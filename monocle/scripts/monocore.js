@@ -1741,9 +1741,9 @@ Monocle.Reader = function (node, bookData, options, onLoadCallback) {
   // Inspects the browser environment and kicks off preparing the container.
   //
   function initialize() {
-    options = options || {}
+  	  options = options || {}
 
-    Monocle.Browser.survey(prepareBox);
+	    Monocle.Browser.survey(prepareBox);
   }
 
 
@@ -3615,9 +3615,9 @@ Monocle.Panels.TwoPane = function (flipper, evtCallbacks) {
   return API;
 }
 
-Monocle.Panels.TwoPane.WIDTH = "50%";
+Monocle.Panels.IMode.WIDTH = "50%";
 
-Monocle.pieceLoaded('panels/twopane');
+Monocle.pieceLoaded('panels/imode');
 // A three-pane system of page interaction. The left 33% turns backwards, the
 // right 33% turns forwards, and contact on the middle third causes the
 // system to go into "interactive mode". In this mode, the page-flipping panels
@@ -4226,7 +4226,7 @@ Monocle.Flippers.Legacy = function (reader) {
 
 Monocle.Flippers.Legacy.FORWARDS = 1;
 Monocle.Flippers.Legacy.BACKWARDS = -1;
-Monocle.Flippers.Legacy.DEFAULT_PANELS_CLASS = Monocle.Panels.TwoPane;
+Monocle.Flippers.Legacy.DEFAULT_PANELS_CLASS = Monocle.Panels.IMode;
 
 Monocle.Flippers.Legacy.STYLES = {
   iBox: {
@@ -4960,7 +4960,7 @@ Monocle.Flippers.Slider = function (reader) {
 
 
 // Constants
-Monocle.Flippers.Slider.DEFAULT_PANELS_CLASS = Monocle.Panels.TwoPane;
+Monocle.Flippers.Slider.DEFAULT_PANELS_CLASS = Monocle.Panels.IMode;
 Monocle.Flippers.Slider.FORWARDS = 1;
 Monocle.Flippers.Slider.BACKWARDS = -1;
 Monocle.Flippers.Slider.FOLLOW_DURATION = 100;
@@ -5091,7 +5091,7 @@ Monocle.Flippers.Scroller.speed = 200; // How long the animation takes
 Monocle.Flippers.Scroller.rate = 20; // frame-rate of the animation
 Monocle.Flippers.Scroller.FORWARDS = 1;
 Monocle.Flippers.Scroller.BACKWARDS = -1;
-Monocle.Flippers.Scroller.DEFAULT_PANELS_CLASS = Monocle.Panels.TwoPane;
+Monocle.Flippers.Scroller.DEFAULT_PANELS_CLASS = Monocle.Panels.IMode;
 
 
 Monocle.pieceLoaded('flippers/scroller');
@@ -5171,7 +5171,7 @@ Monocle.Flippers.Instant = function (reader) {
 
 Monocle.Flippers.Instant.FORWARDS = 1;
 Monocle.Flippers.Instant.BACKWARDS = -1;
-Monocle.Flippers.Instant.DEFAULT_PANELS_CLASS = Monocle.Panels.TwoPane;
+Monocle.Flippers.Instant.DEFAULT_PANELS_CLASS = Monocle.Panels.IMode;
 
 
 
