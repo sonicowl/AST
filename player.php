@@ -43,7 +43,16 @@
 <title>Simple Audio Player</title>
 <script src="data.php"></script>
 <script>
-var runningT;
+var runningP0;
+var runningP1;
+var runningP2;
+var runningP3;
+var runningP4;
+var runningP5;
+var runningP6;
+var runningP7;
+var runningP8;
+var runningP9;
 var audio;
 function init(){
 	console.log("init");
@@ -73,9 +82,23 @@ function init(){
 	audio.addEventListener("volumechange", 		function () {	debug(arguments, "volumechange"); });
 	audio.addEventListener("waiting", 		function () {	debug(arguments, "waiting"); });
 	audio.addEventListener("timeupdate", 		function () {	update(arguments); });
-	
-		audio.play();
-			startRunP(0);
+	audio.play();
+
+
+
+ 	runningP0 = false;
+ 	runningP1 = false;
+ 	runningP2 = false;
+ 	runningP3 = false;
+ 	runningP4 = false;
+ 	runningP5 = false;
+ 	runningP6 = false;
+	runningP7 = false;
+ 	runningP8 = false;
+ 	runningP9 = false;
+console.log("seek1."+runningP5);
+	startRunP(0);
+	console.log("seek2."+runningP5);
 	//var place = reader.getPlace();
     //document.getElementById('currentpar').innerHTML = place.chapterTitle();
 	//reader.addControl(new Monocle.Controls.Scrubber(reader)) 
@@ -140,15 +163,21 @@ function seekTo(t){
 	audio.currentTime = time;
 	audio.pause();
 	audio.play();
-	if (runningT == true){
-	   runningT = false;
-	   startRun(t);
-	}
-	else{
-	   runningT = true;
-	   startRunT(t);
-	}
+	console.log("seek."+time);
 
+
+	if (runningP9 == true) { runningP9 = false; runningP1 = true; runProcess1(t); }
+	if (runningP8 == true) { runningP8 = false; runningP9 = true; runProcess9(t); }
+	if (runningP7 == true) { runningP7 = false; runningP8 = true; runProcess8(t); }
+	if (runningP6 == true) { runningP6 = false; runningP7 = true; runProcess7(t); }
+	if (runningP5 == true) { runningP5 = false; runningP6 = true; runProcess6(t); }
+	if (runningP4 == true) { runningP4 = false; runningP5 = true; runProcess5(t); }
+	if (runningP3 == true) { runningP3 = false; runningP4 = true; runProcess4(t); }
+	if (runningP2 == true) { runningP2 = false; runningP3 = true; runProcess3(t); }
+	if (runningP1 == true) { runningP1 = false; runningP2 = true; runProcess2(t); }
+	if (runningP0 == true) { runningP0 = false; runningP1 = true; runProcess1(t); }
+
+	console.log("seek."+time);
 }
 
 </script>
@@ -179,52 +208,145 @@ function seekTo(t){
 document.getElementById('currentpar').innerHTML = "Paragraph 1, Next 0";
 
 function startRunP(i){
-    runningT = false;
-	startRun(i);	
+    runningP0 = true;
+	runProcess0(i);	
 }
 
-function startRunT(i)
+function runProcess(i, processname){
+	var t2 = timeline[i].start;
+    var t1 = timeline[i-1].start;
+    var time1 = time2secs(t1);
+	var time2 = ((time2secs(t2)-time1) * 1000);
+	var pageDiv = reader.visiblePages()[0];
+	var doc = pageDiv.m.activeFrame.contentDocument;//contentWindow
+	var parag = doc.getElementsByTagName('p');
+    //alert('1');
+	for (var y=0; y<parag.length;y++){
+			if (y!=(i-1))
+				parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFB0F","background-color: #FFFFFF");
+			else
+			    parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFFFF","background-color: #FFFB0F");
+	}			
+	document.getElementById('currentpar').innerHTML = "HMP "+parag.length+", Paragraph "+i.toString()+", Next "+t2;
+	
+
+	setTimeout(processname + "("+i.toString()+")",time2);
+		
+	
+}
+
+function runProcess0(i)
 	{
-		console.log("startRunT: " + runningT.toString());
-	i=Number(i) + 1;
-	if ((timeline.length > i) && (runningT == true)){
-				var t2 = timeline[i].start;
-	            var t1 = timeline[i-1].start;
-		        var time1 = time2secs(t1);
-	        	var time2 = ((time2secs(t2)-time1) * 1000);
-				var pageDiv = reader.visiblePages()[0];
-				var doc = pageDiv.m.activeFrame.contentDocument;//contentWindow
-				var parag = doc.getElementsByTagName('p');
-			//	alert('1');
-				for (var y=0; y<parag.length;y++){
-						if (y!=(i-1))
-							parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFB0F","background-color: #FFFFFF");
-						else
-						    parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFFFF","background-color: #FFFB0F");
-				}
-			
-				document.getElementById('currentpar').innerHTML = "HMP "+parag.length+", Paragraph "+i.toString()+", Next "+t2;
-			   // if (running == false)	setTimeout("startRunT("+(i-1).toString()+")",time2);
-			    	setTimeout("startRunT("+i.toString()+")",time2);
+		i=Number(i) + 1;
+	    if ((timeline.length > i) && (runningP0 == true)){
+			console.log("Running process 0")
+			runProcess(i, "runProcess0");
+		}
 	}
 
+function runProcess1(i)
+	{
+		
+		i=Number(i) + 1;
+	    if ((timeline.length > i) && (runningP1 == true)){
+			console.log("Running process 1")
+			runProcess(i, "runProcess1");
+		}
+	}
 
+function runProcess2(i)
+	{
+		i=Number(i) + 1;
+	    if ((timeline.length > i) && (runningP2 == true)){
+			console.log("Running process 2")
+			runProcess(i, "runProcess2");
+		}
+	}
+
+function runProcess3(i)
+	{
+		i=Number(i) + 1;
+	    if ((timeline.length > i) && (runningP3 == true)){
+			console.log("Running process 3")
+			runProcess(i, "runProcess3");
+		}
+	}
+
+function runProcess4(i)
+	{
+		i=Number(i) + 1;
+	    if ((timeline.length > i) && (runningP4 == true)){
+			console.log("Running process 4")
+			runProcess(i, "runProcess4");
+		}
+	}
+
+function runProcess5(i)
+	{
+		i=Number(i) + 1;
+	    if ((timeline.length > i) && (runningP5 == true)){
+			console.log("Running process 5")
+			runProcess(i, "runProcess5");
+		}
+	}
+
+function runProcess6(i)
+	{
+		i=Number(i) + 1;
+	    if ((timeline.length > i) && (runningP6 == true)){
+			console.log("Running process 6")
+			runProcess(i, "runProcess6");
+		}
+	}
+
+function runProcess7(i)
+	{
+		i=Number(i) + 1;
+	    if ((timeline.length > i) && (runningP7 == true)){
+			console.log("Running process 7")
+			runProcess(i, "runProcess7");
+		}
+	}
+
+function runProcess8(i)
+	{
+		i=Number(i) + 1;
+	    if ((timeline.length > i) && (runningP8 == true)){
+			console.log("Running process 8")
+			runProcess(i, "runProcess8");
+		}
+	}
+
+function runProcess9(i)
+	{
+		i=Number(i) + 1;
+	    if ((timeline.length > i) && (runningP9 == true)){
+			console.log("Running process 9")
+			runProcess(i, "runProcess9");
+		}
 	}
 	
+var pArr = document.getElementsByTagName("p");
+for (var i=0; i<pArr.length;i++){
+	pArr[i].innerHTML = "<span onclick='javascript:top.seekTo(&quot;"+i.toString()+"&quot;)'>"+ pArr[i].innerHTML+ "</a>";
+}
+
+
 	
-function startRun(i)
-{
-	console.log("startRunT: " + runningT.toString());
-	i=Number(i) + 1;
 	
-if ((timeline.length > i) && (runningT == false)){
-        	var t2 = timeline[i].start;
-            var t1 = timeline[i-1].start;
-	        var time1 = time2secs(t1);
-        	var time2 = ((time2secs(t2)-time1) * 1000);
-			var pageDiv = reader.visiblePages()[0];
-			var doc = pageDiv.m.activeFrame.contentDocument;//contentWindow
-			var parag = doc.getElementsByTagName('p');
+//function runProcess1(i)
+//{
+//	console.log("startRunT: " + runningT.toString());
+//	i=Number(i) + 1;
+	
+//if ((timeline.length > i) && (runningT == false)){
+  //      	var t2 = timeline[i].start;
+    //        var t1 = timeline[i-1].start;
+	  //      var time1 = time2secs(t1);
+      // / 	var time2 = ((time2secs(t2)-time1) * 1000);
+//			var pageDiv = reader.visiblePages()[0];
+//			var doc = pageDiv.m.activeFrame.contentDocument;//contentWindow
+//			var parag = doc.getElementsByTagName('p');
 			//var place = reader.getPlace(pageDiv);
 			//var pgcount = reader.dom.find('page', 0).contentDocument;
 		    //var doc = reader.dom.find('page', 0).m.activeFrame.contentDocument;
@@ -232,32 +354,32 @@ if ((timeline.length > i) && (runningT == false)){
   	        //var cmpt = reader.dom.find('component');
 		    //var doc = cmpt.contentWindow;
             
-			document.getElementById('currentpar').innerHTML = "HMP "+parag.length+", Paragraph "+i.toString()+", Next "+t2;
-			setTimeout("startRun("+i.toString()+")",time2);
+//			document.getElementById('currentpar').innerHTML = "HMP "+parag.length+", Paragraph "+i.toString()+", Next "+t2;
+//			for (var y=0; y<parag.length;y++){
+//					if (y!=(i-1))
+//						parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFB0F","background-color: #FFFFFF");
+//					else
+//					    parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFFFF","background-color: #FFFB0F");
+//			}
+//			setTimeout("startRun("+i.toString()+")",time2);
 	  	    //if (running == true) setTimeout("running = true;",time2);
-				for (var y=0; y<parag.length;y++){
-						if (y!=(i-1))
-							parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFB0F","background-color: #FFFFFF");
-						else
-						    parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFFFF","background-color: #FFFB0F");
-				}
+
 		    
 		   //var cmpt = window.reader.dom.find('p', 2);
 		   //cmpt.style.color='red';
 		   //document.getElementById('reader').innerHTML = "<p class='para'>Introduction</div></p>"
 		   //reader.moveTo({ page: 2 });
 		
-}
+//}
 
 
 
-}
+//}
 
  
 
 
-	var pArr = document.getElementsByTagName("p");
-	for (var i=0; i<pArr.length;i++){
+	
 		//	var but = document.createElement("button");
 	//		var txt = document.createTextNode(timeline[i].start);
 	//		but.appendChild(txt);
@@ -267,15 +389,13 @@ if ((timeline.length > i) && (runningT == false)){
 
 
 	
-	pArr[i].innerHTML = "<span onclick='javascript:top.seekTo(&quot;"+i.toString()+"&quot;)'>"+ pArr[i].innerHTML+ "</a>";
+	
 	
 //		pArr[i].innerHTML = "<span onclick=&quot;javascript:seekTo("'"+timeline[i].start.toString()+"'")'&quot;>"+ pArr[i].innerHTML+ "</a>";
 	//	document.getElementById('pagenum').innerHTML = "sd";
-	}
+	
 	
 
-	
-	
 	
 </script>
   
