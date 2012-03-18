@@ -140,6 +140,20 @@ function init(){
     var magnifier = new Monocle.Controls.Magnifier(reader);
     reader.addControl(magnifier);
 
+  	/* TOC CONTROL */
+    Monocle.Reader('toc', bookData, function (rdr) {
+      var toc = Monocle.Controls.Contents(reader);
+      reader.addControl(toc, 'popover', { hidden: true });
+      createBookTitle(
+        reader,
+        {
+          start: function () {
+            rdr.showControl(toc);
+          }
+        }
+      );
+    });
+
 }
 
 
@@ -427,6 +441,8 @@ function runProcess9(i)
 	for (var i=0; i<pArr.length;i++){
 		pArr[i].innerHTML = "<span onclick='javascript:top.seekTo(&quot;"+i.toString()+"&quot;)'>"+ pArr[i].innerHTML+ "</a>";
 	}
+	
+	var iWebkit;if(!iWebkit){iWebkit=window.onload=function(){function fullscreen(){var a=document.getElementsByTagName("a");for(var i=0;i<a.length;i++){if(a[i].className.match("noeffect")){}else{a[i].onclick=function(){window.location=this.getAttribute("href");return false}}}}function hideURLbar(){window.scrollTo(0,0.9)}iWebkit.init=function(){fullscreen();hideURLbar()};iWebkit.init()}}
 
 </script>
 
