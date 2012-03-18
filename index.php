@@ -283,22 +283,30 @@ Monocle.Events.listen(
 	});
 
 
-  	/* SCRUBBER CONTROL */
-    var scrubber = new Monocle.Controls.Scrubber(reader);
-    reader.addControl(scrubber);
 
-  	/* MAGNIFIER CONTROL */
-    var magnifier = new Monocle.Controls.Magnifier(reader);
-    reader.addControl(magnifier);
-
-  	/* TOC CONTROL */
     var readerOptions = {
-      panels: Monocle.Panels.Marginal
+      panels: Monocle.Panels.IMode
     };
+
+
     Monocle.Reader('reader', bookData, readerOptions, function (rdr) {
       reader = rdr;
       var toc = Monocle.Controls.Contents(rdr);
       rdr.addControl(toc, 'popover', { hidden: true });
+
+  	/* SCRUBBER CONTROL */
+    var scrubber = new Monocle.Controls.Scrubber(rdr);
+    rdr.addControl(scrubber);
+
+  	/* MAGNIFIER CONTROL */
+    var magnifier = new Monocle.Controls.Magnifier(rdr);
+    rdr.addControl(magnifier);
+
+  	/* TOC CONTROL */
+    var readerOptions = {
+      panels: Monocle.Panels.IMode
+    };
+
       createBookTitle(
         rdr,
         {
@@ -309,16 +317,6 @@ Monocle.Events.listen(
       );
     });
 
-     // var toc =  Monocle.Controls.Contents(reader);
-     // reader.addControl(toc, 'popover', { hidden: false });
-     // 
-     //  createBookTitle(reader,
-     //     {
-     //      start: function () {
-     //        reader.showControl(toc);
-     //      }
-     //    }
-     //  );
 
   }
 );
