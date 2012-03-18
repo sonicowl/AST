@@ -112,25 +112,25 @@ function init(){
 	//reader.addControl(new Monocle.Controls.Scrubber(reader)) 
 
 		reader.listen(
-		'monocle:pagechange',
-		function (evt) {
-		var place = reader.getPlace(evt.m.page);
-		var section = place.componentId();
-		var chapterInfo = place.chapterInfo();
-		var chapterSrc = place.chapterSrc();
-		var pageTopPos = place.percentAtTopOfPage();
-		var pageBottomPos = place.percentAtBottomOfPage();
-		var pagenumber = place.pageNumber() - 1;
-		document.getElementById('pagenum').innerHTML = "Page "+ pagenumber;
-		
-	
+			'monocle:pagechange',
+			function (evt) {
+			var place = reader.getPlace(evt.m.page);
+			var section = place.componentId();
+			var chapterInfo = place.chapterInfo();
+			var chapterSrc = place.chapterSrc();
+			var pageTopPos = place.percentAtTopOfPage();
+			var pageBottomPos = place.percentAtBottomOfPage();
+			var pagenumber = place.pageNumber() - 1;
+			document.getElementById('pagenum').innerHTML = "Page "+ pagenumber;
 		});
 		
-	
+
+	    var scrubber = new Monocle.Controls.Scrubber(reader);
+        reader.addControl(scrubber);
 
 		  /* MAGNIFIER CONTROL */
           var magnifier = new Monocle.Controls.Magnifier(reader);
-          reader.addControl(magnifier, 'page');
+          reader.addControl(magnifier);
 
 
 
