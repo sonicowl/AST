@@ -366,6 +366,7 @@ Monocle.Reader = function (node, bookData, options, onLoadCallback) {
   function moveTo(locus, callback) {
     if (!p.initialized) {
       console.warn('Attempt to move place before initialization.');
+	  return false;
     }
     if (!p.book.isValidLocus(locus)) {
       dispatchEvent(

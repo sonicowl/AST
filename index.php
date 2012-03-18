@@ -1,29 +1,34 @@
 <!DOCTYPE html>
 <html lang=en>
 <head>
- <script src="monocle/scripts/monocore.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+ <!-- <script src="monocle/scripts/monocore.js"></script> -->
  <!-- MONOCLE CORE -->
-    
-    <script type="text/javascript" src="src/compat/env.js"></script>
-    <script type="text/javascript" src="src/compat/css.js"></script>
-    <script type="text/javascript" src="src/compat/stubs.js"></script>
-    <script type="text/javascript" src="src/compat/browser.js"></script>
-
-    <script type="text/javascript" src="src/core/events.js"></script>
-    <script type="text/javascript" src="src/core/factory.js"></script>
-    <script type="text/javascript" src="src/core/styles.js"></script>
-    <script type="text/javascript" src="src/core/reader.js"></script>
-    <script type="text/javascript" src="src/core/book.js"></script>
-    <script type="text/javascript" src="src/core/component.js"></script>
-    <script type="text/javascript" src="src/core/place.js"></script>
+ <script type="text/javascript" src="src/core/monocle.js"></script>
+ <script type="text/javascript" src="src/compat/env.js"></script>
+ <script type="text/javascript" src="src/compat/css.js"></script>
+ <script type="text/javascript" src="src/compat/stubs.js"></script>
+ <script type="text/javascript" src="src/compat/browser.js"></script>
+ <script type="text/javascript" src="src/core/events.js"></script>
+ <script type="text/javascript" src="src/core/factory.js"></script>
+ <script type="text/javascript" src="src/core/styles.js"></script>
+ <script type="text/javascript" src="src/core/reader.js"></script>
+ <script type="text/javascript" src="src/core/book.js"></script>
+ <script type="text/javascript" src="src/core/component.js"></script>
+ <script type="text/javascript" src="src/core/place.js"></script>
 
  <!-- MONOCLE FLIPPERS -->
-    <script type="text/javascript" src="src/controls/panel.js"></script>
-    <script type="text/javascript" src="src/dimensions/columns.js"></script>
-    <script type="text/javascript" src="src/flippers/slider.js"></script>
-    <script type="text/javascript" src="src/dimensions/vert.js"></script>
-    <script type="text/javascript" src="src/flippers/legacy.js"></script>
-
+ <script type="text/javascript" src="src/controls/panel.js"></script>
+ <script type="text/javascript" src="src/panels/twopane.js"></script>
+ <script type="text/javascript" src="src/panels/marginal.js"></script>
+ <script type="text/javascript" src="src/panels/imode.js"></script>
+ <script type="text/javascript" src="src/panels/eink.js"></script>
+ <script type="text/javascript" src="src/dimensions/columns.js"></script>
+ <script type="text/javascript" src="src/flippers/slider.js"></script>
+ <script type="text/javascript" src="src/flippers/instant.js"></script>
+ <script type="text/javascript" src="src/dimensions/vert.js"></script>
+ <script type="text/javascript" src="src/flippers/legacy.js"></script>
  <!-- MONOCLE STANDARD CONTROLS -->
    <script type="text/javascript" src="src/controls/spinner.js"></script>
     <script type="text/javascript" src="src/controls/magnifier.js"></script>
@@ -35,6 +40,7 @@
   <link rel="stylesheet" type="text/css" href="monocle/styles/monoctrl.css" />
   <style>
     #reader { width: 300px; height: 400px; border: 1px solid #000; }
+	#part1, #part2 {display:none}
   </style>
 <meta charset="UTF-8">
 
@@ -55,7 +61,15 @@ var runningP9;
 var audio;
 function init(){
 	console.log("init");
-	window.reader = Monocle.Reader('reader');
+	// window.reader = Monocle.Reader('reader');
+	
+	// I-MODE
+    // window.reader = Monocle.Reader(
+    //   'imode',
+    //   'reader',
+    //   { panels: Monocle.Panels.IMode }
+    // );
+
 	audioz = document.getElementById("audio");
 	
 	audioz.addEventListener("abort", 		function () {	debug(arguments, "abort"); });
@@ -154,6 +168,7 @@ function debug(args,msg){
 timeline.offset = 0;
 
 function seekTo(t){	
+	console.log('seek to');
 	var time = time2secs(timeline[t].start.toString());
 	try {
 	  audioz.pause();
@@ -176,11 +191,58 @@ function seekTo(t){
     dontturn = false;
 }
 
+var bookData = {
+  getComponents: function () {
+    return [
+      'part1',
+      'part2'
+    ];
+  },
+  getContents: function () {
+    return [
+      {
+        title: "I",
+        src: 'part1'
+      },
+      {
+        title: "II",
+        src: 'part2'
+      }
+    ]
+  },
+  getComponent: function (cmptId) {
+    return { nodes: [document.getElementById(cmptId).cloneNode(true)] };
+  },
+  getMetaData: function(key) {
+    return {
+      title: "Lorem Ipsum",
+      creator: "Monocle"
+    }[key];
+  }
+}
+
+// Initialize the reader element.
+Monocle.Events.listen(
+  window,
+  'load',
+  function () {
+
+    // I-MODE
+    window.reader = Monocle.Reader(
+      'reader',
+      bookData,
+      { panels: Monocle.Panels.IMode }
+    );
+
+
+  }
+);
+
 </script>
 
 <body onload="init()">
-<div id="currentpar"></div>
-<div id="pagenum"></div>
+	<div id="currentpar" style="display:none"></div>
+	<div id="pagenum" style="display:none"></div>
 
 
 <div>
@@ -193,12 +255,47 @@ function seekTo(t){
 <div id="status"></div>
 
 <div id="reader">
-<?php include("epub.php"); ?>
+
 </div>
 
-<div onclick="reader.moveTo({ direction: -1 }); ">Previous page</div>
-<div onclick="reader.moveTo({ direction: 1 }); ">Next page</div>
+<!-- <div onclick="reader.moveTo({ direction: -1 }); ">Previous page</div>
+<div onclick="reader.moveTo({ direction: 1 }); ">Next page</div> -->
 
+
+
+  <div id="part1">
+	<?php include("epub.php"); ?>
+ </div>
+
+<div id="part2">
+  <h3>II</h3>
+  <p>
+  Mauris ac felis et justo pulvinar adipiscing ac quis metus. Duis sollicitudin nisi vel neque posuere auctor pretium urna pharetra. Nunc bibendum, tellus a interdum ultrices, enim velit pretium lorem, ut eleifend turpis ipsum vitae turpis. Cras accumsan sem vitae sapien semper varius. Sed eget orci magna, a sodales est. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent non tincidunt eros. Praesent iaculis, lectus sit amet rutrum dignissim, odio arcu auctor elit, sit amet imperdiet neque elit in lorem. Nam consectetur semper tellus, vel blandit dui porttitor eu. Quisque at metus non urna pulvinar tempus. Nunc a neque sed arcu blandit aliquam. Nam orci sapien, suscipit et suscipit sodales, tempus sed purus.
+  </p>
+  <p>
+  Integer pulvinar nisl a ante sodales id viverra justo molestie. Cras quis mauris nulla. Quisque posuere dignissim consectetur. Curabitur eget augue sed ligula consectetur pulvinar sit amet vel velit. Pellentesque id massa egestas tellus vulputate tincidunt. Vestibulum vel congue arcu. Etiam nisi turpis, consequat sed vehicula vel, congue in leo. Aenean mauris leo, adipiscing nec scelerisque sed, ultricies in nisl. Fusce mollis semper nibh, id gravida libero iaculis quis. Curabitur id mi nisi, vel varius massa. Fusce suscipit rhoncus eleifend. Sed venenatis, velit sit amet consectetur sagittis, felis lacus viverra massa, sit amet suscipit ligula risus vitae urna. In euismod enim eu felis pretium at interdum dolor faucibus. Aenean eu felis orci. Nulla posuere tellus et justo porttitor non commodo sapien elementum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris id accumsan velit. Ut eu ligula molestie risus ornare eleifend eget vitae enim.
+  </p>
+  <p>
+  Phasellus dictum, magna id venenatis egestas, ligula purus sagittis mi, ut egestas ipsum risus a nisl. Quisque aliquet imperdiet lectus, sit amet cursus leo vestibulum id. Praesent nibh purus, pulvinar in tincidunt a, pharetra et urna. Praesent ornare, nisi sed tempor laoreet, lorem nibh tempor est, lacinia ultricies erat felis quis elit. Etiam et elit et lacus lacinia lacinia at sit amet diam. Fusce laoreet ligula non sem volutpat ut porta ipsum tempor. Mauris justo nisi, ornare sodales suscipit at, fermentum placerat justo. Aliquam quis consequat nunc. Mauris turpis ligula, cursus a accumsan sed, porttitor aliquet neque. Quisque vel enim tortor, a rutrum libero. Donec et molestie justo. Sed auctor, tellus at bibendum auctor, nulla sem aliquam dui, nec viverra ante erat eu tellus. Quisque et nisi tortor. Morbi semper odio quis quam accumsan dignissim. Cras ut augue nunc, quis molestie mi. Sed felis arcu, venenatis quis ultrices eget, tempus ac felis. Nunc porta neque non neque convallis nec consectetur orci sollicitudin. Sed leo lectus, feugiat in euismod eget, semper vitae lacus. Vestibulum non lacus a dui fermentum lobortis sed sit amet felis.
+  </p>
+  <p>
+  Praesent quis odio a nulla facilisis pulvinar in in dolor. Donec lacinia mauris non turpis dignissim viverra. Pellentesque sollicitudin dolor nec ipsum sagittis vitae dapibus odio aliquet. Donec ultrices consequat ligula eu volutpat. Vestibulum vitae tortor eu mi pulvinar cursus eget sit amet est. Nulla sagittis adipiscing faucibus. Suspendisse commodo sapien in arcu euismod eleifend. Aliquam porta velit vel leo sagittis vel venenatis urna sagittis. Quisque vulputate egestas scelerisque. Fusce porttitor sagittis neque, sit amet pharetra odio imperdiet at. Cras sodales hendrerit tellus, ut aliquam velit pellentesque id. Vivamus lacus augue, semper ut hendrerit mollis, elementum et velit. Donec lorem nunc, mollis ac pharetra at, bibendum a nisi. Vivamus porta turpis nec magna tempus venenatis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean vitae quam viverra neque interdum ultricies eu in diam. Integer tempus metus in nibh mattis adipiscing tincidunt leo porttitor. Vivamus at velit quis risus tincidunt dapibus.
+  </p>
+  <p>
+  Aliquam erat volutpat. Maecenas nec neque nulla, eget ullamcorper ligula. Phasellus dapibus quam a odio congue consectetur. Quisque sagittis nisl elementum dolor porttitor venenatis. Sed non pulvinar urna. Suspendisse nunc nibh, lacinia id venenatis in, consectetur vitae mauris. Donec ac quam nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porttitor dui urna, facilisis rhoncus nisl. Pellentesque elit sem, molestie nec iaculis id, laoreet sagittis massa. Integer imperdiet sollicitudin nulla non rutrum. Phasellus egestas leo vel erat viverra vel ornare lorem dignissim. Mauris justo ligula, iaculis at vulputate in, viverra ut est. Praesent hendrerit enim eget sem ultricies non ultrices purus facilisis. Pellentesque commodo egestas iaculis. Aliquam erat volutpat. Vestibulum ornare cursus elit, vel mollis lorem elementum sit amet.
+  </p>
+  <p>
+
+  Pellentesque ornare facilisis semper. Pellentesque lorem sem, molestie iaculis mattis vel, molestie at orci. Quisque non arcu lorem. Donec consectetur volutpat turpis, eget aliquam velit dapibus eget. Ut nec iaculis massa. Nam vel metus non augue tempor scelerisque. Vestibulum lectus neque, gravida ac tempor vitae, feugiat in lacus. Mauris vitae ipsum et massa commodo aliquet vitae ac massa. Cras ac nisi sapien, et tempus nibh. Curabitur porta nunc ac mauris porta vel pretium ligula egestas. Integer ut lacus quam. In purus diam, lacinia at congue in, placerat sed lorem. Mauris ultrices, magna in tempor malesuada, est massa dapibus augue, semper tempor turpis dui vel sapien. Nulla facilisi. Nam malesuada, nibh vitae vestibulum mattis, massa nulla interdum ipsum, et venenatis urna magna vel ante.
+  </p>
+  <p>
+  Donec cursus, eros at cursus consequat, augue massa sagittis dolor, id dapibus elit nisi ac dolor. Sed lorem velit, semper in dapibus ullamcorper, ultricies vel dolor. Vestibulum ac tortor nec magna elementum congue in volutpat tortor. Pellentesque tellus turpis, sodales interdum gravida in, aliquam a velit. Ut massa mi, blandit a rhoncus vitae, ultrices ac felis. Curabitur urna nulla, malesuada id mollis et, elementum vel augue. Aenean rhoncus feugiat augue, vitae feugiat libero aliquet non. Aliquam auctor vestibulum malesuada. Phasellus ultrices, urna sed accumsan faucibus, turpis massa rutrum nibh, sed pellentesque metus massa in quam. Morbi bibendum, diam auctor malesuada sagittis, urna tellus adipiscing est, vitae accumsan nibh erat sit amet lorem. Nulla malesuada, lorem a viverra blandit, justo est tristique est, sed lobortis risus sapien sit amet quam. Suspendisse odio enim, posuere in convallis sed, porttitor ut libero. Quisque ultricies euismod consequat. Aliquam nec nunc diam. Aenean interdum erat faucibus enim scelerisque semper. Vestibulum porttitor lorem ullamcorper metus tincidunt ut convallis nisi tempus.
+  </p>
+  <p>
+  Cras id mauris purus. Nullam id tortor tellus. Pellentesque vitae orci eu lacus pulvinar commodo. Aliquam erat volutpat. Integer tellus sapien, tincidunt non luctus nec, tempor a mauris. Nunc quis odio ut erat pellentesque aliquam quis et massa. Praesent lectus lectus, luctus non pellentesque et, facilisis auctor quam. Proin vestibulum eleifend interdum. Ut sit amet justo diam, ut pulvinar massa. Proin vel felis augue. Praesent sed quam sem, dapibus egestas quam. Mauris in magna leo. Nulla eget ipsum vel turpis commodo rutrum ut eu lorem. Morbi ultricies magna non mi eleifend eget pulvinar nulla egestas.
+  </p>
+
+</div>
 
 <script>
 document.getElementById('currentpar').innerHTML = "Paragraph 1, Next 0";
@@ -210,14 +307,14 @@ function startRunP(i){
 
 function runProcess(i, processname){
 	var t2 = timeline[i].start;
-    var t1 = timeline[i-1].start;
-    var time1 = time2secs(t1);
+	    var t1 = timeline[i-1].start;
+	    var time1 = time2secs(t1);
 	var time2 = ((time2secs(t2)-time1) * 1000);
 	var pageDiv = reader.dom.find('component', 1);
 	var doc = pageDiv.contentDocument;//contentWindow
 	var node = doc.evaluate('//p['+i+']', doc, null, 9, null).singleNodeValue;
 	var parag = doc.getElementsByTagName('p');
-    //alert(node);
+	    //alert(node);
 	for (var y=0; y<parag.length;y++){
 			if (y!=(i-1))
 				parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFB0F","background-color: #FFFFFF");
@@ -321,10 +418,12 @@ function runProcess9(i)
 		}
 	}
 	
-var pArr = document.getElementsByTagName("p");
-for (var i=0; i<pArr.length;i++){
-	pArr[i].innerHTML = "<span onclick='javascript:top.seekTo(&quot;"+i.toString()+"&quot;)'>"+ pArr[i].innerHTML+ "</a>";
-}
+	var part1 = document.getElementById('part1');
+	var pArr = part1.getElementsByTagName("p");
+
+	for (var i=0; i<pArr.length;i++){
+		pArr[i].innerHTML = "<span onclick='javascript:top.seekTo(&quot;"+i.toString()+"&quot;)'>"+ pArr[i].innerHTML+ "</a>";
+	}
 
 
 	
@@ -393,7 +492,6 @@ for (var i=0; i<pArr.length;i++){
 
 	
 </script>
-  
 </body>
 
 </html>
