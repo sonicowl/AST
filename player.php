@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang=en>
 <head>
-
  <script src="monocle/scripts/monocore.js"></script>
-
  <!-- MONOCLE CORE -->
     
     <script type="text/javascript" src="src/compat/env.js"></script>
@@ -40,7 +38,7 @@
   </style>
 <meta charset="UTF-8">
 
-<title>Simple Audio Player</title>
+<title>AST</title>
 <script src="data.php"></script>
 <script>
 var runningP0;
@@ -57,36 +55,32 @@ var audio;
 function init(){
 	console.log("init");
 	window.reader = Monocle.Reader('reader');
-	audio = document.getElementById("audio");
+	audioz = document.getElementById("audio");
 	
-	audio.addEventListener("abort", 		function () {	debug(arguments, "abort"); });
-	audio.addEventListener("canplay", 		function () {	debug(arguments, "canplay"); });
-	audio.addEventListener("canplaythrough", 	function () {	debug(arguments, "canplaythrough"); });
-	audio.addEventListener("durationchange", 	function () {	debug(arguments, "durationchange"); });
-	audio.addEventListener("emptied", 		function () {	debug(arguments, "emptied"); });
-	audio.addEventListener("ended", 		function () {	debug(arguments, "ended"); });
-	audio.addEventListener("error", 		function () {	debug(arguments, "error"); });
-	audio.addEventListener("loadeddata", 		function () {	debug(arguments, "loadeddata"); });
-	audio.addEventListener("loadedmetadata", 	function () {	debug(arguments, "loadedmetadata"); });
-	audio.addEventListener("loadstart", 		function () {	debug(arguments, "loadstart"); });
-	audio.addEventListener("pause", 		function () {	debug(arguments, "pause"); });
-	audio.addEventListener("play", 			function () {	debug(arguments, "play"); });
-	audio.addEventListener("playing", 		function () {	debug(arguments, "playing"); });
-	audio.addEventListener("progress", 		function () {	debug(arguments, "progress"); });
-	audio.addEventListener("ratechange", 		function () {	debug(arguments, "ratechange"); });
-	audio.addEventListener("readystatechange", 	function () {	debug(arguments, "readystatechange"); });
-	audio.addEventListener("seeked", 		function () {	debug(arguments, "seeked"); });
-	audio.addEventListener("seeking", 		function () {	debug(arguments, "seeking"); });
-	audio.addEventListener("stalled", 		function () {	debug(arguments, "stalled"); });
-	audio.addEventListener("suspend", 		function () {	debug(arguments, "suspend"); });
-	audio.addEventListener("volumechange", 		function () {	debug(arguments, "volumechange"); });
-	audio.addEventListener("waiting", 		function () {	debug(arguments, "waiting"); });
-	audio.addEventListener("timeupdate", 		function () {	update(arguments); });
-	audio.play();
-
-
-
- 	runningP0 = false;
+	audioz.addEventListener("abort", 		function () {	debug(arguments, "abort"); });
+	audioz.addEventListener("canplay", 		function () {	debug(arguments, "canplay"); });
+	audioz.addEventListener("canplaythrough", 	function () {	debug(arguments, "canplaythrough"); });
+	audioz.addEventListener("durationchange", 	function () {	debug(arguments, "durationchange"); });
+	audioz.addEventListener("emptied", 		function () {	debug(arguments, "emptied"); });
+	audioz.addEventListener("ended", 		function () {	debug(arguments, "ended"); });
+	audioz.addEventListener("error", 		function () {	debug(arguments, "error"); });
+	audioz.addEventListener("loadeddata", 		function () {	debug(arguments, "loadeddata"); });
+	audioz.addEventListener("loadedmetadata", 	function () {	debug(arguments, "loadedmetadata"); });
+	audioz.addEventListener("loadstart", 		function () {	debug(arguments, "loadstart"); });
+	audioz.addEventListener("pause", 		function () {	debug(arguments, "pause"); });
+	audioz.addEventListener("play", 			function () {	debug(arguments, "play"); });
+	audioz.addEventListener("playing", 		function () {	debug(arguments, "playing"); });
+	audioz.addEventListener("progress", 		function () {	debug(arguments, "progress"); });
+	audioz.addEventListener("ratechange", 		function () {	debug(arguments, "ratechange"); });
+	audioz.addEventListener("readystatechange", 	function () {	debug(arguments, "readystatechange"); });
+	audioz.addEventListener("seeked", 		function () {	debug(arguments, "seeked"); });
+	audioz.addEventListener("seeking", 		function () {	debug(arguments, "seeking"); });
+	audioz.addEventListener("stalled", 		function () {	debug(arguments, "stalled"); });
+	audioz.addEventListener("suspend", 		function () {	debug(arguments, "suspend"); });
+	audioz.addEventListener("volumechange", 		function () {	debug(arguments, "volumechange"); });
+	audioz.addEventListener("waiting", 		function () {	debug(arguments, "waiting"); });
+	audioz.addEventListener("timeupdate", 		function () {	update(arguments); });
+	runningP0 = false;
  	runningP1 = false;
  	runningP2 = false;
  	runningP3 = false;
@@ -96,9 +90,7 @@ function init(){
 	runningP7 = false;
  	runningP8 = false;
  	runningP9 = false;
-console.log("seek1."+runningP5);
 	startRunP(0);
-	console.log("seek2."+runningP5);
 	//var place = reader.getPlace();
     //document.getElementById('currentpar').innerHTML = place.chapterTitle();
 	//reader.addControl(new Monocle.Controls.Scrubber(reader)) 
@@ -133,9 +125,10 @@ console.log("seek1."+runningP5);
 }
 
 
+
 function update(){
 	var status = document.getElementById("status");
-	//status.innerHTML = audio.currentTime + "<br />";
+	//status.innerHTML = audioz.currentTime + "<br />";
 	for (var i=0; i<timeline.length; i++){
 		
 	}
@@ -160,11 +153,13 @@ timeline.offset = 0;
 
 function seekTo(t){	
 	var time = time2secs(timeline[t].start.toString());
-	audio.currentTime = time;
-	audio.pause();
-	audio.play();
-	console.log("seek."+time);
+	try {
+	  audioz.pause();
+	  audioz.currentTime = time;
+	  audioz.play();      
+	} catch (e) {
 
+	}
 
 	if (runningP9 == true) { runningP9 = false; runningP1 = true; runProcess1(t); }
 	if (runningP8 == true) { runningP8 = false; runningP9 = true; runProcess9(t); }
@@ -177,7 +172,6 @@ function seekTo(t){
 	if (runningP1 == true) { runningP1 = false; runningP2 = true; runProcess2(t); }
 	if (runningP0 == true) { runningP0 = false; runningP1 = true; runProcess1(t); }
 
-	console.log("seek."+time);
 }
 
 </script>
@@ -190,7 +184,7 @@ function seekTo(t){
 <div>
 	<audio controls id="audio">
 		<source type="audio/mp3" preload="metadata" src="video.php"/>
-		Your browser does not support HTML5 audio.
+		Your browser does not support HTML5 audioz.
 	</audio>
 </div>
 
@@ -217,8 +211,8 @@ function runProcess(i, processname){
     var t1 = timeline[i-1].start;
     var time1 = time2secs(t1);
 	var time2 = ((time2secs(t2)-time1) * 1000);
-	var pageDiv = reader.visiblePages()[0];
-	var doc = pageDiv.m.activeFrame.contentDocument;//contentWindow
+	var pageDiv = reader.dom.find('component', 1);
+	var doc = pageDiv.contentDocument;//contentWindow
 	var parag = doc.getElementsByTagName('p');
     //alert('1');
 	for (var y=0; y<parag.length;y++){
@@ -228,11 +222,9 @@ function runProcess(i, processname){
 			    parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFFFF","background-color: #FFFB0F");
 	}			
 	document.getElementById('currentpar').innerHTML = "HMP "+parag.length+", Paragraph "+i.toString()+", Next "+t2;
-	
-
+	reader.moveTo({ xpath: '//p['+i+']' });
 	setTimeout(processname + "("+i.toString()+")",time2);
-		
-	
+
 }
 
 function runProcess0(i)

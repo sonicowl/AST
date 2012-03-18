@@ -1741,9 +1741,9 @@ Monocle.Reader = function (node, bookData, options, onLoadCallback) {
   // Inspects the browser environment and kicks off preparing the container.
   //
   function initialize() {
-  	  options = options || {}
+    options = options || {}
 
-	    Monocle.Browser.survey(prepareBox);
+    Monocle.Browser.survey(prepareBox);
   }
 
 
@@ -3615,7 +3615,7 @@ Monocle.Panels.TwoPane = function (flipper, evtCallbacks) {
   return API;
 }
 
-Monocle.Panels.IMode.WIDTH = "50%";
+Monocle.Panels.IMode.WIDTH = "33%";
 
 Monocle.pieceLoaded('panels/imode');
 // A three-pane system of page interaction. The left 33% turns backwards, the
