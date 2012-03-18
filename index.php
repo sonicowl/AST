@@ -44,6 +44,16 @@
 <style>
   #reader { width: 300px; height: 400px; border: 1px solid #000; }
   #part1, #part2 {display:none}
+  .bookTitle {
+    position: absolute;
+    top: 0;
+    width: 100%;
+padding:1px;
+    text-align: center;
+    cursor: pointer;
+	font-size:0.8em;
+	color:#cc0000;
+  }
 </style>
 
 <meta charset="UTF-8">
@@ -67,6 +77,7 @@ var runningP7;
 var runningP8;
 var runningP9;
 var audio;
+var reader;
 
 function init(){
 	console.log("init");
@@ -141,44 +152,6 @@ function init(){
  	runningP8 = false;
  	runningP9 = false;
 	startRunP(0);
-
-
-	reader.listen(
-		'monocle:pagechange',
-		function (evt) {
-		var place = reader.getPlace(evt.m.page);
-		var section = place.componentId();
-		var chapterInfo = place.chapterInfo();
-		var chapterSrc = place.chapterSrc();
-		var pageTopPos = place.percentAtTopOfPage();
-		var pageBottomPos = place.percentAtBottomOfPage();
-		var pagenumber = place.pageNumber() - 1;
-		document.getElementById('pagenum').innerHTML = "Page "+ pagenumber;
-	});
-
-
-  	/* SCRUBBER CONTROL */
-    var scrubber = new Monocle.Controls.Scrubber(reader);
-    reader.addControl(scrubber);
-
-  	/* MAGNIFIER CONTROL */
-    var magnifier = new Monocle.Controls.Magnifier(reader);
-    reader.addControl(magnifier);
-
-  	/* TOC CONTROL */
-    Monocle.Reader('toc', bookData, function (rdr) {
-      var toc = Monocle.Controls.Contents(reader);
-      reader.addControl(toc, 'popover', { hidden: true });
-      createBookTitle(
-        reader,
-        {
-          start: function () {
-            rdr.showControl(toc);
-          }
-        }
-      );
-    });
-
 }
 
 
@@ -258,10 +231,29 @@ var bookData = {
   },
   getMetaData: function(key) {
     return {
-      title: "Lorem Ipsum",
-      creator: "Monocle"
+      title: "Practical Demonkeeping",
+      creator: "Sonic Owl"
     }[key];
   }
+}
+
+
+function createBookTitle(reader, contactListeners) {
+  var bt = {}
+  bt.createControlElements = function () {
+    cntr = document.createElement('div');
+    cntr.className = "bookTitle";
+    runner = document.createElement('div');
+    runner.className = "runner";
+    runner.innerHTML = reader.getBook().getMetaData('title');
+    cntr.appendChild(runner);
+    if (contactListeners) {
+      Monocle.Events.listenForContact(cntr, contactListeners);
+    }
+    return cntr;
+  }
+  reader.addControl(bt, 'page');
+  return bt;
 }
 
 // Initialize the reader element.
@@ -277,6 +269,56 @@ Monocle.Events.listen(
       { panels: Monocle.Panels.IMode }
     );
 
+	reader.listen(
+		'monocle:pagechange',
+		function (evt) {
+		var place = reader.getPlace(evt.m.page);
+		var section = place.componentId();
+		var chapterInfo = place.chapterInfo();
+		var chapterSrc = place.chapterSrc();
+		var pageTopPos = place.percentAtTopOfPage();
+		var pageBottomPos = place.percentAtBottomOfPage();
+		var pagenumber = place.pageNumber() - 1;
+		document.getElementById('pagenum').innerHTML = "Page "+ pagenumber;
+	});
+
+
+  	/* SCRUBBER CONTROL */
+    var scrubber = new Monocle.Controls.Scrubber(reader);
+    reader.addControl(scrubber);
+
+  	/* MAGNIFIER CONTROL */
+    var magnifier = new Monocle.Controls.Magnifier(reader);
+    reader.addControl(magnifier);
+
+  	/* TOC CONTROL */
+    var readerOptions = {
+      panels: Monocle.Panels.Marginal
+    };
+    Monocle.Reader('reader', bookData, readerOptions, function (rdr) {
+      reader = rdr;
+      var toc = Monocle.Controls.Contents(rdr);
+      rdr.addControl(toc, 'popover', { hidden: true });
+      createBookTitle(
+        rdr,
+        {
+          start: function () {
+            rdr.showControl(toc);
+          }
+        }
+      );
+    });
+
+     // var toc =  Monocle.Controls.Contents(reader);
+     // reader.addControl(toc, 'popover', { hidden: false });
+     // 
+     //  createBookTitle(reader,
+     //     {
+     //      start: function () {
+     //        reader.showControl(toc);
+     //      }
+     //    }
+     //  );
 
   }
 );
