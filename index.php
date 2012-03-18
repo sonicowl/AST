@@ -79,6 +79,31 @@ function init(){
     //   { panels: Monocle.Panels.IMode }
     // );
 
+	
+	//Hide the address bar
+
+	function fullscreen(){
+		var a=document.getElementsByTagName("a");
+		for(var i=0;i<a.length;i++){
+			if(a[i].className.match("noeffect")){
+			
+			}
+			else{a[i].onclick=function(){
+				window.location=this.getAttribute("href");
+				return false;
+			}}
+		}
+	}
+	
+	function hideURLbar(){
+		window.scrollTo(0,0.9)
+	}
+		
+	fullscreen();
+	hideURLbar();
+
+
+
 	audioz = document.getElementById("audio");
 	
 	audioz.addEventListener("abort", 		function () {	debug(arguments, "abort"); });
@@ -441,8 +466,7 @@ function runProcess9(i)
 	for (var i=0; i<pArr.length;i++){
 		pArr[i].innerHTML = "<span onclick='javascript:top.seekTo(&quot;"+i.toString()+"&quot;)'>"+ pArr[i].innerHTML+ "</a>";
 	}
-	
-	var iWebkit;if(!iWebkit){iWebkit=window.onload=function(){function fullscreen(){var a=document.getElementsByTagName("a");for(var i=0;i<a.length;i++){if(a[i].className.match("noeffect")){}else{a[i].onclick=function(){window.location=this.getAttribute("href");return false}}}}function hideURLbar(){window.scrollTo(0,0.9)}iWebkit.init=function(){fullscreen();hideURLbar()};iWebkit.init()}}
+
 
 </script>
 

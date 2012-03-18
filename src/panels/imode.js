@@ -29,13 +29,13 @@ Monocle.Panels.IMode = function (flipper, evtCallbacks) {
       p.divs[dir].style.width = "33%";
       p.divs[dir].style[dir == "forwards" ? "right" : "left"] = 0;
     }
-    // 
-    // p.panels.central = new Monocle.Controls.Panel();
-    // p.reader.addControl(p.panels.central);
-    // p.divs.central = p.panels.central.properties.div;
-    // p.divs.central.dom.setStyles({ left: "33%", width: "34%" });
-    // menuCallbacks({ end: modeOn });
 
+    p.panels.central = new Monocle.Controls.Panel();
+    p.reader.addControl(p.panels.central);
+    p.divs.central = p.panels.central.properties.div;
+    p.divs.central.dom.setStyles({ left: "33%", width: "34%" });
+    menuCallbacks({ end: modeOn });
+	modeOn();
     for (dir in p.panels) {
       p.divs[dir].dom.addClass('panels_imode_panel');
       p.divs[dir].dom.addClass('panels_imode_'+dir+'Panel');
