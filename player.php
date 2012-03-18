@@ -41,6 +41,7 @@
 <title>AST</title>
 <script src="data.php"></script>
 <script>
+var dontturn;
 var runningP0;
 var runningP1;
 var runningP2;
@@ -80,6 +81,7 @@ function init(){
 	audioz.addEventListener("volumechange", 		function () {	debug(arguments, "volumechange"); });
 	audioz.addEventListener("waiting", 		function () {	debug(arguments, "waiting"); });
 	audioz.addEventListener("timeupdate", 		function () {	update(arguments); });
+	dontturn = false;
 	runningP0 = false;
  	runningP1 = false;
  	runningP2 = false;
@@ -160,7 +162,7 @@ function seekTo(t){
 	} catch (e) {
 
 	}
-
+    dontturn = true;
 	if (runningP9 == true) { runningP9 = false; runningP1 = true; runProcess1(t); }
 	if (runningP8 == true) { runningP8 = false; runningP9 = true; runProcess9(t); }
 	if (runningP7 == true) { runningP7 = false; runningP8 = true; runProcess8(t); }
@@ -171,7 +173,7 @@ function seekTo(t){
 	if (runningP2 == true) { runningP2 = false; runningP3 = true; runProcess3(t); }
 	if (runningP1 == true) { runningP1 = false; runningP2 = true; runProcess2(t); }
 	if (runningP0 == true) { runningP0 = false; runningP1 = true; runProcess1(t); }
-
+    dontturn = false;
 }
 
 </script>
@@ -213,8 +215,9 @@ function runProcess(i, processname){
 	var time2 = ((time2secs(t2)-time1) * 1000);
 	var pageDiv = reader.dom.find('component', 1);
 	var doc = pageDiv.contentDocument;//contentWindow
+	var node = doc.evaluate('//p['+i+']', doc, null, 9, null).singleNodeValue;
 	var parag = doc.getElementsByTagName('p');
-    //alert('1');
+    //alert(node);
 	for (var y=0; y<parag.length;y++){
 			if (y!=(i-1))
 				parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFB0F","background-color: #FFFFFF");
@@ -222,7 +225,7 @@ function runProcess(i, processname){
 			    parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFFFF","background-color: #FFFB0F");
 	}			
 	document.getElementById('currentpar').innerHTML = "HMP "+parag.length+", Paragraph "+i.toString()+", Next "+t2;
-	reader.moveTo({ xpath: '//p['+i+']' });
+	if (dontturn == false) reader.moveTo({ xpath: '//p['+i+']' });
 	setTimeout(processname + "("+i.toString()+")",time2);
 
 }
