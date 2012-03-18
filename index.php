@@ -3,7 +3,8 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	
- <!-- <script src="monocle/scripts/monocore.js"></script> -->
+<!-- TODO MINIFY JAVASCRIPT -->
+
  <!-- MONOCLE CORE -->
  <script type="text/javascript" src="src/core/monocle.js"></script>
  <script type="text/javascript" src="src/compat/env.js"></script>
@@ -29,24 +30,31 @@
  <script type="text/javascript" src="src/flippers/instant.js"></script>
  <script type="text/javascript" src="src/dimensions/vert.js"></script>
  <script type="text/javascript" src="src/flippers/legacy.js"></script>
- <!-- MONOCLE STANDARD CONTROLS -->
-   <script type="text/javascript" src="src/controls/spinner.js"></script>
-    <script type="text/javascript" src="src/controls/magnifier.js"></script>
 
-    <script type="text/javascript" src="src/controls/scrubber.js"></script>
-    <script type="text/javascript" src="src/controls/placesaver.js"></script>
-    <script type="text/javascript" src="src/controls/contents.js"></script>
-  <link rel="stylesheet" type="text/css" href="monocle/styles/monocore.css" />
-  <link rel="stylesheet" type="text/css" href="monocle/styles/monoctrl.css" />
-  <style>
-    #reader { width: 300px; height: 400px; border: 1px solid #000; }
-	#part1, #part2 {display:none}
-  </style>
+ <!-- MONOCLE STANDARD CONTROLS -->
+<script type="text/javascript" src="src/controls/spinner.js"></script>
+<script type="text/javascript" src="src/controls/magnifier.js"></script>
+<script type="text/javascript" src="src/controls/scrubber.js"></script>
+<script type="text/javascript" src="src/controls/placesaver.js"></script>
+<script type="text/javascript" src="src/controls/contents.js"></script>
+
+<link rel="stylesheet" type="text/css" href="monocle/styles/monocore.css" />
+<link rel="stylesheet" type="text/css" href="monocle/styles/monoctrl.css" />
+
+<style>
+  #reader { width: 300px; height: 400px; border: 1px solid #000; }
+  #part1, #part2 {display:none}
+</style>
+
 <meta charset="UTF-8">
 
 <title>AST</title>
+
 <script src="data.php"></script>
+
 <script>
+
+/* GLOBAL VARIABLES */
 var dontturn;
 var runningP0;
 var runningP1;
@@ -59,6 +67,7 @@ var runningP7;
 var runningP8;
 var runningP9;
 var audio;
+
 function init(){
 	console.log("init");
 	// window.reader = Monocle.Reader('reader');
@@ -107,36 +116,29 @@ function init(){
  	runningP8 = false;
  	runningP9 = false;
 	startRunP(0);
-	//var place = reader.getPlace();
-    //document.getElementById('currentpar').innerHTML = place.chapterTitle();
-	//reader.addControl(new Monocle.Controls.Scrubber(reader)) 
-
-		reader.listen(
-			'monocle:pagechange',
-			function (evt) {
-			var place = reader.getPlace(evt.m.page);
-			var section = place.componentId();
-			var chapterInfo = place.chapterInfo();
-			var chapterSrc = place.chapterSrc();
-			var pageTopPos = place.percentAtTopOfPage();
-			var pageBottomPos = place.percentAtBottomOfPage();
-			var pagenumber = place.pageNumber() - 1;
-			document.getElementById('pagenum').innerHTML = "Page "+ pagenumber;
-		});
-		
-
-	    var scrubber = new Monocle.Controls.Scrubber(reader);
-        reader.addControl(scrubber);
-
-		  /* MAGNIFIER CONTROL */
-          var magnifier = new Monocle.Controls.Magnifier(reader);
-          reader.addControl(magnifier);
 
 
+	reader.listen(
+		'monocle:pagechange',
+		function (evt) {
+		var place = reader.getPlace(evt.m.page);
+		var section = place.componentId();
+		var chapterInfo = place.chapterInfo();
+		var chapterSrc = place.chapterSrc();
+		var pageTopPos = place.percentAtTopOfPage();
+		var pageBottomPos = place.percentAtBottomOfPage();
+		var pagenumber = place.pageNumber() - 1;
+		document.getElementById('pagenum').innerHTML = "Page "+ pagenumber;
+	});
 
 
+  	/* SCRUBBER CONTROL */
+    var scrubber = new Monocle.Controls.Scrubber(reader);
+    reader.addControl(scrubber);
 
-//setTimeout("reader.moveTo({ direction: 1 })",6000);
+  	/* MAGNIFIER CONTROL */
+    var magnifier = new Monocle.Controls.Magnifier(reader);
+    reader.addControl(magnifier);
 
 }
 
@@ -190,6 +192,8 @@ function seekTo(t){
 	if (runningP0 == true) { runningP0 = false; runningP1 = true; runProcess1(t); }
     dontturn = false;
 }
+
+//*TODO = GET BOOK DATA FROM ALL CHAPTERS *//
 
 var bookData = {
   getComponents: function () {
@@ -261,8 +265,6 @@ Monocle.Events.listen(
 <!-- <div onclick="reader.moveTo({ direction: -1 }); ">Previous page</div>
 <div onclick="reader.moveTo({ direction: 1 }); ">Next page</div> -->
 
-
-
   <div id="part1">
 	<?php include("epub.php"); ?>
  </div>
@@ -298,6 +300,7 @@ Monocle.Events.listen(
 </div>
 
 <script>
+
 document.getElementById('currentpar').innerHTML = "Paragraph 1, Next 0";
 
 function startRunP(i){
@@ -307,14 +310,14 @@ function startRunP(i){
 
 function runProcess(i, processname){
 	var t2 = timeline[i].start;
-	    var t1 = timeline[i-1].start;
-	    var time1 = time2secs(t1);
+    var t1 = timeline[i-1].start;
+    var time1 = time2secs(t1);
 	var time2 = ((time2secs(t2)-time1) * 1000);
 	var pageDiv = reader.dom.find('component', 1);
 	var doc = pageDiv.contentDocument;//contentWindow
 	var node = doc.evaluate('//p['+i+']', doc, null, 9, null).singleNodeValue;
 	var parag = doc.getElementsByTagName('p');
-	    //alert(node);
+	
 	for (var y=0; y<parag.length;y++){
 			if (y!=(i-1))
 				parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFB0F","background-color: #FFFFFF");
@@ -425,75 +428,9 @@ function runProcess9(i)
 		pArr[i].innerHTML = "<span onclick='javascript:top.seekTo(&quot;"+i.toString()+"&quot;)'>"+ pArr[i].innerHTML+ "</a>";
 	}
 
-
-	
-	
-//function runProcess1(i)
-//{
-//	console.log("startRunT: " + runningT.toString());
-//	i=Number(i) + 1;
-	
-//if ((timeline.length > i) && (runningT == false)){
-  //      	var t2 = timeline[i].start;
-    //        var t1 = timeline[i-1].start;
-	  //      var time1 = time2secs(t1);
-      // / 	var time2 = ((time2secs(t2)-time1) * 1000);
-//			var pageDiv = reader.visiblePages()[0];
-//			var doc = pageDiv.m.activeFrame.contentDocument;//contentWindow
-//			var parag = doc.getElementsByTagName('p');
-			//var place = reader.getPlace(pageDiv);
-			//var pgcount = reader.dom.find('page', 0).contentDocument;
-		    //var doc = reader.dom.find('page', 0).m.activeFrame.contentDocument;
-			//var doccon = doc.innerHTML;//contentWindow
-  	        //var cmpt = reader.dom.find('component');
-		    //var doc = cmpt.contentWindow;
-            
-//			document.getElementById('currentpar').innerHTML = "HMP "+parag.length+", Paragraph "+i.toString()+", Next "+t2;
-//			for (var y=0; y<parag.length;y++){
-//					if (y!=(i-1))
-//						parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFB0F","background-color: #FFFFFF");
-//					else
-//					    parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFFFF","background-color: #FFFB0F");
-//			}
-//			setTimeout("startRun("+i.toString()+")",time2);
-	  	    //if (running == true) setTimeout("running = true;",time2);
-
-		    
-		   //var cmpt = window.reader.dom.find('p', 2);
-		   //cmpt.style.color='red';
-		   //document.getElementById('reader').innerHTML = "<p class='para'>Introduction</div></p>"
-		   //reader.moveTo({ page: 2 });
-		
-//}
-
-
-
-//}
-
- 
-
-
-	
-		//	var but = document.createElement("button");
-	//		var txt = document.createTextNode(timeline[i].start);
-	//		but.appendChild(txt);
-	//		but.onclick = function(){seekTo(this.firstChild.nodeValue);};
-	//	   pArr[i].insertBefore(but,pArr[i].firstChild);
-	
-
-
-	
-	
-	
-//		pArr[i].innerHTML = "<span onclick=&quot;javascript:seekTo("'"+timeline[i].start.toString()+"'")'&quot;>"+ pArr[i].innerHTML+ "</a>";
-	//	document.getElementById('pagenum').innerHTML = "sd";
-	
-	
-
-	
 </script>
-</body>
 
+</body>
 </html>
 
 
