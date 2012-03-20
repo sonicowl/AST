@@ -120,11 +120,12 @@ function init(){
 			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_play.png)");
 		}else{
 			isPlaying = true;
-			audioz.play();
 			if (isFirstTime == true){
 					seekTo(1);
 					isFirstTime = false;
 			}
+			audioz.play();
+			
 			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_pause.png)");
 		}
 	}
