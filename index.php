@@ -82,6 +82,7 @@ var runningP8;
 var runningP9;
 var audio;
 var reader;
+var currentParagraph = 1;
 var isPlaying = false;
 
 function init(){
@@ -120,6 +121,8 @@ function init(){
 		}else{
 			isPlaying = true;
 			audioz.play();
+			seekTo(currentParagraph);
+			
 			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_pause.png)");
 		}
 	}
@@ -195,6 +198,7 @@ function debug(args,msg){
 timeline.offset = 0;
 
 function seekTo(t){	
+	currentParagraph = t;
 	console.log('seek to');
 	var time = time2secs(timeline[t].start.toString());
 	try {
@@ -407,6 +411,7 @@ function startRunP(i){
 }
 
 function runProcess(i, processname){
+	currentParagraph = i;
 	var t2 = timeline[i].start;
     var t1 = timeline[i-1].start;
     var time1 = time2secs(t1);
