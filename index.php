@@ -86,6 +86,7 @@ var currentParagraph = 1;
 var isPlaying = false;
 
 function init(){
+	seekTo(1)
 	// console.log("init");
 	// window.reader = Monocle.Reader('reader');
 	
