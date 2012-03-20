@@ -35,7 +35,7 @@ Monocle.Panels.IMode = function (flipper, evtCallbacks) {
     p.divs.central = p.panels.central.properties.div;
     p.divs.central.dom.setStyles({ left: "33%", width: "34%" });
     menuCallbacks({ end: modeOn });
-	modeOn();
+	// modeOn();
     for (dir in p.panels) {
       p.divs[dir].dom.addClass('panels_imode_panel');
       p.divs[dir].dom.addClass('panels_imode_'+dir+'Panel');
@@ -64,31 +64,41 @@ Monocle.Panels.IMode = function (flipper, evtCallbacks) {
 
 
   function modeOn() {
-    if (p.interactive) {
-      return;
-    }
-
-    p.panels.central.contract();
-
-    var page = p.reader.visiblePages()[0];
-    var sheaf = page.m.sheafDiv;
-    var bw = sheaf.offsetLeft;
-    var fw = page.offsetWidth - (sheaf.offsetLeft + sheaf.offsetWidth);
-    bw = Math.floor(((bw - 2) / page.offsetWidth) * 10000 / 100 ) + "%";
-    fw = Math.floor(((fw - 2) / page.offsetWidth) * 10000 / 100 ) + "%";
-
-    startCameo(function () {
-      p.divs.forwards.style.width = fw;
-      p.divs.backwards.style.width = bw;
-      Monocle.Styles.affix(p.divs.central, 'transform', 'translateY(-100%)');
-    });
-
-    p.reader.showControl(p.toggleIcon);
-
-    p.interactive = true;
-    if (flipper.interactiveMode) {
-      flipper.interactiveMode(true);
-    }
+	if (p.interactive) {
+		p.interactive = false;
+		document.getElementById("topMenu").setAttribute("style","opacity:0;-webkit-transform: translateY(-47px)");
+		
+      // return;
+    }else{
+	    p.interactive = true;
+		document.getElementById("topMenu").setAttribute("style","opacity:0.9; -webkit-transform: translateY(0px)");
+	}
+	
+    // if (p.interactive) {
+    //   return;
+    // }
+    // 
+    // p.panels.central.contract();
+    // 
+    // var page = p.reader.visiblePages()[0];
+    // var sheaf = page.m.sheafDiv;
+    // var bw = sheaf.offsetLeft;
+    // var fw = page.offsetWidth - (sheaf.offsetLeft + sheaf.offsetWidth);
+    // bw = Math.floor(((bw - 2) / page.offsetWidth) * 10000 / 100 ) + "%";
+    // fw = Math.floor(((fw - 2) / page.offsetWidth) * 10000 / 100 ) + "%";
+    // 
+    // startCameo(function () {
+    //   p.divs.forwards.style.width = fw;
+    //   p.divs.backwards.style.width = bw;
+    //   Monocle.Styles.affix(p.divs.central, 'transform', 'translateY(-100%)');
+    // });
+    // 
+    // p.reader.showControl(p.toggleIcon);
+    // 
+    // p.interactive = true;
+    // if (flipper.interactiveMode) {
+    //   flipper.interactiveMode(true);
+    // }
   }
 
 

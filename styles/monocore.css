@@ -9,8 +9,8 @@ modify this stylesheet accordingly.
 /* The reader object that holds pretty much everything.
  * (A direct child of the element passed to reader initialisation). */
 div.monelem_container {
-  background-color: black;
-}
+/*  background-color: black;
+*/}
 
 
 /* The div that mimics a leaf of paper in a book. */
@@ -20,8 +20,8 @@ div.monelem_page {
   left: 0;
   bottom: 3px;
   right: 5px;
-  border-right: 1px solid #999;
-}
+/*  border-right: 1px solid #999;
+*/}
 
 
 /* The div within the page that determines page margins. */
@@ -54,15 +54,15 @@ div.monelem_overlay {
 }
 
 .monelem_panels_imode_backwardsPanel {
-  -webkit-box-shadow: 1px 1px 3px #777;
+/*  -webkit-box-shadow: 1px 1px 3px #777;
   -moz-box-shadow: 1px 1px 3px #777;
-  box-shadow: 1px 1px 3px #777;
+  box-shadow: 1px 1px 3px #777;*/
 }
 
 .monelem_panels_imode_forwardsPanel {
-  -webkit-box-shadow: -1px 1px 3px #777;
+/*  -webkit-box-shadow: -1px 1px 3px #777;
   -moz-box-shadow: -1px 1px 3px #777;
-  box-shadow: -1px 1px 3px #777;
+  box-shadow: -1px 1px 3px #777;*/
 }
 
 .monelem_panels_imode_centralPanel {

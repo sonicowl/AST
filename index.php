@@ -33,6 +33,8 @@
 
  <!-- MONOCLE STANDARD CONTROLS -->
 <script type="text/javascript" src="src/controls/spinner.js"></script>
+<script type="text/javascript" src="src/controls/menu.js"></script>
+
 <script type="text/javascript" src="src/controls/magnifier.js"></script>
 <script type="text/javascript" src="src/controls/scrubber.js"></script>
 <script type="text/javascript" src="src/controls/placesaver.js"></script>
@@ -42,7 +44,8 @@
 <link rel="stylesheet" type="text/css" href="monocle/styles/monoctrl.css" />
 
 <style>
-  #reader { width: 300px; height: 400px; border: 1px solid #000; }
+  #reader { width: 320px; height: 358px; }
+
   #part1, #part2 {display:none}
   .bookTitle {
     position: absolute;
@@ -54,6 +57,7 @@
 	font-size:0.8em;
 	color:#cc0000;
   }
+  #main_audio{display:none}
 </style>
 
 <meta charset="UTF-8">
@@ -78,20 +82,14 @@ var runningP8;
 var runningP9;
 var audio;
 var reader;
+var isPlaying = false;
 
 function init(){
-	console.log("init");
+	// console.log("init");
 	// window.reader = Monocle.Reader('reader');
 	
-	// I-MODE
-    // window.reader = Monocle.Reader(
-    //   'imode',
-    //   'reader',
-    //   { panels: Monocle.Panels.IMode }
-    // );
-
-	
 	//Hide the address bar
+	audioz = document.getElementById("audio");
 
 	function fullscreen(){
 		var a=document.getElementsByTagName("a");
@@ -105,17 +103,32 @@ function init(){
 			}}
 		}
 	}
-	
+		
 	function hideURLbar(){
 		window.scrollTo(0,0.9)
 	}
-		
 	fullscreen();
 	hideURLbar();
 
+	
+	//Audio Control
+	document.getElementById('top_audio').onclick = function(e){
+		if (isPlaying == true){
+			isPlaying = false;
+			audioz.pause();
+			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_play.png)");
+		}else{
+			isPlaying = true;
+			audioz.play();
+			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_pause.png)");
+		}
+	}
+	
+	//Audio Control
+	document.getElementById('top_home_btn').onclick = function(e){
+		window.location = "home.php"
+	}
 
-
-	audioz = document.getElementById("audio");
 	
 	audioz.addEventListener("abort", 		function () {	debug(arguments, "abort"); });
 	audioz.addEventListener("canplay", 		function () {	debug(arguments, "canplay"); });
@@ -210,8 +223,7 @@ function seekTo(t){
 var bookData = {
   getComponents: function () {
     return [
-      'part1',
-      'part2'
+      'part1'
     ];
   },
   getContents: function () {
@@ -219,10 +231,6 @@ var bookData = {
       {
         title: "I",
         src: 'part1'
-      },
-      {
-        title: "II",
-        src: 'part2'
       }
     ]
   },
@@ -294,27 +302,33 @@ Monocle.Events.listen(
       var toc = Monocle.Controls.Contents(rdr);
       rdr.addControl(toc, 'popover', { hidden: true });
 
+
+  	// /* MENU CONTROL */
+  	//     var menu = new Monocle.Controls.Menu(rdr);
+  	//     rdr.addControl(menu);
+
   	/* SCRUBBER CONTROL */
-    var scrubber = new Monocle.Controls.Scrubber(rdr);
-    rdr.addControl(scrubber);
+  	//     var scrubber = new Monocle.Controls.Scrubber(rdr);
+  	//     rdr.addControl(scrubber);
+  	// 
+  	// /* MAGNIFIER CONTROL */
+  	//     var magnifier = new Monocle.Controls.Magnifier(rdr);
+  	//     rdr.addControl(magnifier);
+  	// 
+  	// /* TOC CONTROL */
+  	//     var readerOptions = {
+  	//       panels: Monocle.Panels.IMode
+  	//     };
+  	// 
+  	//       createBookTitle(
+  	//         rdr,
+  	//         {
+  	//           start: function () {
+  	//             rdr.showControl(toc);
+  	//           }
+  	//         }
+  	//       );
 
-  	/* MAGNIFIER CONTROL */
-    var magnifier = new Monocle.Controls.Magnifier(rdr);
-    rdr.addControl(magnifier);
-
-  	/* TOC CONTROL */
-    var readerOptions = {
-      panels: Monocle.Panels.IMode
-    };
-
-      createBookTitle(
-        rdr,
-        {
-          start: function () {
-            rdr.showControl(toc);
-          }
-        }
-      );
     });
 
 
@@ -323,12 +337,11 @@ Monocle.Events.listen(
 
 </script>
 
-<body onload="init()">
+<body style="padding:0; margin:0" onload="init()">
 	<div id="currentpar" style="display:none"></div>
 	<div id="pagenum" style="display:none"></div>
 
-
-<div>
+<div id="main_audio">
 	<audio controls id="audio">
 		<source type="audio/mp3" preload="metadata" src="video.php"/>
 		Your browser does not support HTML5 audioz.
@@ -336,6 +349,13 @@ Monocle.Events.listen(
 </div>
 
 <div id="status"></div>
+
+<div id="topMenu">
+	<div id="top_home_btn"></div>
+	<div id="top_title">Chapter Title</div>
+	<div id="top_audio"></div>
+	<div style="clear:both"></div>
+</div>
 
 <div id="reader">
 
