@@ -84,9 +84,8 @@ var audio;
 var reader;
 var currentParagraph = 1;
 var isPlaying = false;
-
+var isFirstTime = true;
 function init(){
-	seekTo(1)
 	// console.log("init");
 	// window.reader = Monocle.Reader('reader');
 	
@@ -122,6 +121,10 @@ function init(){
 		}else{
 			isPlaying = true;
 			audioz.play();
+			if (isFirstTime == true){
+					seekTo(1);
+					isFirstTime = false;
+			}
 			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_pause.png)");
 		}
 	}
