@@ -82,7 +82,7 @@ var runningP8;
 var runningP9;
 var audio;
 var reader;
-var currentParagraph = 1;
+var currentParagraph = 0;
 var isPlaying = false;
 var isFirstTime = true;
 function init(){
@@ -121,7 +121,7 @@ function init(){
 		}else{
 			isPlaying = true;
 			if (isFirstTime == true){
-					seekTo(1);
+					seekTo(0);
 					isFirstTime = false;
 			}
 			audioz.play();
