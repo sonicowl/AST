@@ -121,8 +121,6 @@ function init(){
 		}else{
 			isPlaying = true;
 			audioz.play();
-			seekTo(currentParagraph);
-			
 			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_pause.png)");
 		}
 	}
