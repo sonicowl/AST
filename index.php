@@ -46,7 +46,7 @@
 <style>
   #reader { width: 320px; height: 358px; }
 
-  #part1, #part2 {display:none}
+  #part1 {display:none}
   .bookTitle {
     position: absolute;
     top: 0;
@@ -69,28 +69,19 @@
 <script>
 
 /* GLOBAL VARIABLES */
-var dontturn;
-var runningP0;
-var runningP1;
-var runningP2;
-var runningP3;
-var runningP4;
-var runningP5;
-var runningP6;
-var runningP7;
-var runningP8;
-var runningP9;
+var currentpar = 1;
 var audio;
 var reader;
-var currentParagraph = 0;
-var isPlaying = false;
-var isFirstTime = true;
+var tt1;
+var tt2;
+var isPlaying;
+var isFirstTime;
 function init(){
 	// console.log("init");
 	// window.reader = Monocle.Reader('reader');
 	
 	//Hide the address bar
-	audioz = document.getElementById("audio");
+	audio = document.getElementById("audio");
 
 	function fullscreen(){
 		var a=document.getElementsByTagName("a");
@@ -116,16 +107,14 @@ function init(){
 	document.getElementById('top_audio').onclick = function(e){
 		if (isPlaying == true){
 			isPlaying = false;
-			audioz.pause();
+			audio.pause();
+			clearTimeout(tt1);
+			clearTimeout(tt2);
 			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_play.png)");
 		}else{
 			isPlaying = true;
-			if (isFirstTime == true){
-					seekTo(0);
-					isFirstTime = false;
-			}
-			audioz.play();
-			
+		    //alert((currentpar + 1));
+		    seekTo(currentpar - 1);	
 			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_pause.png)");
 		}
 	}
@@ -136,48 +125,36 @@ function init(){
 	}
 
 	
-	audioz.addEventListener("abort", 		function () {	debug(arguments, "abort"); });
-	audioz.addEventListener("canplay", 		function () {	debug(arguments, "canplay"); });
-	audioz.addEventListener("canplaythrough", 	function () {	debug(arguments, "canplaythrough"); });
-	audioz.addEventListener("durationchange", 	function () {	debug(arguments, "durationchange"); });
-	audioz.addEventListener("emptied", 		function () {	debug(arguments, "emptied"); });
-	audioz.addEventListener("ended", 		function () {	debug(arguments, "ended"); });
-	audioz.addEventListener("error", 		function () {	debug(arguments, "error"); });
-	audioz.addEventListener("loadeddata", 		function () {	debug(arguments, "loadeddata"); });
-	audioz.addEventListener("loadedmetadata", 	function () {	debug(arguments, "loadedmetadata"); });
-	audioz.addEventListener("loadstart", 		function () {	debug(arguments, "loadstart"); });
-	audioz.addEventListener("pause", 		function () {	debug(arguments, "pause"); });
-	audioz.addEventListener("play", 			function () {	debug(arguments, "play"); });
-	audioz.addEventListener("playing", 		function () {	debug(arguments, "playing"); });
-	audioz.addEventListener("progress", 		function () {	debug(arguments, "progress"); });
-	audioz.addEventListener("ratechange", 		function () {	debug(arguments, "ratechange"); });
-	audioz.addEventListener("readystatechange", 	function () {	debug(arguments, "readystatechange"); });
-	audioz.addEventListener("seeked", 		function () {	debug(arguments, "seeked"); });
-	audioz.addEventListener("seeking", 		function () {	debug(arguments, "seeking"); });
-	audioz.addEventListener("stalled", 		function () {	debug(arguments, "stalled"); });
-	audioz.addEventListener("suspend", 		function () {	debug(arguments, "suspend"); });
-	audioz.addEventListener("volumechange", 		function () {	debug(arguments, "volumechange"); });
-	audioz.addEventListener("waiting", 		function () {	debug(arguments, "waiting"); });
-	audioz.addEventListener("timeupdate", 		function () {	update(arguments); });
-	dontturn = false;
-	runningP0 = false;
- 	runningP1 = false;
- 	runningP2 = false;
- 	runningP3 = false;
- 	runningP4 = false;
- 	runningP5 = false;
- 	runningP6 = false;
-	runningP7 = false;
- 	runningP8 = false;
- 	runningP9 = false;
-	startRunP(0);
+	audio.addEventListener("abort", 		function () {	debug(arguments, "abort"); });
+	audio.addEventListener("canplay", 		function () {	debug(arguments, "canplay"); });
+	audio.addEventListener("canplaythrough", 	function () {	debug(arguments, "canplaythrough"); });
+	audio.addEventListener("durationchange", 	function () {	debug(arguments, "durationchange"); });
+	audio.addEventListener("emptied", 		function () {	debug(arguments, "emptied"); });
+	audio.addEventListener("ended", 		function () {	debug(arguments, "ended"); });
+	audio.addEventListener("error", 		function () {	debug(arguments, "error"); });
+	audio.addEventListener("loadeddata", 		function () {	debug(arguments, "loadeddata"); });
+	audio.addEventListener("loadedmetadata", 	function () {	debug(arguments, "loadedmetadata"); });
+	audio.addEventListener("loadstart", 		function () {	debug(arguments, "loadstart"); });
+	audio.addEventListener("pause", 		function () {	debug(arguments, "pause"); });
+	audio.addEventListener("play", 			function () {	debug(arguments, "play"); });
+	audio.addEventListener("playing", 		function () {	debug(arguments, "playing"); });
+	audio.addEventListener("progress", 		function () {	debug(arguments, "progress"); });
+	audio.addEventListener("ratechange", 		function () {	debug(arguments, "ratechange"); });
+	audio.addEventListener("readystatechange", 	function () {	debug(arguments, "readystatechange"); });
+	audio.addEventListener("seeked", 		function () {	debug(arguments, "seeked"); });
+	audio.addEventListener("seeking", 		function () {	debug(arguments, "seeking"); });
+	audio.addEventListener("stalled", 		function () {	debug(arguments, "stalled"); });
+	audio.addEventListener("suspend", 		function () {	debug(arguments, "suspend"); });
+	audio.addEventListener("volumechange", 		function () {	debug(arguments, "volumechange"); });
+	audio.addEventListener("waiting", 		function () {	debug(arguments, "waiting"); });
+	audio.addEventListener("timeupdate", 		function () {	update(arguments); });
 }
 
 
 
 function update(){
 	var status = document.getElementById("status");
-	//status.innerHTML = audioz.currentTime + "<br />";
+	//status.innerHTML = audio.currentTime + "<br />";
 	for (var i=0; i<timeline.length; i++){
 		
 	}
@@ -188,12 +165,13 @@ function time2secs(t){
 	return Number(secs) + Number(timeline.offset);
 }
 
+
 function debug(args,msg){
 	var t = "";
 	for (var o in args[0]){
 		t += o + " " + args[0][o];
 	}
-
+  
 	console.log(args.length + " - " + msg);
 }
 
@@ -201,28 +179,20 @@ function debug(args,msg){
 timeline.offset = 0;
 
 function seekTo(t){	
-	currentParagraph = t;
-	console.log('seek to');
-	var time = time2secs(timeline[t].start.toString());
+	var timeaux;
+	//alert(i);
+	if (i == 1) timeaux = 0; else timeaux = timeline[t].start.toString()
+	time = time2secs(timeaux);
 	try {
-	  audioz.pause();
-	  audioz.currentTime = time;
-	  audioz.play();      
+	  audio.pause();
+	  audio.currentTime = time;
+	  audio.play();    
+   
 	} catch (e) {
 
 	}
-    dontturn = true;
-	if (runningP9 == true) { runningP9 = false; runningP1 = true; runProcess1(t); }
-	if (runningP8 == true) { runningP8 = false; runningP9 = true; runProcess9(t); }
-	if (runningP7 == true) { runningP7 = false; runningP8 = true; runProcess8(t); }
-	if (runningP6 == true) { runningP6 = false; runningP7 = true; runProcess7(t); }
-	if (runningP5 == true) { runningP5 = false; runningP6 = true; runProcess6(t); }
-	if (runningP4 == true) { runningP4 = false; runningP5 = true; runProcess5(t); }
-	if (runningP3 == true) { runningP3 = false; runningP4 = true; runProcess4(t); }
-	if (runningP2 == true) { runningP2 = false; runningP3 = true; runProcess3(t); }
-	if (runningP1 == true) { runningP1 = false; runningP2 = true; runProcess2(t); }
-	if (runningP0 == true) { runningP0 = false; runningP1 = true; runProcess1(t); }
-    dontturn = false;
+    runProcess(t);
+ 
 }
 
 //*TODO = GET BOOK DATA FROM ALL CHAPTERS *//
@@ -351,7 +321,7 @@ Monocle.Events.listen(
 <div id="main_audio">
 	<audio controls id="audio">
 		<source type="audio/mp3" preload="metadata" src="video.php"/>
-		Your browser does not support HTML5 audioz.
+		Your browser does not support HTML5 audio.
 	</audio>
 </div>
 
@@ -375,163 +345,105 @@ Monocle.Events.listen(
 	<?php include("epub.php"); ?>
  </div>
 
-<div id="part2">
-	 <h3>II</h3>
-	 <p>
-	 Mauris ac felis et justo pulvinar adipiscing ac quis metus. Duis sollicitudin nisi vel neque posuere auctor pretium urna pharetra. Nunc bibendum, tellus a interdum ultrices, enim velit pretium lorem, ut eleifend turpis ipsum vitae turpis. Cras accumsan sem vitae sapien semper varius. Sed eget orci magna, a sodales est. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent non tincidunt eros. Praesent iaculis, lectus sit amet rutrum dignissim, odio arcu auctor elit, sit amet imperdiet neque elit in lorem. Nam consectetur semper tellus, vel blandit dui porttitor eu. Quisque at metus non urna pulvinar tempus. Nunc a neque sed arcu blandit aliquam. Nam orci sapien, suscipit et suscipit sodales, tempus sed purus.
-	 </p>
-	 <p>
-	 Integer pulvinar nisl a ante sodales id viverra justo molestie. Cras quis mauris nulla. Quisque posuere dignissim consectetur. Curabitur eget augue sed ligula consectetur pulvinar sit amet vel velit. Pellentesque id massa egestas tellus vulputate tincidunt. Vestibulum vel congue arcu. Etiam nisi turpis, consequat sed vehicula vel, congue in leo. Aenean mauris leo, adipiscing nec scelerisque sed, ultricies in nisl. Fusce mollis semper nibh, id gravida libero iaculis quis. Curabitur id mi nisi, vel varius massa. Fusce suscipit rhoncus eleifend. Sed venenatis, velit sit amet consectetur sagittis, felis lacus viverra massa, sit amet suscipit ligula risus vitae urna. In euismod enim eu felis pretium at interdum dolor faucibus. Aenean eu felis orci. Nulla posuere tellus et justo porttitor non commodo sapien elementum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris id accumsan velit. Ut eu ligula molestie risus ornare eleifend eget vitae enim.
-	 </p>
-	 <p>
-	 Phasellus dictum, magna id venenatis egestas, ligula purus sagittis mi, ut egestas ipsum risus a nisl. Quisque aliquet imperdiet lectus, sit amet cursus leo vestibulum id. Praesent nibh purus, pulvinar in tincidunt a, pharetra et urna. Praesent ornare, nisi sed tempor laoreet, lorem nibh tempor est, lacinia ultricies erat felis quis elit. Etiam et elit et lacus lacinia lacinia at sit amet diam. Fusce laoreet ligula non sem volutpat ut porta ipsum tempor. Mauris justo nisi, ornare sodales suscipit at, fermentum placerat justo. Aliquam quis consequat nunc. Mauris turpis ligula, cursus a accumsan sed, porttitor aliquet neque. Quisque vel enim tortor, a rutrum libero. Donec et molestie justo. Sed auctor, tellus at bibendum auctor, nulla sem aliquam dui, nec viverra ante erat eu tellus. Quisque et nisi tortor. Morbi semper odio quis quam accumsan dignissim. Cras ut augue nunc, quis molestie mi. Sed felis arcu, venenatis quis ultrices eget, tempus ac felis. Nunc porta neque non neque convallis nec consectetur orci sollicitudin. Sed leo lectus, feugiat in euismod eget, semper vitae lacus. Vestibulum non lacus a dui fermentum lobortis sed sit amet felis.
-	 </p>
-	 <p>
-	 Praesent quis odio a nulla facilisis pulvinar in in dolor. Donec lacinia mauris non turpis dignissim viverra. Pellentesque sollicitudin dolor nec ipsum sagittis vitae dapibus odio aliquet. Donec ultrices consequat ligula eu volutpat. Vestibulum vitae tortor eu mi pulvinar cursus eget sit amet est. Nulla sagittis adipiscing faucibus. Suspendisse commodo sapien in arcu euismod eleifend. Aliquam porta velit vel leo sagittis vel venenatis urna sagittis. Quisque vulputate egestas scelerisque. Fusce porttitor sagittis neque, sit amet pharetra odio imperdiet at. Cras sodales hendrerit tellus, ut aliquam velit pellentesque id. Vivamus lacus augue, semper ut hendrerit mollis, elementum et velit. Donec lorem nunc, mollis ac pharetra at, bibendum a nisi. Vivamus porta turpis nec magna tempus venenatis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean vitae quam viverra neque interdum ultricies eu in diam. Integer tempus metus in nibh mattis adipiscing tincidunt leo porttitor. Vivamus at velit quis risus tincidunt dapibus.
-	 </p>
-	 <p>
-	 Aliquam erat volutpat. Maecenas nec neque nulla, eget ullamcorper ligula. Phasellus dapibus quam a odio congue consectetur. Quisque sagittis nisl elementum dolor porttitor venenatis. Sed non pulvinar urna. Suspendisse nunc nibh, lacinia id venenatis in, consectetur vitae mauris. Donec ac quam nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porttitor dui urna, facilisis rhoncus nisl. Pellentesque elit sem, molestie nec iaculis id, laoreet sagittis massa. Integer imperdiet sollicitudin nulla non rutrum. Phasellus egestas leo vel erat viverra vel ornare lorem dignissim. Mauris justo ligula, iaculis at vulputate in, viverra ut est. Praesent hendrerit enim eget sem ultricies non ultrices purus facilisis. Pellentesque commodo egestas iaculis. Aliquam erat volutpat. Vestibulum ornare cursus elit, vel mollis lorem elementum sit amet.
-	 </p>
-	 <p>
-
-	 Pellentesque ornare facilisis semper. Pellentesque lorem sem, molestie iaculis mattis vel, molestie at orci. Quisque non arcu lorem. Donec consectetur volutpat turpis, eget aliquam velit dapibus eget. Ut nec iaculis massa. Nam vel metus non augue tempor scelerisque. Vestibulum lectus neque, gravida ac tempor vitae, feugiat in lacus. Mauris vitae ipsum et massa commodo aliquet vitae ac massa. Cras ac nisi sapien, et tempus nibh. Curabitur porta nunc ac mauris porta vel pretium ligula egestas. Integer ut lacus quam. In purus diam, lacinia at congue in, placerat sed lorem. Mauris ultrices, magna in tempor malesuada, est massa dapibus augue, semper tempor turpis dui vel sapien. Nulla facilisi. Nam malesuada, nibh vitae vestibulum mattis, massa nulla interdum ipsum, et venenatis urna magna vel ante.
-	 </p>
-	 <p>
-	 Donec cursus, eros at cursus consequat, augue massa sagittis dolor, id dapibus elit nisi ac dolor. Sed lorem velit, semper in dapibus ullamcorper, ultricies vel dolor. Vestibulum ac tortor nec magna elementum congue in volutpat tortor. Pellentesque tellus turpis, sodales interdum gravida in, aliquam a velit. Ut massa mi, blandit a rhoncus vitae, ultrices ac felis. Curabitur urna nulla, malesuada id mollis et, elementum vel augue. Aenean rhoncus feugiat augue, vitae feugiat libero aliquet non. Aliquam auctor vestibulum malesuada. Phasellus ultrices, urna sed accumsan faucibus, turpis massa rutrum nibh, sed pellentesque metus massa in quam. Morbi bibendum, diam auctor malesuada sagittis, urna tellus adipiscing est, vitae accumsan nibh erat sit amet lorem. Nulla malesuada, lorem a viverra blandit, justo est tristique est, sed lobortis risus sapien sit amet quam. Suspendisse odio enim, posuere in convallis sed, porttitor ut libero. Quisque ultricies euismod consequat. Aliquam nec nunc diam. Aenean interdum erat faucibus enim scelerisque semper. Vestibulum porttitor lorem ullamcorper metus tincidunt ut convallis nisi tempus.
-	 </p>
-	 <p>
-	 Cras id mauris purus. Nullam id tortor tellus. Pellentesque vitae orci eu lacus pulvinar commodo. Aliquam erat volutpat. Integer tellus sapien, tincidunt non luctus nec, tempor a mauris. Nunc quis odio ut erat pellentesque aliquam quis et massa. Praesent lectus lectus, luctus non pellentesque et, facilisis auctor quam. Proin vestibulum eleifend interdum. Ut sit amet justo diam, ut pulvinar massa. Proin vel felis augue. Praesent sed quam sem, dapibus egestas quam. Mauris in magna leo. Nulla eget ipsum vel turpis commodo rutrum ut eu lorem. Morbi ultricies magna non mi eleifend eget pulvinar nulla egestas.
-	 </p>
-</div>
 
 <script>
 
 document.getElementById('currentpar').innerHTML = "Paragraph 1, Next 0";
 
-function startRunP(i){
-    runningP0 = true;
-	runProcess0(i);	
+function runProcess(i){
+i=Number(i) + 1;
+currentpar = i;
+//alert(i);
+pageDiv = reader.visiblePages()[0];
+doc = pageDiv.m.activeFrame.contentDocument;
+t2 = timeline[i].start;
+t1 = timeline[i-1].start;
+time1 = time2secs(t1);
+time2 = ((time2secs(t2)-time1) * 1000);
+if (i!=1) {
+	node1 = doc.evaluate('//p['+(i-1)+']', doc, null, 9, null).singleNodeValue;
+	paragraphcontents1 = node1.textContent;
+	percent1 = pageDiv.m.dimensions.percentageThroughOfNode(node1);
+	pag1 =Math.floor(percent1 * 30) + 2;
+
+	node2 = doc.evaluate('//p['+i+']', doc, null, 9, null).singleNodeValue;
+	paragraphcontents2 = node2.textContent;
+	percent2 = pageDiv.m.dimensions.percentageThroughOfNode(node2);
+	pag2 =Math.floor(percent2 * 30) + 2;
+
+	node3 = doc.evaluate('//p['+(i+1)+']', doc, null, 9, null).singleNodeValue;
+	paragraphcontents3 = node3.textContent;
+	percent3 = pageDiv.m.dimensions.percentageThroughOfNode(node3);
+	pag3 =Math.floor(percent3 * 30) + 2;
+
+	b1 = node1.getBoundingClientRect().bottom;
+	b2 = node2.getBoundingClientRect().bottom;
+	b3 = node3.getBoundingClientRect().bottom;
+
+	t1 = node1.getBoundingClientRect().top;
+	t2 = node2.getBoundingClientRect().top;
+	t3 = node3.getBoundingClientRect().top;
+
+	h1 = node1.getBoundingClientRect().height;
+	h2 = node2.getBoundingClientRect().height;
+	h3 = node3.getBoundingClientRect().height;
+
+
+	//If the next paragraph is all on the same page
+	//if ((pag2 == pag3) && (b3<333) && (b3>0)) goto fim;
+
+	//If the next paragraph is on the same page (the most), but the rest of the next paragraphg is on the next page.
+	//if ((pag2 == pag3) && (b3>333))  goto fim;
+
+	//If the next paragraph is on the next page, and the rest of the next paragraph is on the next page (the most)
+	//if (((pag2+1) == pag3) && (t3 < 0)) goto fim;
+
+	//means it starts in the current page and ends on the next, the most part of the text is on the current page
+	if (((pag2+1) == pag3) && (t3 > 0)) {
+			SizeOnActualPage = (333 - t2);
+			SizeOnNextPage = (b2 - 333);
+			newtime2 =  Math.floor((time2 * SizeOnActualPage) / (SizeOnActualPage + SizeOnNextPage));
+		    clearTimeout(tt2);
+			tt2 = setTimeout("reader.moveTo({ page: "+(pag2+1)+" })",newtime2);
+			
+	}
+
+	//means it starts in the current page and ends on the next, the most part of the text is on the next page
+	//or means it starts in the current page and ends on the next, the most part of the text is on the next page, and the next page has a paragraph that ends after the next page and the most of text are on that page
+	if (((pag2 == pag3) && (t2 < 0)) || (((pag2+1) == pag3) && (t2 < 0) && (t3 < 0))) {
+			SizeOnActualPage = (t2 * -1);
+			SizeOnNextPage = b2;
+			newtime2 =  Math.floor((time2 * SizeOnActualPage) / (SizeOnActualPage + SizeOnNextPage));
+			clearTimeout(tt2);
+			tt2 = setTimeout("reader.moveTo({ page: "+pag2+" })",newtime2);
+		//	alert(newtime2);
+	}
+	
+
+	if (t2 == 0){reader.moveTo({ page: pag2 })}
+
+    
+	//fim:	
 }
 
-function runProcess(i, processname){
-	currentParagraph = i;
-	var t2 = timeline[i].start;
-    var t1 = timeline[i-1].start;
-    var time1 = time2secs(t1);
-	var time2 = ((time2secs(t2)-time1) * 1000);
-	var pageDiv = reader.dom.find('component', 1);
-	var doc = pageDiv.contentDocument;//contentWindow
-	var node = doc.evaluate('//p['+i+']', doc, null, 9, null).singleNodeValue;
-	var parag = doc.getElementsByTagName('p');
-	
+clearTimeout(tt1);
+tt1 = setTimeout("runProcess("+i.toString()+")",time2);
+
+    parag = doc.getElementsByTagName('p');
 	for (var y=0; y<parag.length;y++){
 			if (y!=(i-1))
 				parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFB0F","background-color: #FFFFFF");
 			else
 			    parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFFFF","background-color: #FFFB0F");
 	}			
-	document.getElementById('currentpar').innerHTML = "HMP "+parag.length+", Paragraph "+i.toString()+", Next "+t2;
-	if (dontturn == false) reader.moveTo({ xpath: '//p['+i+']' });
-	setTimeout(processname + "("+i.toString()+")",time2);
+	//document.getElementById('currentpar').innerHTML = "HMP "+parag.length+", Paragraph "+i.toString()+", Next "+t2;
 
 }
 
-function runProcess0(i)
-	{
-		i=Number(i) + 1;
-	    if ((timeline.length > i) && (runningP0 == true)){
-			console.log("Running process 0")
-			runProcess(i, "runProcess0");
-		}
-	}
-
-function runProcess1(i)
-	{
-		
-		i=Number(i) + 1;
-	    if ((timeline.length > i) && (runningP1 == true)){
-			console.log("Running process 1")
-			runProcess(i, "runProcess1");
-		}
-	}
-
-function runProcess2(i)
-	{
-		i=Number(i) + 1;
-	    if ((timeline.length > i) && (runningP2 == true)){
-			console.log("Running process 2")
-			runProcess(i, "runProcess2");
-		}
-	}
-
-function runProcess3(i)
-	{
-		i=Number(i) + 1;
-	    if ((timeline.length > i) && (runningP3 == true)){
-			console.log("Running process 3")
-			runProcess(i, "runProcess3");
-		}
-	}
-
-function runProcess4(i)
-	{
-		i=Number(i) + 1;
-	    if ((timeline.length > i) && (runningP4 == true)){
-			console.log("Running process 4")
-			runProcess(i, "runProcess4");
-		}
-	}
-
-function runProcess5(i)
-	{
-		i=Number(i) + 1;
-	    if ((timeline.length > i) && (runningP5 == true)){
-			console.log("Running process 5")
-			runProcess(i, "runProcess5");
-		}
-	}
-
-function runProcess6(i)
-	{
-		i=Number(i) + 1;
-	    if ((timeline.length > i) && (runningP6 == true)){
-			console.log("Running process 6")
-			runProcess(i, "runProcess6");
-		}
-	}
-
-function runProcess7(i)
-	{
-		i=Number(i) + 1;
-	    if ((timeline.length > i) && (runningP7 == true)){
-			console.log("Running process 7")
-			runProcess(i, "runProcess7");
-		}
-	}
-
-function runProcess8(i)
-	{
-		i=Number(i) + 1;
-	    if ((timeline.length > i) && (runningP8 == true)){
-			console.log("Running process 8")
-			runProcess(i, "runProcess8");
-		}
-	}
-
-function runProcess9(i)
-	{
-		i=Number(i) + 1;
-	    if ((timeline.length > i) && (runningP9 == true)){
-			console.log("Running process 9")
-			runProcess(i, "runProcess9");
-		}
-	}
-	
-	var part1 = document.getElementById('part1');
-	var pArr = part1.getElementsByTagName("p");
-
+	part1 = document.getElementById('part1');
+	pArr = part1.getElementsByTagName("p");
 	for (var i=0; i<pArr.length;i++){
-		pArr[i].innerHTML = "<span onclick='javascript:top.seekTo(&quot;"+i.toString()+"&quot;)'>"+ pArr[i].innerHTML+ "</a>";
+		pArr[i].innerHTML = "<span style='background-color: #FFFFFF' onclick='javascript:top.seekTo(&quot;"+i.toString()+"&quot;);'>"+ pArr[i].innerHTML+ "</a>";
 	}
 
 
