@@ -53,6 +53,10 @@ Monocle.Place = function () {
     return Math.max(Math.round(p.component.lastPageNumber() * percent), 1);
   }
 
+  function countPage(percent) {
+    return p.component.lastPageNumber();
+  }
+
 
   // The page number of this point within the component.
   //
@@ -132,6 +136,7 @@ Monocle.Place = function () {
   API.percentAtBottomOfPage = percentAtBottomOfPage;
   API.percentageThrough = percentAtBottomOfPage;
   API.pageAtPercentageThrough = pageAtPercentageThrough;
+  API.countPage = countPage;
   API.pageNumber = pageNumber;
   API.chapterInfo = chapterInfo;
   API.chapterTitle = chapterTitle;

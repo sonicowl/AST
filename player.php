@@ -389,7 +389,63 @@ for (var i=0; i<pArr.length;i++){
 	//	document.getElementById('pagenum').innerHTML = "sd";
 	
 	
+	for (var xx=0; xx<myPages.length;xx++){
+		if (xx == 0) {
+			myTimes[0] = 0;
+			mySelPar[0] = 1;
+		}
+	   	if (xx !== 0) {
+		    node1 = doc.evaluate('//p['+(myPages[xx-1])+']', doc, null, 9, null).singleNodeValue;
+		    percent1 = pageDiv.m.dimensions.percentageThroughOfNode(node1);
+		    pag1 =Math.floor(percent1 * nupages);
 
+			node2 = doc.evaluate('//p['+(myPages[xx-1]+1)+']', doc, null, 9, null).singleNodeValue;
+			percent2 = pageDiv.m.dimensions.percentageThroughOfNode(node2);
+			pag2 =Math.floor(percent2 * nupages);
+
+			b1 = node1.getBoundingClientRect().bottom;
+			b2 = node2.getBoundingClientRect().bottom;
+
+			t1 = node1.getBoundingClientRect().top;
+			t2 = node2.getBoundingClientRect().top;
+
+			h1 = node1.getBoundingClientRect().height;
+			h2 = node2.getBoundingClientRect().height;
+
+			tt1 = timeline[(myPages[xx-1])].start;
+			tt2 = timeline[(myPages[xx-1]+1)].start;
+
+			time1 = time2secs(tt1);
+			time2 = (time2secs(tt2)-time1);
+
+			//If the top of the next paragraph is zero, that means it start on the begging of the next page.
+			if (t2==0) {
+				myTimes[xx] = time2secs(timeline[(myPages[xx-1]+1)].start);
+				mySelPar[xx] = myPages[xx-1] + 1;
+			} 
+
+			//If the actual paragraph has the bottom more than 333, that means if ends on the next page, and has the most part of it on the current page.
+			if (b1 > 333){
+			    SizeOnActualPage = (333 - t1);
+				SizeOnNextPage = (b1 - 333);
+				newtime2 =  Math.floor((time2 * SizeOnActualPage) / (SizeOnActualPage + SizeOnNextPage));
+				myTimes[xx] = (time2secs(timeline[(myPages[xx-1])].start) + newtime2);
+				mySelPar[xx] = myPages[xx-1];
+			}
+
+			//If the next paragraph has the bottom less than 0, that means if ends on the next page, and has the most part of it on the next page.
+			if (t2 < 0){
+	            SizeOnActualPage = (t2 * -1);
+				SizeOnNextPage = b2;
+				newtime2 =  Math.floor((time2 * SizeOnActualPage) / (SizeOnActualPage + SizeOnNextPage));
+				myTimes[xx] = (time2secs(timeline[(myPages[xx-1])].start) + newtime2);
+				mySelPar[xx] = myPages[xx-1] + 1;
+			}
+		}
+
+
+
+	}
 	
 </script>
   
