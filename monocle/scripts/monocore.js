@@ -2073,6 +2073,7 @@ Monocle.Reader = function (node, bookData, options, onLoadCallback) {
   //              use showControl to show them
   //
   function addControl(ctrl, cType, options) {
+	alert('a')
     for (var i = 0; i < p.controls.length; ++i) {
       if (p.controls[i].control == ctrl) {
         console.warn("Already added control: " + ctrl);

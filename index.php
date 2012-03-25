@@ -4,7 +4,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	
 <!-- TODO MINIFY JAVASCRIPT -->
-
+<script>
+var toc;
+</script>
  <!-- MONOCLE CORE -->
  <script type="text/javascript" src="src/core/monocle.js"></script>
  <script type="text/javascript" src="src/compat/env.js"></script>
@@ -311,7 +313,7 @@ Monocle.Events.listen(
 
     Monocle.Reader('reader', bookData, readerOptions, function (rdr) {
       reader = rdr;
-      var toc = Monocle.Controls.Contents(rdr);
+      toc = Monocle.Controls.Contents(rdr);
       rdr.addControl(toc, 'popover', { hidden: true });
 
 
@@ -320,8 +322,8 @@ Monocle.Events.listen(
   	//     rdr.addControl(menu);
 
   	/* SCRUBBER CONTROL */
-  	//     var scrubber = new Monocle.Controls.Scrubber(rdr);
-  	//     rdr.addControl(scrubber);
+  	    var scrubber = new Monocle.Controls.Scrubber(rdr);
+  	    rdr.addControl(scrubber);
   	// 
   	// /* MAGNIFIER CONTROL */
   	//     var magnifier = new Monocle.Controls.Magnifier(rdr);

@@ -57,15 +57,69 @@ li.monelem_controls_contents_chapter_active {
   color: white;
 }
 
+
+/* TOC */
+
+.monelem_searchButton {
+  cursor: pointer;
+  color: #fff;
+  background:#000;
+  height:30px;
+  width:30px;
+  position: absolute;
+  top: 2px;
+  right: 85px;
+  padding: 0 2px;
+  background: url(btn_search.png);
+  width:39px;
+  height:34px;
+
+}
+
+.monelem_bookmarkButton {
+  cursor: pointer;
+  color: #fff;
+  background:#000;
+  height:30px;
+  width:30px;
+  position: absolute;
+  top: 2px;
+  left: 85px;
+  padding: 0 2px;
+  background: url(btn_bookmark.png);
+  width:39px;
+  height:34px;
+
+}
+
+.monelem_tocButton {
+  cursor: pointer;
+  color: #fff;
+  background:#000;
+  height:30px;
+  width:30px;
+  position: absolute;
+  top: 2px;
+  left: 10px;
+  padding: 0 2px;
+  background: url(btn_toc.png);
+  width:39px;
+  height:34px;
+
+}
+
 /* Magnifier */
 
 .monelem_controls_magnifier_button {
   cursor: pointer;
-  color: #555;
+  color: #fff;
   position: absolute;
   top: 2px;
   right: 10px;
   padding: 0 2px;
+  background: url(btn_zoom.png);
+  width:39px;
+  height:34px;
 }
 
 .monelem_controls_magnifier_a {
@@ -90,6 +144,34 @@ li.monelem_controls_contents_chapter_active {
 }
 
 
+
+/* BottomMenu */
+
+div.monelem_bottomMenu {
+  position: absolute;
+  bottom: 0px;
+  height: 64px;
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#4F4F4F), to(#191919), color-stop(.6,#333333));
+  overflow-y: auto;
+  box-shadow: 0 0 3px 3px rgba(0,0,0,0.5);
+  -moz-box-shadow: 1px 2px 6px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 0 0 3px 3px rgba(0,0,0,0.5);
+  z-index:9999;
+  -webkit-transition-duration: 0.5s, 0.5s;
+  width:100%;
+  margin:0;
+  padding:0;
+  opacity:0;
+
+}
+
+
+div.monelem_bottomMenu_Inside {
+  position: relative;
+  height:30px;
+  margin:0 1em 0 1em;
+}
+
 /* Scrubber */
 
 div.monelem_controls_scrubber_container {
@@ -98,13 +180,20 @@ div.monelem_controls_scrubber_container {
   right: 1em;
   bottom: 4px;
   height: 30px;
-  background: rgba(255,255,255,0.8);
 }
 
 div.monelem_controls_scrubber_track {
   margin-top: 10px;
-  height: 5px;
-  border: 1px solid #999;
+  height: 7px;
+  background: -webkit-gradient(
+	linear,
+	left bottom,
+	left top,
+	color-stop(0.24, rgb(250,247,250)),
+	color-stop(0.62, rgb(250,247,250)),
+	color-stop(0.81, rgb(209,209,209))
+);
+  border-radius: 15px;
   cursor: pointer;
 }
 
@@ -113,7 +202,14 @@ div.monelem_controls_scrubber_needle {
   width: 14px;
   height: 14px;
   top: 5px;
-  background: #CCC;
+  background: -webkit-gradient(
+	linear,
+	left bottom,
+	left top,
+	color-stop(0.24, rgb(250,247,250)),
+	color-stop(0.62, rgb(250,247,250)),
+	color-stop(0.81, rgb(250,247,250))
+);
   border: 1px solid #999;
   border-radius: 8px;
   -moz-border-radius: 8px;
@@ -122,10 +218,12 @@ div.monelem_controls_scrubber_needle {
 
 div.monelem_controls_scrubber_trail {
   position: absolute;
-  background: #DDD;
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#1a82f7), to(#075f97));
+  border-radius: 15px;
+
   top: 11px;
   left: 1px;
-  height: 5px;
+  height: 7px;
 }
 
 div.monelem_controls_scrubber_bubble {

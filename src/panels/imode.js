@@ -62,16 +62,28 @@ Monocle.Panels.IMode = function (flipper, evtCallbacks) {
     p.interactive ? modeOff() : modeOn();
   }
 
+  function setAttributeForClass(theClass, attribute) {
+		//Create Array of All HTML Tags
+		var allHTMLTags=document.getElementsByTagName("*");
+		for (i=0; i<allHTMLTags.length; i++) {
+			if (allHTMLTags[i].className==theClass) {
+				allHTMLTags[i].setAttribute("style",attribute);;
+			}
+		}
+  }
 
   function modeOn() {
 	if (p.interactive) {
 		p.interactive = false;
 		document.getElementById("topMenu").setAttribute("style","opacity:0;-webkit-transform: translateY(-47px)");
-		
+		setAttributeForClass("monelem_bottomMenu", "opacity:0; -webkit-transform: translateY(47px)")
       // return;
     }else{
 	    p.interactive = true;
 		document.getElementById("topMenu").setAttribute("style","opacity:0.9; -webkit-transform: translateY(0px)");
+		// document.getElementById("monelem_bottomMenu").setAttribute("style","opacity:0.9;");
+		setAttributeForClass("monelem_bottomMenu", "opacity:0.9; -webkit-transform: translateY(0px)")
+	    
 	}
 	
     // if (p.interactive) {
