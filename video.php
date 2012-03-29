@@ -1,6 +1,8 @@
 <?php
 
 include ('smartReadFile.php');
-smartReadFile("audio/Practical_Demonkeeping_Ch01.mp3", "audio/Practical_Demonkeeping_Ch01.mp3","audio/mpeg");
+$c = $_GET['c'];
+if (empty($_GET['c'])) $c = "01";
+smartReadFile("1/Practical Demonkeeping Ch ".$c.".mp3", "1/Practical Demonkeeping Ch ".$c.".mp3","audio/mpeg");
 
 ?>

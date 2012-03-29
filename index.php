@@ -5,6 +5,7 @@
 	
 <!-- TODO MINIFY JAVASCRIPT -->
 <script>
+
 var toc;
 </script>
  <!-- MONOCLE CORE -->
@@ -66,7 +67,8 @@ var toc;
 
 <title>AST</title>
 
-<script src="data.php"></script>
+
+<script src="data.php?c=<?php echo $_GET['c'] ?>"></script>
 
 <script>
 
@@ -491,7 +493,7 @@ Monocle.Events.listen(
 
 <div id="main_audio">
 	<audio controls id="audio">
-		<source type="audio/mp3" preload="metadata" src="video.php"/>
+		<source type="audio/mp3" preload="metadata" src="video.php?c=<?php echo $_GET['c'] ?>"/>
 		Your browser does not support HTML5 audio.
 	</audio>
 </div>
@@ -513,7 +515,10 @@ Monocle.Events.listen(
 <div onclick="reader.moveTo({ direction: 1 }); ">Next page</div> -->
 
   <div id="part1">
-	<?php include("epub.php"); ?>
+	<?php 
+	include("epub.php"); 
+	?>
+
  </div>
 
 
@@ -600,7 +605,7 @@ if (i!=1) {
 part1 = document.getElementById('part1');
 pArr = part1.getElementsByTagName("p");
 for (var i=0; i<pArr.length;i++){
-pArr[i].innerHTML = "<span style='background-color: #FFFFFF' onclick='javascript:top.seekTo(&quot;"+i.toString()+"&quot;,0);'>"+ (i+1)+ pArr[i].innerHTML+ "</span>";
+pArr[i].innerHTML = "<span style='background-color: #FFFFFF' onclick='javascript:top.seekTo(&quot;"+i.toString()+"&quot;,0);'>"+pArr[i].innerHTML+ "</span>";
 }
 
 </script>

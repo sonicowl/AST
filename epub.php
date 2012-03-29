@@ -1,8 +1,8 @@
 <?php
-
-$xml = "epub/part01chapter01.xhtml";
+$c = $_GET['c'];
+if (empty($_GET['c'])) $c = "01";
+$xml = "1/chapter".$c.".xhtml";
 $xsl = "epub.xsl";
-
 function transDoc($xml_filename,$xsl_filename){
 	$xp = new XsltProcessor();
 	$xsl = new DomDocument;
