@@ -83,6 +83,136 @@ var pagenumber = 1;
 var myPages=new Array();
 var myTimes=new Array();
 var mySelPar=new Array();
+
+function populatearrays(){
+		pageDiv = reader.visiblePages()[0];
+		doc = pageDiv.m.activeFrame.contentDocument;
+
+		part1 = document.getElementById('part1');
+		pArr = part1.getElementsByTagName("p");
+
+
+		 myPages=new Array();
+	
+	
+		for (var xx=0; xx<pArr.length-1;xx++){
+			if (xx !== 0) {
+			    node1 = document.evaluate('//p['+(xx-1)+']', doc, null, 9, null).singleNodeValue;
+			    percent1 = pageDiv.m.dimensions.percentageThroughOfNode(node1);
+			    pag1 =Math.floor(percent1 * nupages);
+		    }
+
+			node2 = document.evaluate('//p['+xx+']', doc, null, 9, null).singleNodeValue;
+			percent2 = pageDiv.m.dimensions.percentageThroughOfNode(node2);
+			pag2 =Math.floor(percent2 * nupages);
+			if (xx !== pArr.length){
+				node3 = document.evaluate('//p['+(xx+1)+']', doc, null, 9, null).singleNodeValue;
+				percent3 = pageDiv.m.dimensions.percentageThroughOfNode(node3);
+				pag3 =Math.floor(percent3 * nupages);
+			}
+
+			if (typeof myPages[pag2]  !== 'undefined') {
+				myPages[pag2] =  myPages[pag2] + 1; 
+			}
+			else{ 
+				if (typeof pag1  !== 'undefined') {
+					myPages[pag2] = myPages[pag1] + 1;
+				}
+				else{
+					myPages[pag2] = 0;
+				}
+			}
+		}
+		console.log("myPages[0] " + myPages[0]);
+		console.log("myPages[1] " + myPages[1]);
+		console.log("myPages[2] " + myPages[2]);
+		console.log("myPages[3] " + myPages[3]);
+		console.log("myPages[4] " + myPages[4]);
+		
+		
+		for (var xx=0; xx<nupages-1;xx++){
+			if (xx == 0) {
+				myTimes[0] = 0;
+				mySelPar[0] = 1;
+			}
+
+		   	if ((xx !== 0) && (typeof timeline[(myPages[xx-1]+1)]  != 'undefined')) {
+			    node1 = doc.evaluate('//p['+(myPages[xx-1])+']', doc, null, 9, null).singleNodeValue;
+				percent1 = pageDiv.m.dimensions.percentageThroughOfNode(node1);
+				pag1 =Math.floor(percent1 * nupages);
+					
+				if (node1!=null) {
+					node2 = doc.evaluate('//p['+(myPages[xx-1]+1)+']', doc, null, 9, null).singleNodeValue;
+					percent2 = pageDiv.m.dimensions.percentageThroughOfNode(node2);
+					pag2 =Math.floor(percent2 * nupages);
+	
+					b1 = node1.getBoundingClientRect().bottom;   
+					b2 = node2.getBoundingClientRect().bottom;
+
+					t1 = node1.getBoundingClientRect().top;
+					t2 = node2.getBoundingClientRect().top;
+
+					h1 = node1.getBoundingClientRect().height;
+					h2 = node2.getBoundingClientRect().height;
+
+					tt1 = timeline[(myPages[xx-1])].start;
+					tt2 = timeline[(myPages[xx-1]+1)].start;
+
+					time1 = time2secs(tt1);
+					time2 = (time2secs(tt2)-time1);
+
+				//If the top of the next paragraph is zero, that means it start on the begging of the next page.
+				if (t2==0) {
+					myTimes[xx] = time2secs(timeline[(myPages[xx-1])].start);
+					mySelPar[xx] = myPages[xx-1] + 1;
+				} 
+
+				//If the actual paragraph has the bottom more than doc.body.scrollHeight, that means if ends on the next page, and has the most part of it on the current page.
+				if (b1 > doc.body.scrollHeight){
+					SizeOnActualPage = (doc.body.scrollHeight - t1);
+					SizeOnNextPage = (b1 - doc.body.scrollHeight);
+
+					newtime2 =  Math.floor((time2 * SizeOnActualPage) / (SizeOnActualPage + SizeOnNextPage));
+					//console.log("foi1 " + time2secs(timeline[(mySelPar[xx-1]+1)].start)  );
+					//console.log("foi2 " + newtime2 );
+
+					myTimes[xx] = (time2secs(timeline[(mySelPar[xx-1]+1)].start) + newtime2);
+					mySelPar[xx] = myPages[xx-1];
+				}
+
+				//If the next paragraph has the bottom less than 0, that means if ends on the next page, and has the most part of it on the next page.
+				if (t2 < 0){
+		            SizeOnActualPage = (t2 * -1);
+					SizeOnNextPage = b2;
+					newtime2 =  Math.floor((time2 * SizeOnActualPage) / (SizeOnActualPage + SizeOnNextPage));
+					myTimes[xx] = (time2secs(timeline[(mySelPar[xx-1]+1)].start) + newtime2);
+					mySelPar[xx] = myPages[xx-1] + 1;
+				}
+				//console.log("foi " + b1 );
+			}
+
+		}
+
+		}
+
+		console.log("myTimes[0] " + myTimes[0]);
+		console.log("myTimes[1] " + myTimes[1]);
+		console.log("myTimes[2] " + myTimes[2]);
+		console.log("myTimes[3] " + myTimes[3]);
+		console.log("myTimes[4] " + myTimes[4]);
+
+
+
+		console.log("mySelPar1[0] " + mySelPar[0]);
+		console.log("mySelPar1[1] " + mySelPar[1]);
+		console.log("mySelPar1[2] " + mySelPar[2]);
+		console.log("mySelPar1[3] " + mySelPar[3]);
+		console.log("mySelPar1[4] " + mySelPar[4]);
+	
+	
+	
+}
+
 function init(){
 	// console.log("init");
 	// window.reader = Monocle.Reader('reader');
@@ -102,6 +232,8 @@ function init(){
 			}}
 		}
 	}
+	
+
 		
 	function hideURLbar(){
 		window.scrollTo(0,0.9)
@@ -112,6 +244,7 @@ function init(){
 	
 	//Audio Control
 	document.getElementById('top_audio').onclick = function(e){
+		
 		if (isPlaying == true){
 			isPlaying = false;
 			audio.pause();
@@ -120,28 +253,29 @@ function init(){
 			pageDiv = reader.visiblePages()[0];
 			doc = pageDiv.m.activeFrame.contentDocument;
 			parag = doc.getElementsByTagName('p');
+			console.log("checked turned " + parag.length);
 			for (var y=0; y<parag.length;y++){
-				parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFB0F","background-color: #FFFFFF");
+				parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFFDD","background-color: #FFFFFF");
 			}
 			turned = false;
 			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_play.png)");
 		}else{
 			isPlaying = true;
+			populatearrays();
 		    //console.log("mySelPar2[0] " + mySelPar[0]);
 			//console.log("mySelPar2[1] " + mySelPar[1]);
 			//console.log("mySelPar2[2] " + mySelPar[2]);
 			//console.log("mySelPar2[3] " + mySelPar[3]);
-			console.log("checked turned " + turned);
+			//console.log("checked turned " + parag.length);
 		    if (turned == true) {
-		    if (typeof mySelPar[pagenumber-1]  == 'undefined')  currentpar = 1; else currentpar= mySelPar[pagenumber-1];
-			turned = false;
-			
-		}
+		    	currentpar= mySelPar[pagenumber-1];
+				turned = false;
+			}
             
 		 
 		    //reader.moveTo({ xpath: '//p['+currentpar+']' });
 		    console.log("moveTo Paragraph: " + (mySelPar[pagenumber-1]));
-	   	    seekTo(currentpar - 1);	
+	   	    seekTo(currentpar - 1,myTimes[pagenumber-1]);	
 			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_pause.png)");
 		}
 	}
@@ -176,6 +310,7 @@ function init(){
 	audio.addEventListener("waiting", 		function () {	debug(arguments, "waiting"); });
 	audio.addEventListener("timeupdate", 		function () {	update(arguments); });
 	currentpar = 1;
+
 }
 
 
@@ -205,7 +340,7 @@ function debug(args,msg){
 
 timeline.offset = 0;
 
-function seekTo(t){	
+function seekTo(t,btime){	
 	var timeaux;
 	console.log("SeekTo " + t);
 	if (t == 0) timeaux = 0; else timeaux = timeline[t].start.toString()
@@ -213,8 +348,9 @@ function seekTo(t){
 	
 	try {
 	  audio.pause();
-	console.log("turned " + turned);
-	  if (turned == true) audio.currentTime = myTimes[pagenumber]; else  audio.currentTime = time;
+	  btime = 0;
+	  console.log("turned " + turned);
+	  if (btime != 0) audio.currentTime = btime; else  audio.currentTime = time;
  	  audio.play();    
    
 	} catch (e) {
@@ -297,9 +433,7 @@ Monocle.Events.listen(
 		pagenumber = place.pageNumber() - 1;
 		document.getElementById('pagenum').innerHTML = "Page "+ pagenumber;
 		nupages = place.countPage();
-	
-		
-		if (typeof myPages[pagenumber]  !== 'undefined') currentpar = myPages[pagenumber-1]-2;
+		currentpar = mySelPar[pagenumber-1];
 		
 		//alert(currentpar);
 	});
@@ -390,129 +524,7 @@ document.getElementById('currentpar').innerHTML = "Paragraph 1, Next 0";
 function runProcess(i){
 i=Number(i) + 1;
 currentpar = i;
-pageDiv = reader.visiblePages()[0];
-doc = pageDiv.m.activeFrame.contentDocument;
-part1 = document.getElementById('part1');
-pArr = part1.getElementsByTagName("p");
-
-
-if (typeof myPages[0]  == 'undefined') {
-	for (var xx=0; xx<pArr.length-1;xx++){
-		if (xx !== 0) {
-		    node1 = doc.evaluate('//p['+(xx-1)+']', doc, null, 9, null).singleNodeValue;
-		    percent1 = pageDiv.m.dimensions.percentageThroughOfNode(node1);
-		    pag1 =Math.floor(percent1 * nupages);
-	    }
-
-		node2 = doc.evaluate('//p['+xx+']', doc, null, 9, null).singleNodeValue;
-		percent2 = pageDiv.m.dimensions.percentageThroughOfNode(node2);
-		pag2 =Math.floor(percent2 * nupages);
-
-		if (xx !== pArr.length){
-			node3 = doc.evaluate('//p['+(xx+1)+']', doc, null, 9, null).singleNodeValue;
-			percent3 = pageDiv.m.dimensions.percentageThroughOfNode(node3);
-			pag3 =Math.floor(percent3 * nupages);
-		}
-
-		if (typeof myPages[pag2]  !== 'undefined') {
-			myPages[pag2] =  myPages[pag2] + 1; 
-		}
-		else{ 
-			if (typeof pag1  !== 'undefined') {
-				myPages[pag2] = myPages[pag1] + 1;
-			}
-			else{
-				myPages[pag2] = 0;
-			}
-		}
-	}
-
-}
-
-
-
-console.log("myPages2[0] " + myPages[0]);
-console.log("myPages2[1] " + myPages[1]);
-console.log("myPages2[2] " + myPages[2]);
-console.log("myPages2[3] " + myPages[3]);
-console.log("myPages2[4] " + myPages[4]);
-
-for (var xx=0; xx<nupages-1;xx++){
-	if (xx == 0) {
-		myTimes[0] = 0;
-		mySelPar[0] = 1;
-	}
-
-   	if (xx !== 0) {
-	    node1 = doc.evaluate('//p['+(myPages[xx-1])+']', doc, null, 9, null).singleNodeValue;
-	    percent1 = pageDiv.m.dimensions.percentageThroughOfNode(node1);
-	    pag1 =Math.floor(percent1 * nupages);
-
-		node2 = doc.evaluate('//p['+(myPages[xx-1]+1)+']', doc, null, 9, null).singleNodeValue;
-		percent2 = pageDiv.m.dimensions.percentageThroughOfNode(node2);
-		pag2 =Math.floor(percent2 * nupages);
-        
-		b1 = node1.getBoundingClientRect().bottom;   
-		b2 = node2.getBoundingClientRect().bottom;
-
-		t1 = node1.getBoundingClientRect().top;
-		t2 = node2.getBoundingClientRect().top;
-
-		h1 = node1.getBoundingClientRect().height;
-		h2 = node2.getBoundingClientRect().height;
-
-		tt1 = timeline[(myPages[xx-1])].start;
-		tt2 = timeline[(myPages[xx-1]+1)].start;
-
-		time1 = time2secs(tt1);
-		time2 = (time2secs(tt2)-time1);
-
-		//If the top of the next paragraph is zero, that means it start on the begging of the next page.
-		if (t2==0) {
-			myTimes[xx] = time2secs(timeline[(myPages[xx-1]+1)].start);
-			mySelPar[xx] = myPages[xx-1] + 1;
-		} 
-
-		//If the actual paragraph has the bottom more than 333, that means if ends on the next page, and has the most part of it on the current page.
-		if (b1 > 333){
-		    SizeOnActualPage = (333 - t1);
-			SizeOnNextPage = (b1 - 333);
-			newtime2 =  Math.floor((time2 * SizeOnActualPage) / (SizeOnActualPage + SizeOnNextPage));
-			myTimes[xx] = (time2secs(timeline[(myPages[xx-1])].start) + newtime2);
-			mySelPar[xx] = myPages[xx-1];
-		}
-
-		//If the next paragraph has the bottom less than 0, that means if ends on the next page, and has the most part of it on the next page.
-		if (t2 < 0){
-            SizeOnActualPage = (t2 * -1);
-			SizeOnNextPage = b2;
-			newtime2 =  Math.floor((time2 * SizeOnActualPage) / (SizeOnActualPage + SizeOnNextPage));
-			myTimes[xx] = (time2secs(timeline[(myPages[xx-1])].start) + newtime2);
-			mySelPar[xx] = myPages[xx-1] + 1;
-		}
-		//console.log("foi " + b1 );
-	}
-
-
-
-}
-
-console.log("myTimes[0] " + myTimes[0]);
-console.log("myTimes[1] " + myTimes[1]);
-console.log("myTimes[2] " + myTimes[2]);
-console.log("myTimes[3] " + myTimes[3]);
-console.log("myTimes[4] " + myTimes[4]);
-
-
-
-console.log("mySelPar1[0] " + mySelPar[0]);
-console.log("mySelPar1[1] " + mySelPar[1]);
-console.log("mySelPar1[2] " + mySelPar[2]);
-console.log("mySelPar1[3] " + mySelPar[3]);
-console.log("mySelPar1[4] " + mySelPar[4]);
-
-
-
+populatearrays();
 t2 = timeline[i].start;
 t1 = timeline[i-1].start;
 time1 = time2secs(t1);
@@ -544,8 +556,8 @@ if (i!=1) {
 
 	//means it starts in the current page and ends on the next, the most part of the text is on the current page
 	if (((pag2+1) == pag3) && (t3 > 0)) {
-			SizeOnActualPage = (333 - t2);
-			SizeOnNextPage = (b2 - 333);
+			SizeOnActualPage = (doc.body.scrollHeight - t2);
+			SizeOnNextPage = (b2 - doc.body.scrollHeight);
 			newtime2 =  Math.floor((time2 * SizeOnActualPage) / (SizeOnActualPage + SizeOnNextPage));
 		    clearTimeout(tt2);
 			//Processo da pagina
@@ -577,21 +589,19 @@ if (i!=1) {
     parag = doc.getElementsByTagName('p');
 	for (var y=0; y<parag.length;y++){
 			if (y!=(i-1))
-				parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFB0F","background-color: #FFFFFF");
+				parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFFDD","background-color: #FFFFFF");
 			else
-			    parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFFFF","background-color: #FFFB0F");
+			    parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFFFF","background-color: #FFFFDD");
 	}			
 	//document.getElementById('currentpar').innerHTML = "HMP "+parag.length+", Paragraph "+i.toString()+", Next "+t2;
 
 }
 
-  
 part1 = document.getElementById('part1');
 pArr = part1.getElementsByTagName("p");
 for (var i=0; i<pArr.length;i++){
-pArr[i].innerHTML = "<span style='background-color: #FFFFFF' onclick='javascript:top.seekTo(&quot;"+i.toString()+"&quot;);'>"+ (i+1).toString()+": " + pArr[i].innerHTML+ "</a>";
+pArr[i].innerHTML = "<span style='background-color: #FFFFFF' onclick='javascript:top.seekTo(&quot;"+i.toString()+"&quot;,0);'>"+ (i+1)+ pArr[i].innerHTML+ "</span>";
 }
-
 
 </script>
 
