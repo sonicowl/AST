@@ -33,11 +33,14 @@ Monocle.Controls.Contents = function (reader) {
   function chapterBuilder(list, chp, padLvl) {
     var index = list.childNodes.length;
     var li = list.dom.append('li', 'controls_contents_chapter', index);
+
+ 
+
     var span = li.dom.append(
       'span',
       'controls_contents_chapterTitle',
       index,
-      { html: chp.title }
+      { html: '<a href="index.php?c='+chp.chp+'">'+chp.title+'</a>' }
     );
     span.style.paddingLeft = padLvl + "em";
 

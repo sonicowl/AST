@@ -93,10 +93,8 @@ function populatearrays(){
 		part1 = document.getElementById('part1');
 		pArr = part1.getElementsByTagName("p");
 
-
-		 myPages=new Array();
-	
-	
+		myPages=new Array();
+		
 		for (var xx=0; xx<pArr.length-1;xx++){
 			if (xx !== 0) {
 			    node1 = document.evaluate('//p['+(xx-1)+']', doc, null, 9, null).singleNodeValue;
@@ -125,11 +123,11 @@ function populatearrays(){
 				}
 			}
 		}
-		console.log("myPages[0] " + myPages[0]);
-		console.log("myPages[1] " + myPages[1]);
-		console.log("myPages[2] " + myPages[2]);
-		console.log("myPages[3] " + myPages[3]);
-		console.log("myPages[4] " + myPages[4]);
+		//console.log("myPages[0] " + myPages[0]);
+		//console.log("myPages[1] " + myPages[1]);
+		//console.log("myPages[2] " + myPages[2]);
+		//console.log("myPages[3] " + myPages[3]);
+		//console.log("myPages[4] " + myPages[4]);
 		
 		
 		for (var xx=0; xx<nupages-1;xx++){
@@ -197,19 +195,17 @@ function populatearrays(){
 
 		}
 
-		console.log("myTimes[0] " + myTimes[0]);
-		console.log("myTimes[1] " + myTimes[1]);
-		console.log("myTimes[2] " + myTimes[2]);
-		console.log("myTimes[3] " + myTimes[3]);
-		console.log("myTimes[4] " + myTimes[4]);
+		//console.log("myTimes[0] " + myTimes[0]);
+		//console.log("myTimes[1] " + myTimes[1]);
+		//console.log("myTimes[2] " + myTimes[2]);
+		//console.log("myTimes[3] " + myTimes[3]);
+		//console.log("myTimes[4] " + myTimes[4]);
 
-
-
-		console.log("mySelPar1[0] " + mySelPar[0]);
-		console.log("mySelPar1[1] " + mySelPar[1]);
-		console.log("mySelPar1[2] " + mySelPar[2]);
-		console.log("mySelPar1[3] " + mySelPar[3]);
-		console.log("mySelPar1[4] " + mySelPar[4]);
+		//console.log("mySelPar1[0] " + mySelPar[0]);
+		//console.log("mySelPar1[1] " + mySelPar[1]);
+		//console.log("mySelPar1[2] " + mySelPar[2]);
+		//console.log("mySelPar1[3] " + mySelPar[3]);
+		//console.log("mySelPar1[4] " + mySelPar[4]);
 	
 	
 	
@@ -234,8 +230,6 @@ function init(){
 			}}
 		}
 	}
-	
-
 		
 	function hideURLbar(){
 		window.scrollTo(0,0.9)
@@ -255,7 +249,7 @@ function init(){
 			pageDiv = reader.visiblePages()[0];
 			doc = pageDiv.m.activeFrame.contentDocument;
 			parag = doc.getElementsByTagName('p');
-			console.log("checked turned " + parag.length);
+			//console.log("checked turned " + parag.length);
 			for (var y=0; y<parag.length;y++){
 				parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFFDD","background-color: #FFFFFF");
 			}
@@ -273,8 +267,6 @@ function init(){
 		    	currentpar= mySelPar[pagenumber-1];
 				turned = false;
 			}
-            
-		 
 		    //reader.moveTo({ xpath: '//p['+currentpar+']' });
 		    console.log("moveTo Paragraph: " + (mySelPar[pagenumber-1]));
 	   	    seekTo(currentpar - 1,myTimes[pagenumber-1]);	
@@ -374,9 +366,227 @@ var bookData = {
   getContents: function () {
     return [
       {
-        title: "I",
-        src: 'part1'
+        title: "Part I, Chapter 1",
+        src: 'part1',
+		chp: '01'
       }
+	,
+	 {
+       title: "Part II, Chapter 2",
+        src: 'x',
+		chp: '02'
+	 },
+	{
+       title: "Part II, Chapter 3",
+        src: 'x',
+		chp: '03'
+	 }
+	,
+	{
+       title: "Part II, Chapter 4",
+        src: 'x',
+		chp: '04'
+	 }
+	,
+	{
+       title: "Part II, Chapter 5",
+        src: 'x',
+		chp: '05'
+	 }
+	,
+	{
+       title: "Part II, Chapter 6",
+        src: 'x',
+		chp: '06'
+	 }
+	,
+	{
+       title: "Part II, Chapter 7",
+        src: 'x',
+		chp: '07'
+	 }
+	,
+	{
+       title: "Part II, Chapter 8",
+        src: 'x',
+		chp: '08'
+	 }
+	,
+	{
+       title: "Part II, Chapter 9",
+        src: 'x',
+		chp: '09'
+	 }
+	,
+	{
+       title: "Part II, Chapter 10",
+        src: 'x',
+		chp: '10'
+	 }
+	,
+	{
+       title: "Part II, Chapter 11",
+        src: 'x',
+		chp: '11'
+	 }
+	,
+	{
+       title: "Part II, Chapter 12",
+        src: 'x',
+		chp: '12'
+	 }
+	,
+	{
+       title: "Part III, Chapter 13",
+        src: 'x',
+		chp: '13'
+	 }
+	,
+	{
+       title: "Part III, Chapter 14",
+        src: 'x',
+		chp: '14'
+	 }
+	,
+	{
+       title: "Part III, Chapter 15",
+        src: 'x',
+		chp: '15'
+	 }
+	,
+	{
+       title: "Part III, Chapter 16",
+        src: 'x',
+		chp: '16'
+	 }
+	,
+	{
+       title: "Part III, Chapter 17",
+        src: 'x',
+		chp: '17'
+	 }
+	,
+	{
+       title: "Part III, Chapter 18",
+        src: 'x',
+		chp: '18'
+	 }
+	,
+	{
+       title: "Part III, Chapter 19",
+        src: 'x',
+		chp: '19'
+	 }
+	,
+	{
+       title: "Part III, Chapter 20",
+        src: 'x',
+		chp: '20'
+	 }
+	,
+	{
+       title: "Part III, Chapter 21",
+        src: 'x',
+		chp: '21'
+	 }
+	,
+	{
+       title: "Part III, Chapter 22",
+        src: 'x',
+		chp: '22'
+	 }
+	,
+	{
+       title: "Part IV, Chapter 23",
+        src: 'x',
+		chp: '23'
+	 }
+	,
+	{
+       title: "Part IV, Chapter 24",
+        src: 'x',
+		chp: '24'
+	 }
+	,
+	{
+       title: "Part IV, Chapter 25",
+        src: 'x',
+		chp: '25'
+	 }
+	,
+	{
+       title: "Part IV, Chapter 26",
+        src: 'x',
+		chp: '26'
+	 }
+	,
+	{
+       title: "Part IV, Chapter 27",
+        src: 'x',
+		chp: '27'
+	 }
+	,
+	{
+       title: "Part IV, Chapter 28",
+        src: 'x',
+		chp: '28'
+	 }
+	,
+	{
+       title: "Part IV, Chapter 29",
+        src: 'x',
+		chp: '29'
+	 }
+	,
+	{
+       title: "Part IV, Chapter 30",
+        src: 'x',
+		chp: '30'
+	 }
+	,
+	{
+       title: "Part IV, Chapter 31",
+        src: 'x',
+		chp: '31'
+	 }
+	,
+	{
+       title: "Part IV, Chapter 32",
+        src: 'x',
+		chp: '32'
+	 }
+	,
+	{
+       title: "Part IV, Chapter 33",
+        src: 'x',
+		chp: '33'
+	 }
+	,
+	{
+       title: "Part IV, Chapter 34",
+        src: 'x',
+		chp: '34'
+	 }
+	,
+	{
+       title: "Part IV, Chapter 35",
+        src: 'x',
+		chp: '35'
+	 }
+	,
+	{
+       title: "Part IV, Chapter 36",
+        src: 'x',
+		chp: '36'
+	 }
+	,
+	{
+       title: "Part IV, Chapter 37",
+        src: 'x',
+		chp: '37'
+	 }
+
+	
     ]
   },
   getComponent: function (cmptId) {
