@@ -5,7 +5,6 @@
 	
 <!-- TODO MINIFY JAVASCRIPT -->
 <script>
-var isPlaying;
 
 var toc;
 </script>
@@ -48,11 +47,9 @@ var toc;
 <link rel="stylesheet" type="text/css" href="monocle/styles/monoctrl.css" />
 
 <style>
-/*  #reader { width: 320px; height: 358px; }
-*/
-#reader { width: 320px; height: 416px; }
+  #reader { width: 320px; height: 416px; }
 
-  #part1, #part2, #part3 {display:none}
+  #part1 {display:none}
   .bookTitle {
     position: absolute;
     top: 0;
@@ -82,6 +79,7 @@ var audio;
 var reader;
 var tt1;
 var tt2;
+var isPlaying;
 var turned = false;
 var pagenumber = 1;
 var myPages=new Array();
@@ -221,7 +219,6 @@ function init(){
 	audio = document.getElementById("audio");
 
 
-	
 	function fullscreen(){
 		var a=document.getElementsByTagName("a");
 		for(var i=0;i<a.length;i++){
@@ -240,14 +237,12 @@ function init(){
 	}
 	fullscreen();
 	hideURLbar();
+
 	
 	//Audio Control
 	document.getElementById('top_audio').onclick = function(e){
-
 		
 		if (isPlaying == true){
-			document.getElementById('reader_wrapper').setAttribute("style","display: none");
-			
 			isPlaying = false;
 			audio.pause();
 			clearTimeout(tt1);
@@ -262,25 +257,7 @@ function init(){
 			turned = false;
 			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_play.png)");
 		}else{
-			// 
-			// 
-			// var elements = document.getElementsByTagName('div');
-			// 
-			// for(var i=0; i<elements.length; i++){
-			// 		        current = elements[i];
-			// 	if (current.getAttribute('class') != null){
-			//         if(current.getAttribute('class').indexOf('monelem_panel') != -1){
-			// 			current.onclick = function(e){
-			// 				e.preventDefault();
-			// 				return false;
-			// 			}
-			//         }    
-			// 	}
-			// 		    }
-
 			isPlaying = true;
-			document.getElementById('reader_wrapper').setAttribute("style","display: block");
-			
 			populatearrays();
 		    //console.log("mySelPar2[0] " + mySelPar[0]);
 			//console.log("mySelPar2[1] " + mySelPar[1]);
@@ -368,11 +345,15 @@ function seekTo(t,btime){
 	  audio.pause();
 	  btime = 0;
 	  console.log("turned " + turned);
-	  if (btime != 0) audio.currentTime = btime; else  audio.currentTime = time;
- 	  audio.play();    
+	  if (btime != 0) audio.currentTime = btime; else   audio.currentTime = time;
+ 	  //setTimeout("audio.play()", 1000); 
+      audio.play();
    
 	} catch (e) {
-
+		audio.play();
+	    audio.pause();
+	    setTimeout("audio.currentTime = time;",500);
+	    setTimeout("audio.play();",1000);
 	}
 	console.log("runProcess " + t);
     runProcess(t);
@@ -384,27 +365,25 @@ function seekTo(t,btime){
 var bookData = {
   getComponents: function () {
     return [
-      'part1', 
-	  'part2',
-	  'part3'
+      'part1'
     ];
   },
   getContents: function () {
     return [
       {
-        title: "Chapter 1",
+        title: "Part I, Chapter 1",
         src: 'part1',
 		chp: '01'
       }
 	,
 	 {
-       title: "Chapter 2",
-        src: 'part2',
+       title: "Part II, Chapter 2",
+        src: 'x',
 		chp: '02'
 	 },
 	{
-       title: "Chapter 3",
-        src: 'part3',
+       title: "Part II, Chapter 3",
+        src: 'x',
 		chp: '03'
 	 }
 	,
@@ -743,57 +722,19 @@ Monocle.Events.listen(
 	<div style="clear:both"></div>
 </div>
 
-<div style="position:relative">
-<div id="reader_wrapper">
-	<div id="sound_image"></div>
-</div>
+<div id="reader">
 
-	<div id="reader">
-
-	</div>
 </div>
 
 <!-- <div onclick="reader.moveTo({ direction: -1 }); ">Previous page</div>
 <div onclick="reader.moveTo({ direction: 1 }); ">Next page</div> -->
 
-<?php
-
-	function transDoc($xml_filename,$xsl_filename){
-		$xp = new XsltProcessor();
-		$xsl = new DomDocument;
-		$xsl->load($xsl_filename);
-		$xp->importStylesheet($xsl);
-		$xml_dom = new DomDocument;
-		$xml_dom->load($xml_filename);
-
-		return $xp->transformToXML($xml_dom);
-	}
-	
-	$xsl = "epub.xsl";
-
-?>
-
   <div id="part1">
-	<?php
-	$xml = "1/chapter01.xhtml";
-	echo transDoc($xml,$xsl);
-	?>
- </div>
-
-  <div id="part2">
-	<?php
-	$xml = "1/chapter02.xhtml";
-	echo transDoc($xml,$xsl);
+	<?php 
+	include("epub.php"); 
 	?>
 
  </div>
-  <div id="part3">
-	<?php
-	$xml = "1/chapter03.xhtml";
-	echo transDoc($xml,$xsl);
-	?>
- </div>
-
 
 
 <script>
@@ -886,7 +827,6 @@ pArr[i].innerHTML = "<span style='background-color: #FFFFFF' onclick='javascript
 
 </body>
 </html>
-
 
 
 
