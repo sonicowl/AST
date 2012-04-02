@@ -5,7 +5,7 @@
 	
 <!-- TODO MINIFY JAVASCRIPT -->
 <script>
-
+var isPlaying;
 var toc;
 </script>
  <!-- MONOCLE CORE -->
@@ -79,7 +79,6 @@ var audio;
 var reader;
 var tt1;
 var tt2;
-var isPlaying;
 var turned = false;
 var pagenumber = 1;
 var myPages=new Array();
@@ -243,6 +242,8 @@ function init(){
 	document.getElementById('top_audio').onclick = function(e){
 		
 		if (isPlaying == true){
+			document.getElementById('reader_wrapper').setAttribute("style","display: none");
+			
 			isPlaying = false;
 			audio.pause();
 			clearTimeout(tt1);
@@ -258,6 +259,8 @@ function init(){
 			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_play.png)");
 		}else{
 			isPlaying = true;
+			document.getElementById('reader_wrapper').setAttribute("style","display: block");
+			
 			populatearrays();
 		    //console.log("mySelPar2[0] " + mySelPar[0]);
 			//console.log("mySelPar2[1] " + mySelPar[1]);
@@ -722,8 +725,14 @@ Monocle.Events.listen(
 	<div style="clear:both"></div>
 </div>
 
-<div id="reader">
+<div style="position:relative">
+<div id="reader_wrapper">
+	<div id="sound_image"></div>
+</div>
 
+	<div id="reader">
+
+	</div>
 </div>
 
 <!-- <div onclick="reader.moveTo({ direction: -1 }); ">Previous page</div>
