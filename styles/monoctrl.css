@@ -63,6 +63,8 @@ li.monelem_controls_contents_chapter_active {
   opacity: 0.3;
 }
 
+.chapterTitle{display:none}
+
 
 /* Spinner */
 

@@ -4,7 +4,7 @@ $c = $_GET['c'];
 if (empty($_GET['c'])) $c = "01";
 $fn = "1/Practical Demonkeeping, Ch".$c.".txt";
 $f = file($fn);
-echo("timeline = [");
+echo("[");
 for($i=1;$i<count($f);$i++){
 	list($start,$end,$dur) = explode("\t",trim($f[$i]));
 	$comma = ($i==count($f)-1) ? "" : ",";

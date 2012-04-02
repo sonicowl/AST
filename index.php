@@ -6,6 +6,8 @@
 <!-- TODO MINIFY JAVASCRIPT -->
 <script>
 var isPlaying;
+var currentTitle;
+var timeline;
 var toc;
 </script>
  <!-- MONOCLE CORE -->
@@ -49,7 +51,8 @@ var toc;
 <style>
   #reader { width: 320px; height: 416px; }
 
-  #part1 {display:none}
+  #part_01, #part_02, #part_03,  #part_04,  #part_05,  #part_06,  #part_07,  #part_08,  #part_09,  #part_10,  #part_11,  #part_12,  #part_13,  #part_14,  #part_15,  #part_16 ,  
+#part_17,  #part_18, #part_19,  #part_20,  #part_21, #part_22, #part_23,  #part_24, #part_25, #part_26,  #part_27, #part_28,#part_29,#part_30,#part_31,#part_32,#part_33, #part_34, #part_35, #part_36, #part_37{display:none}
   .bookTitle {
     position: absolute;
     top: 0;
@@ -68,7 +71,9 @@ var toc;
 <title>AST</title>
 
 
-<script src="data.php?c=<?php echo $_GET['c'] ?>"></script>
+<script>
+	timeline = <?php include("data.php"); ?>;
+</script>
 
 <script>
 
@@ -89,7 +94,7 @@ function populatearrays(){
 		pageDiv = reader.visiblePages()[0];
 		doc = pageDiv.m.activeFrame.contentDocument;
 
-		part1 = document.getElementById('part1');
+		part1 = document.getElementById('part_01');
 		pArr = part1.getElementsByTagName("p");
 
 		myPages=new Array();
@@ -262,6 +267,9 @@ function init(){
 			document.getElementById('reader_wrapper').setAttribute("style","display: block");
 			
 			populatearrays();
+			
+			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_pause.png)");
+			
 		    //console.log("mySelPar2[0] " + mySelPar[0]);
 			//console.log("mySelPar2[1] " + mySelPar[1]);
 			//console.log("mySelPar2[2] " + mySelPar[2]);
@@ -273,8 +281,15 @@ function init(){
 			}
 		    //reader.moveTo({ xpath: '//p['+currentpar+']' });
 		    console.log("moveTo Paragraph: " + (mySelPar[pagenumber-1]));
-	   	    seekTo(currentpar - 1,myTimes[pagenumber-1]);	
-			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_pause.png)");
+		
+		console.log('call to seekto' +currentpar - 1);
+			var seekToP;
+			if (isNaN(currentpar - 1) == true ){
+				seekToP = 0
+			}else{
+				seekToP = currentpar - 1;
+			}
+	   	    seekTo(seekToP,myTimes[pagenumber-1]);	
 		}
 	}
 	
@@ -322,6 +337,7 @@ function update(){
 }
 
 function time2secs(t){
+	console.log('time2secs '+t);
 	var secs = (Number(t.toString().substr(0,2))*3600) + (Number(t.toString().substr(3,2))*60) + (Number(t.toString().substr(6,2)));
 	return Number(secs) + Number(timeline.offset);
 }
@@ -341,6 +357,8 @@ timeline.offset = 0;
 function seekTo(t,btime){	
 	var timeaux;
 	console.log("SeekTo " + t);
+	console.log("SeekTo timeline " + timeline);
+	
 	if (t == 0) timeaux = 0; else timeaux = timeline[t].start.toString()
 	time = time2secs(timeaux);
 	
@@ -368,229 +386,265 @@ function seekTo(t,btime){
 var bookData = {
   getComponents: function () {
     return [
-      'part1'
+      'part_01', 
+	  'part_02',
+	  'part_03', 
+	  'part_04', 
+	  'part_05',
+	  'part_06',
+	  'part_07', 
+	  'part_08',
+	  'part_09',
+	  'part_10',
+	  'part_11', 
+	  'part_12',
+	  'part_13', 
+	  'part_14', 
+	  'part_15',
+	  'part_16',
+	  'part_17', 
+	  'part_18',
+	  'part_19',
+	  'part_20',
+	  'part_21', 
+	  'part_22',
+	  'part_23', 
+	  'part_24', 
+	  'part_25',
+	  'part_26',
+	  'part_27', 
+	  'part_28',
+	  'part_29',
+	  'part_30',
+	  'part_31', 
+	  'part_32', 
+	  'part_33',
+	  'part_34',
+	  'part_35', 
+	  'part_36',
+	  'part_37'
     ];
   },
   getContents: function () {
     return [
       {
         title: "Part I, Chapter 1",
-        src: 'part1',
+        src: 'part_01',
 		chp: '01'
       }
 	,
 	 {
        title: "Part II, Chapter 2",
-        src: 'x',
+        src: 'part_02',
 		chp: '02'
 	 },
 	{
        title: "Part II, Chapter 3",
-        src: 'x',
+        src: 'part_03',
 		chp: '03'
 	 }
 	,
 	{
        title: "Part II, Chapter 4",
-        src: 'x',
+        src: 'part_04',
 		chp: '04'
 	 }
 	,
 	{
        title: "Part II, Chapter 5",
-        src: 'x',
+       src: 'part_05',
 		chp: '05'
 	 }
 	,
 	{
        title: "Part II, Chapter 6",
-        src: 'x',
+       src: 'part_06',
 		chp: '06'
 	 }
 	,
 	{
        title: "Part II, Chapter 7",
-        src: 'x',
+       src: 'part_07',
 		chp: '07'
 	 }
 	,
 	{
        title: "Part II, Chapter 8",
-        src: 'x',
+       src: 'part_08',
 		chp: '08'
 	 }
 	,
 	{
        title: "Part II, Chapter 9",
-        src: 'x',
+       src: 'part_09',
 		chp: '09'
 	 }
 	,
 	{
        title: "Part II, Chapter 10",
-        src: 'x',
+       src: 'part_10',
 		chp: '10'
 	 }
 	,
 	{
        title: "Part II, Chapter 11",
-        src: 'x',
+       src: 'part_11',
 		chp: '11'
 	 }
 	,
 	{
        title: "Part II, Chapter 12",
-        src: 'x',
+       src: 'part_12',
 		chp: '12'
 	 }
 	,
 	{
        title: "Part III, Chapter 13",
-        src: 'x',
+       src: 'part_13',
 		chp: '13'
 	 }
 	,
 	{
        title: "Part III, Chapter 14",
-        src: 'x',
+       src: 'part_14',
 		chp: '14'
 	 }
 	,
 	{
        title: "Part III, Chapter 15",
-        src: 'x',
+       src: 'part_15',
 		chp: '15'
 	 }
 	,
 	{
        title: "Part III, Chapter 16",
-        src: 'x',
+       src: 'part_16',
 		chp: '16'
 	 }
 	,
 	{
        title: "Part III, Chapter 17",
-        src: 'x',
+       src: 'part_17',
 		chp: '17'
 	 }
 	,
 	{
        title: "Part III, Chapter 18",
-        src: 'x',
+       src: 'part_18',
 		chp: '18'
 	 }
 	,
 	{
        title: "Part III, Chapter 19",
-        src: 'x',
+       src: 'part_19',
 		chp: '19'
 	 }
 	,
 	{
        title: "Part III, Chapter 20",
-        src: 'x',
+       src: 'part_20',
 		chp: '20'
 	 }
 	,
 	{
        title: "Part III, Chapter 21",
-        src: 'x',
+       src: 'part_21',
 		chp: '21'
 	 }
 	,
 	{
        title: "Part III, Chapter 22",
-        src: 'x',
+       src: 'part_22',
 		chp: '22'
 	 }
 	,
 	{
        title: "Part IV, Chapter 23",
-        src: 'x',
+       src: 'part_23',
 		chp: '23'
 	 }
 	,
 	{
        title: "Part IV, Chapter 24",
-        src: 'x',
+       src: 'part_24',
 		chp: '24'
 	 }
 	,
 	{
        title: "Part IV, Chapter 25",
-        src: 'x',
+       src: 'part_25',
 		chp: '25'
 	 }
 	,
 	{
        title: "Part IV, Chapter 26",
-        src: 'x',
+       src: 'part_26',
 		chp: '26'
 	 }
 	,
 	{
        title: "Part IV, Chapter 27",
-        src: 'x',
+       src: 'part_27',
 		chp: '27'
 	 }
 	,
 	{
        title: "Part IV, Chapter 28",
-        src: 'x',
+       src: 'part_28',
 		chp: '28'
 	 }
 	,
 	{
        title: "Part IV, Chapter 29",
-        src: 'x',
+       src: 'part_29',
 		chp: '29'
 	 }
 	,
 	{
        title: "Part IV, Chapter 30",
-        src: 'x',
+       src: 'part_30',
 		chp: '30'
 	 }
 	,
 	{
        title: "Part IV, Chapter 31",
-        src: 'x',
+       src: 'part_31',
 		chp: '31'
 	 }
 	,
 	{
        title: "Part IV, Chapter 32",
-        src: 'x',
+       src: 'part_32',
 		chp: '32'
 	 }
 	,
 	{
        title: "Part IV, Chapter 33",
-        src: 'x',
+       src: 'part_33',
 		chp: '33'
 	 }
 	,
 	{
        title: "Part IV, Chapter 34",
-        src: 'x',
+       src: 'part_34',
 		chp: '34'
 	 }
 	,
 	{
        title: "Part IV, Chapter 35",
-        src: 'x',
+       src: 'part_35',
 		chp: '35'
 	 }
 	,
 	{
        title: "Part IV, Chapter 36",
-        src: 'x',
+       src: 'part_36',
 		chp: '36'
 	 }
 	,
 	{
        title: "Part IV, Chapter 37",
-        src: 'x',
+       src: 'part_37',
 		chp: '37'
 	 }
 
@@ -643,19 +697,18 @@ Monocle.Events.listen(
 	reader.listen(
 		'monocle:pagechange',
 		function (evt) {
-		var place = reader.getPlace(evt.m.page);
-		var section = place.componentId();
-		var chapterInfo = place.chapterInfo();
-		var chapterSrc = place.chapterSrc();
-		var pageTopPos = place.percentAtTopOfPage();
-		var pageBottomPos = place.percentAtBottomOfPage();
-		if (pagenumber !== (place.pageNumber() - 1)) turned = true;
-		pagenumber = place.pageNumber() - 1;
-		document.getElementById('pagenum').innerHTML = "Page "+ pagenumber;
-		nupages = place.countPage();
-		currentpar = mySelPar[pagenumber-1];
-		
-		//alert(currentpar);
+			var place = reader.getPlace(evt.m.page);
+			var section = place.componentId();
+			var chapterInfo = place.chapterInfo();
+			var chapterSrc = place.chapterSrc();
+			var pageTopPos = place.percentAtTopOfPage();
+			var pageBottomPos = place.percentAtBottomOfPage();
+			if (pagenumber !== (place.pageNumber() - 1)) turned = true;
+			pagenumber = place.pageNumber() - 1;
+			document.getElementById('pagenum').innerHTML = "Page "+ pagenumber;
+			nupages = place.countPage();
+			currentpar = mySelPar[pagenumber-1];
+			//alert(currentpar);
 	});
 
 
@@ -664,11 +717,71 @@ Monocle.Events.listen(
       panels: Monocle.Panels.IMode
     };
 
-
+	currentTitle = "Part I, Chapter 1";
+	
     Monocle.Reader('reader', bookData, readerOptions, function (rdr) {
       reader = rdr;
       toc = Monocle.Controls.Contents(rdr);
       rdr.addControl(toc, 'popover', { hidden: true });
+
+	
+      /* CHAPTER TITLE RUNNING HEAD */
+      var chapterTitle = {
+        runners: [],
+        createControlElements: function (page) {
+          var cntr = document.createElement('div');
+          // cntr.className = "chapterTitle";
+          // var runner = document.createElement('div');
+          // runner.className = "runner";
+          // cntr.appendChild(runner);
+          // this.runners.push(runner);
+          // this.update(page);
+          return cntr;
+        },
+        update: function (page) {
+          var place = reader.getPlace(page);
+		  // console.log('place.chapterTitle()' +place.chapterTitle());
+		
+		function handler()
+		{
+		    if (oReq.readyState == 4 /* complete */) {
+		        if (oReq.status == 200) {
+		            // console.log(oReq.responseText);
+		  			timeline = oReq.responseText;
+					var audio = document.getElementsByTagName('audio')[0];
+					var src = audio.getElementsByTagName('source')[0];
+					// console.log('audio src 1' +src.getAttribute('src'));
+					audio.innerHTML = "";
+					var sourceElement = document.createElement('source');
+					var sourceElementAttr = sourceElement.setAttribute("src", "video.php?c="+place.chapterSrc().split('_')[1])
+					audio.appendChild(sourceElement);
+					// console.log('audio src 2' +src.getAttribute('src'));
+					audio.pause();
+					audio.load();
+		        }
+		    }
+		}
+		document.getElementById('top_title').innerHTML = place.chapterTitle();
+		console.log('place chapter metadata '+place.chapterSrc().split('_')[1]);
+		if (currentTitle != place.chapterTitle()){
+		  document.getElementById('top_title').innerHTML = place.chapterTitle();
+		  // console.log('timeline = ' +timeline);
+		  timeline = null;
+		  var oReq = new XMLHttpRequest();
+			if (oReq != null) {
+			    oReq.open("GET", "http://localhost/ast3/AST/timeline_generator.php?c="+place.chapterSrc().split('_')[1], true);
+			    oReq.onreadystatechange = handler;
+			    oReq.send();
+			}
+        }
+		}
+      }
+
+      reader.addControl(chapterTitle, 'page');
+      reader.listen(
+        'monocle:pagechange',
+        function (evt) { chapterTitle.update(evt.m.page); }
+      );
 
 
   	// /* MENU CONTROL */
@@ -738,12 +851,308 @@ Monocle.Events.listen(
 <!-- <div onclick="reader.moveTo({ direction: -1 }); ">Previous page</div>
 <div onclick="reader.moveTo({ direction: 1 }); ">Next page</div> -->
 
-  <div id="part1">
+  <div id="part_01">
 	<?php 
-	include("epub.php"); 
+	$xsl = "epub.xsl";
+	
+	function transDoc($xml_filename,$xsl_filename){
+		$xp = new XsltProcessor();
+		$xsl = new DomDocument;
+		$xsl->load($xsl_filename);
+		$xp->importStylesheet($xsl);
+		$xml_dom = new DomDocument;
+		$xml_dom->load($xml_filename);
+
+		return $xp->transformToXML($xml_dom);
+	}
+	
+	$xml = "1/chapter01.xhtml";
+	echo transDoc($xml,$xsl);
 	?>
 
  </div>
+
+
+  <div id="part_02">
+	<?php 
+	$xml = "1/chapter02.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+
+  <div id="part_03">
+	<?php 
+	$xml = "1/chapter03.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+
+  <div id="part_04">
+	<?php 
+	$xml = "1/chapter04.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+
+  <div id="part_05">
+	<?php 
+	$xml = "1/chapter05.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+
+  <div id="part_06">
+	<?php 
+	$xml = "1/chapter06.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_07">
+	<?php 
+	$xml = "1/chapter07.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_08">
+	<?php 
+	$xml = "1/chapter08.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_09">
+	<?php 
+	$xml = "1/chapter09.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_10">
+	<?php 
+	$xml = "1/chapter10.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_11">
+	<?php 
+	$xml = "1/chapter11.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_12">
+	<?php 
+	$xml = "1/chapter12.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_13">
+	<?php 
+	$xml = "1/chapter13.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_14">
+	<?php 
+	$xml = "1/chapter14.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_15">
+	<?php 
+	$xml = "1/chapter15.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_16">
+	<?php 
+	$xml = "1/chapter16.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_17">
+	<?php 
+	$xml = "1/chapter17.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_18">
+	<?php 
+	$xml = "1/chapter18.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_19">
+	<?php 
+	$xml = "1/chapter19.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_20">
+	<?php 
+	$xml = "1/chapter20.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_21">
+	<?php 
+	$xml = "1/chapter21.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_22">
+	<?php 
+	$xml = "1/chapter22.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+
+  <div id="part_23">
+	<?php 
+	$xml = "1/chapter23.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_24">
+	<?php 
+	$xml = "1/chapter24.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+  <div id="part_25">
+	<?php 
+	$xml = "1/chapter25.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+  <div id="part_26">
+	<?php 
+	$xml = "1/chapter26.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+
+  <div id="part_27">
+	<?php 
+	$xml = "1/chapter27.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_28">
+	<?php 
+	$xml = "1/chapter28.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+  <div id="part_29">
+	<?php 
+	$xml = "1/chapter29.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+  <div id="part_30">
+	<?php 
+	$xml = "1/chapter31.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_32">
+	<?php 
+	$xml = "1/chapter32.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_33">
+	<?php 
+	$xml = "1/chapter33.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+  <div id="part_34">
+	<?php 
+	$xml = "1/chapter34.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+  <div id="part_35">
+	<?php 
+	$xml = "1/chapter35.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_36">
+	<?php 
+	$xml = "1/chapter36.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_37">
+	<?php 
+	$xml = "1/chapter37.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
 
 
 <script>
@@ -751,13 +1160,20 @@ Monocle.Events.listen(
 document.getElementById('currentpar').innerHTML = "Paragraph 1, Next 0";
 
 function runProcess(i){
+	console.log ('runProcess' +i);
 i=Number(i) + 1;
 currentpar = i;
 populatearrays();
 t2 = timeline[i].start;
 t1 = timeline[i-1].start;
+
+console.log ('runProcess t2' +t2);
+
+console.log ('runProcess t1' +t1);
+
 time1 = time2secs(t1);
 time2 = ((time2secs(t2)-time1) * 1000);
+
 if (i!=1) {
 	node1 = doc.evaluate('//p['+(i-1)+']', doc, null, 9, null).singleNodeValue;
 	percent1 = pageDiv.m.dimensions.percentageThroughOfNode(node1);
@@ -826,7 +1242,7 @@ if (i!=1) {
 
 }
 
-part1 = document.getElementById('part1');
+part1 = document.getElementById('part_01');
 pArr = part1.getElementsByTagName("p");
 for (var i=0; i<pArr.length;i++){
 pArr[i].innerHTML = "<span style='background-color: #FFFFFF' onclick='javascript:top.seekTo(&quot;"+i.toString()+"&quot;,0);'>"+pArr[i].innerHTML+ "</span>";

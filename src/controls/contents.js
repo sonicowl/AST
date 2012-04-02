@@ -35,13 +35,19 @@ Monocle.Controls.Contents = function (reader) {
     var li = list.dom.append('li', 'controls_contents_chapter', index);
 
  
-
+    // var span = li.dom.append(
+    //   'span',
+    //   'controls_contents_chapterTitle',
+    //   index,
+    //   { html: '<a href="index.php?c='+chp.chp+'">'+chp.title+'</a>' }
+    // );
     var span = li.dom.append(
       'span',
       'controls_contents_chapterTitle',
       index,
-      { html: '<a href="index.php?c='+chp.chp+'">'+chp.title+'</a>' }
+      { html: chp.title }
     );
+
     span.style.paddingLeft = padLvl + "em";
 
     var invoked = function () {
