@@ -133,11 +133,14 @@ Monocle.Controls.Scrubber = function (reader) {
 	var searchBtn = cntrInside.dom.append('div', 'searchButton');
 	var bookmarkBtn = cntrInside.dom.append('div', 'bookmarkButton');
 	
+	
+
+	
     // btn.smallA = btn.dom.append('span', 'controls_magnifier_a', { text: 'A' });
     // btn.largeA = btn.dom.append('span', 'controls_magnifier_A', { text: 'A' });
     // p.buttons.push(btn);
+
     Monocle.Events.listenForTap(btn, toggleMagnification);
-	
 	
 	
 	var tocDiv = cntrInside.dom.append('div', 'tocButton');

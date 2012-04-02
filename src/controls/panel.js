@@ -46,6 +46,11 @@ Monocle.Controls.Panel = function () {
 
 
   function start(evt) {
+	console.log('start');
+	if (isPlaying == true){
+		console.log('isplaying')
+		return;
+	};
     p.contact = true;
     evt.m.offsetX += p.div.offsetLeft;
     evt.m.offsetY += p.div.offsetTop;

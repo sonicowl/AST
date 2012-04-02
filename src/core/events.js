@@ -228,9 +228,9 @@ Monocle.Events.deafenForContact = function (elem, listeners) {
 // Returns a listeners object that you should pass to deafenForTap if you
 // need to.
 Monocle.Events.listenForTap = function (elem, fn, activeClass) {
-  var startPos;
 
-  // On Kindle, register a noop function with click to make the elem a
+  var startPos;
+  	// On Kindle, register a noop function with click to make the elem a
   // cursor target.
   if (Monocle.Browser.on.Kindle3) {
     Monocle.Events.listen(elem, 'click', function () {});
@@ -262,6 +262,12 @@ Monocle.Events.listenForTap = function (elem, fn, activeClass) {
     elem,
     {
       start: function (evt) {
+		console.log('listenForTap')
+
+		if (isPlaying == true){
+			console.log('isplaying')
+			return;
+		};
         startPos = [evt.m.pageX, evt.m.pageY];
         if (activeClass && elem.dom) { elem.dom.addClass(activeClass); }
       },

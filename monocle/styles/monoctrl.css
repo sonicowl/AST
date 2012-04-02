@@ -70,11 +70,12 @@ li.monelem_controls_contents_chapter_active {
   top: 2px;
   right: 85px;
   padding: 0 2px;
-  background: url(btn_search.png);
+  background: url(btn_search_grey.png);
   width:39px;
   height:34px;
 
 }
+
 
 .monelem_bookmarkButton {
   cursor: pointer;
@@ -86,10 +87,9 @@ li.monelem_controls_contents_chapter_active {
   top: 2px;
   left: 85px;
   padding: 0 2px;
-  background: url(btn_bookmark.png);
+  background: url(btn_bookmark_grey.png);
   width:39px;
   height:34px;
-
 }
 
 .monelem_tocButton {
@@ -105,7 +105,6 @@ li.monelem_controls_contents_chapter_active {
   background: url(btn_toc.png);
   width:39px;
   height:34px;
-
 }
 
 /* Magnifier */
@@ -163,6 +162,28 @@ div.monelem_bottomMenu {
   padding:0;
   opacity:0;
 
+}
+
+
+#reader_wrapper{
+	display:none;
+	background:url(sound_on.png) 60px 100px no-repeat;
+	position:absolute;
+	bottom:0;
+	top:0;
+	left:0;
+	width: 320px; 
+	height: 416px; 
+	z-index:99;
+}
+
+
+
+#sound_image {
+	opacity:0.5;
+	background:#000;
+	width: 320px; 
+	height: 416px;
 }
 
 

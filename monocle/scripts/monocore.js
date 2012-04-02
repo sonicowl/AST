@@ -1138,7 +1138,6 @@ Monocle.Events.deafenForContact = function (elem, listeners) {
 // need to.
 Monocle.Events.listenForTap = function (elem, fn, activeClass) {
   var startPos;
-
   // On Kindle, register a noop function with click to make the elem a
   // cursor target.
   if (Monocle.Browser.on.Kindle3) {
