@@ -1,6 +1,6 @@
 <?php
-$c = $_request['c'];
-if (empty($_request['c'])) $c = "01";
+$c = $_GET['c'];
+if (empty($_GET['c'])) $c = "01";
 $xml = "1/chapter".$c.".xhtml";
 $xsl = "epub.xsl";
 function transDoc($xml_filename,$xsl_filename){
