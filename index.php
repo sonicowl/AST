@@ -47,7 +47,7 @@ var toc;
 <link rel="stylesheet" type="text/css" href="monocle/styles/monoctrl.css" />
 
 <style>
-  #reader { width: 320px; height: 358px; }
+  #reader { width: 320px; height: 416px; }
 
   #part1 {display:none}
   .bookTitle {
@@ -218,6 +218,7 @@ function init(){
 	//Hide the address bar
 	audio = document.getElementById("audio");
 
+
 	function fullscreen(){
 		var a=document.getElementsByTagName("a");
 		for(var i=0;i<a.length;i++){
@@ -344,11 +345,15 @@ function seekTo(t,btime){
 	  audio.pause();
 	  btime = 0;
 	  console.log("turned " + turned);
-	  if (btime != 0) audio.currentTime = btime; else  audio.currentTime = time;
- 	  audio.play();    
+	  if (btime != 0) audio.currentTime = btime; else   audio.currentTime = time;
+ 	  //setTimeout("audio.play()", 1000); 
+      audio.play();
    
 	} catch (e) {
-
+		audio.play();
+	    audio.pause();
+	    setTimeout("audio.currentTime = time;",500);
+	    setTimeout("audio.play();",1000);
 	}
 	console.log("runProcess " + t);
     runProcess(t);
