@@ -2,13 +2,26 @@
 <html lang=en>
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	
+	<?php
+	$full_url_path = "http://" . $_SERVER['HTTP_HOST'] . preg_replace("#/[^/]*\.php$#simU", "/", $_SERVER["PHP_SELF"]);
+	?>
 <!-- TODO MINIFY JAVASCRIPT -->
 <script>
 var isPlaying;
 var currentTitle;
 var timeline;
 var toc;
+var pathInfo = "<?php echo $full_url_path;?>";
+	
+	function setAttributeForClass(theClass, attribute) {
+		//Create Array of All HTML Tags
+		var allHTMLTags=document.getElementsByTagName("*");
+		for (i=0; i<allHTMLTags.length; i++) {
+			if (allHTMLTags[i].className==theClass) {
+				allHTMLTags[i].setAttribute("style",attribute);;
+			}
+		}
+  	}
 </script>
  <!-- MONOCLE CORE -->
  <script type="text/javascript" src="src/core/monocle.js"></script>
@@ -265,6 +278,10 @@ function init(){
 		}else{
 			isPlaying = true;
 			document.getElementById('reader_wrapper').setAttribute("style","display: block");
+			document.getElementById("topMenu").setAttribute("style","opacity:0;-webkit-transform: translateY(-47px)");
+			
+			setAttributeForClass("monelem_bottomMenu", "opacity:0; -webkit-transform: translateY(47px)")
+			
 			
 			populatearrays();
 			
@@ -769,7 +786,7 @@ Monocle.Events.listen(
 		  timeline = null;
 		  var oReq = new XMLHttpRequest();
 			if (oReq != null) {
-			    oReq.open("GET", "http://localhost/ast3/AST/timeline_generator.php?c="+place.chapterSrc().split('_')[1], true);
+			    oReq.open("GET", pathInfo+"timeline_generator.php?c="+place.chapterSrc().split('_')[1], true);
 			    oReq.onreadystatechange = handler;
 			    oReq.send();
 			}

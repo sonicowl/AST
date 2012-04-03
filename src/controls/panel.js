@@ -11,7 +11,7 @@
 // 'end' and 'cancel'.
 //
 Monocle.Controls.Panel = function () {
-
+  var isOpen = true;
   var API = { constructor: Monocle.Controls.Panel }
   var k = API.constants = API.constructor;
   var p = API.properties = {
@@ -48,7 +48,16 @@ Monocle.Controls.Panel = function () {
   function start(evt) {
 	console.log('start');
 	if (isPlaying == true){
-		console.log('isplaying')
+		console.log('isplaying isOpen'+isOpen);
+		if (isOpen==true){
+			document.getElementById("topMenu").setAttribute("style","opacity:0.9; -webkit-transform: translateY(0px)");
+			setAttributeForClass("monelem_bottomMenu", "opacity:0.9; -webkit-transform: translateY(0px)")
+			isOpen = false;
+		}else{
+			document.getElementById("topMenu").setAttribute("style","opacity:0;-webkit-transform: translateY(-47px)");
+			setAttributeForClass("monelem_bottomMenu", "opacity:0; -webkit-transform: translateY(47px)")
+			isOpen = true;
+		}
 		return;
 	};
     p.contact = true;
