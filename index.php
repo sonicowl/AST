@@ -1101,6 +1101,14 @@ Monocle.Events.listen(
  </div>
   <div id="part_30">
 	<?php 
+	$xml = "1/chapter30.xhtml";
+	echo transDoc($xml,$xsl);
+	?>
+
+ </div>
+
+  <div id="part_31">
+	<?php 
 	$xml = "1/chapter31.xhtml";
 	echo transDoc($xml,$xsl);
 	?>

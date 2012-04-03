@@ -9,7 +9,7 @@
 	<!-- Date: 2012-03-19 -->
 	<style>
 		body {font-family: Helvetica}
-		#header {float:right; font-size:0.9em; margin-bottom:10px; margin-right:5px}
+		#header {float:right; font-size:0.9em; margin-bottom:5px; margin-right:5px}
 		a{text-decoration:none; color:#757373}
 		h1{font:bold 24px Helvetica;}
 		#current_reading {border-radius: 5px;border:1px solid #474747}
