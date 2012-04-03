@@ -9,6 +9,8 @@ Monocle.Controls.Contents = function (reader) {
     reader: reader
   }
 
+ var closeBtn;
+
 
   function createControlElements() {
     var div = reader.dom.make('div', 'controls_contents_container');
@@ -21,6 +23,13 @@ Monocle.Controls.Contents = function (reader) {
     while (div.hasChildNodes()) {
       div.removeChild(div.firstChild);
     }
+
+    var textH = div.dom.append('div', 'tableOfContentsTitle');
+
+    closeBtn = div.dom.append('div', 'closeBtn');
+
+    textH.innerHTML = 'Table Of Contents';
+
     var list = div.dom.append('ol', 'controls_contents_list');
 
     var contents = book.properties.contents;
@@ -55,7 +64,9 @@ Monocle.Controls.Contents = function (reader) {
       p.reader.hideControl(API);
     }
 
-    Monocle.Events.listenForTap(li, invoked, 'controls_contents_chapter_active');
+	Monocle.Events.listenForTap(li, invoked, 'controls_contents_chapter_active');
+
+    Monocle.Events.listenForTap(closeBtn, function(){p.reader.hideControl(API);});
 
     if (chp.children) {
       for (var i = 0; i < chp.children.length; ++i) {

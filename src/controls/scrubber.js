@@ -14,6 +14,8 @@ Monocle.Controls.Scrubber = function (reader) {
     updateNeedles();
   }
 
+
+
   function toggleMagnification(evt) {
     var opacities;
     if (!p.sheetIndex) {

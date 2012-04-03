@@ -428,222 +428,222 @@ var bookData = {
   getContents: function () {
     return [
       {
-        title: "Part I, Chapter 1",
+        title: "1 - THE BREEZE",
         src: 'part_01',
 		chp: '01'
       }
 	,
 	 {
-       title: "Part II, Chapter 2",
+       title: "2 - PINE COVE",
         src: 'part_02',
 		chp: '02'
 	 },
 	{
-       title: "Part II, Chapter 3",
+       title: "3 - TRAVIS",
         src: 'part_03',
 		chp: '03'
 	 }
 	,
 	{
-       title: "Part II, Chapter 4",
+       title: "4 - ROBERT",
         src: 'part_04',
 		chp: '04'
 	 }
 	,
 	{
-       title: "Part II, Chapter 5",
+       title: "5 - AUGUSTUS BRINE",
        src: 'part_05',
 		chp: '05'
 	 }
 	,
 	{
-       title: "Part II, Chapter 6",
+       title: "6 - THE DJINN'S STORY",
        src: 'part_06',
 		chp: '06'
 	 }
 	,
 	{
-       title: "Part II, Chapter 7",
+       title: "7 - ARRIVAL",
        src: 'part_07',
 		chp: '07'
 	 }
 	,
 	{
-       title: "Part II, Chapter 8",
+       title: "8 - ROBERT",
        src: 'part_08',
 		chp: '08'
 	 }
 	,
 	{
-       title: "Part II, Chapter 9",
+       title: "9 - THE HEAD OF THE SLUG",
        src: 'part_09',
 		chp: '09'
 	 }
 	,
 	{
-       title: "Part II, Chapter 10",
+       title: "10 - AUGUSTUS BRINE",
        src: 'part_10',
 		chp: '10'
 	 }
 	,
 	{
-       title: "Part II, Chapter 11",
+       title: "11 - EFFROM",
        src: 'part_11',
 		chp: '11'
 	 }
 	,
 	{
-       title: "Part II, Chapter 12",
+       title: "12 - JENNIFER",
        src: 'part_12',
 		chp: '12'
 	 }
 	,
 	{
-       title: "Part III, Chapter 13",
+       title: "13 - NIGHTFALL",
        src: 'part_13',
 		chp: '13'
 	 }
 	,
 	{
-       title: "Part III, Chapter 14",
+       title: "14 - DINNER",
        src: 'part_14',
 		chp: '14'
 	 }
 	,
 	{
-       title: "Part III, Chapter 15",
+       title: "15 - RACHEL",
        src: 'part_15',
 		chp: '15'
 	 }
 	,
 	{
-       title: "Part III, Chapter 16",
+       title: "16 - HOWARD",
        src: 'part_16',
 		chp: '16'
 	 }
 	,
 	{
-       title: "Part III, Chapter 17",
+       title: "17 - BILLY",
        src: 'part_17',
 		chp: '17'
 	 }
 	,
 	{
-       title: "Part III, Chapter 18",
+       title: "18 - RACHEL",
        src: 'part_18',
 		chp: '18'
 	 }
 	,
 	{
-       title: "Part III, Chapter 19",
+       title: "19 - JENNY'S HOUSE",
        src: 'part_19',
 		chp: '19'
 	 }
 	,
 	{
-       title: "Part III, Chapter 20",
+       title: "20 - EFFROM",
        src: 'part_20',
 		chp: '20'
 	 }
 	,
 	{
-       title: "Part III, Chapter 21",
+       title: "21 - AUGUSTUS BRINE",
        src: 'part_21',
 		chp: '21'
 	 }
 	,
 	{
-       title: "Part III, Chapter 22",
+       title: "22 - TRAVIS AND JENNY",
        src: 'part_22',
 		chp: '22'
 	 }
 	,
 	{
-       title: "Part IV, Chapter 23",
+       title: "23 - RIVERA",
        src: 'part_23',
 		chp: '23'
 	 }
 	,
 	{
-       title: "Part IV, Chapter 24",
+       title: "24 - AUGUSTUS BRINE",
        src: 'part_24',
 		chp: '24'
 	 }
 	,
 	{
-       title: "Part IV, Chapter 25",
+       title: "25 - AMANDA",
        src: 'part_25',
 		chp: '25'
 	 }
 	,
 	{
-       title: "Part IV, Chapter 26",
+       title: "26 - TRAVIS'S STORY",
        src: 'part_26',
 		chp: '26'
 	 }
 	,
 	{
-       title: "Part IV, Chapter 27",
+       title: "27 - AUGUSTUS",
        src: 'part_27',
 		chp: '27'
 	 }
 	,
 	{
-       title: "Part IV, Chapter 28",
+       title: "28 - EFFROM",
        src: 'part_28',
 		chp: '28'
 	 }
 	,
 	{
-       title: "Part IV, Chapter 29",
+       title: "29 - RIVERA",
        src: 'part_29',
 		chp: '29'
 	 }
 	,
 	{
-       title: "Part IV, Chapter 30",
+       title: "30 - JENNY",
        src: 'part_30',
 		chp: '30'
 	 }
 	,
 	{
-       title: "Part IV, Chapter 31",
+       title: "31 - GOOD GUYS",
        src: 'part_31',
 		chp: '31'
 	 }
 	,
 	{
-       title: "Part IV, Chapter 32",
+       title: "32 - THE HEAD OF THE SLUG",
        src: 'part_32',
 		chp: '32'
 	 }
 	,
 	{
-       title: "Part IV, Chapter 33",
+       title: "33 - RIVERA",
        src: 'part_33',
 		chp: '33'
 	 }
 	,
 	{
-       title: "Part IV, Chapter 34",
+       title: "34 - U-PICK-EM",
        src: 'part_34',
 		chp: '34'
 	 }
 	,
 	{
-       title: "Part IV, Chapter 35",
+       title: "35 - BAD GUYS, GOOD GUYS",
        src: 'part_35',
 		chp: '35'
 	 }
 	,
 	{
-       title: "Part IV, Chapter 36",
+       title: "36 - JENNY, ROBERT, RIVERA, AMANDA, TRAVIS, HOWARD, AND THE SPIDER",
        src: 'part_36',
 		chp: '36'
 	 }
 	,
 	{
-       title: "Part IV, Chapter 37",
+       title: "37 - GOOD GUYS",
        src: 'part_37',
 		chp: '37'
 	 }
@@ -717,7 +717,7 @@ Monocle.Events.listen(
       panels: Monocle.Panels.IMode
     };
 
-	currentTitle = "Part I, Chapter 1";
+	currentTitle = "1 - THE BREEZE";
 	
     Monocle.Reader('reader', bookData, readerOptions, function (rdr) {
       reader = rdr;
@@ -833,7 +833,7 @@ Monocle.Events.listen(
 
 <div id="topMenu">
 	<div id="top_home_btn"></div>
-	<div id="top_title">Chapter Title</div>
+	<div id="top_title">1 - THE BREEZE</div>
 	<div id="top_audio"></div>
 	<div style="clear:both"></div>
 </div>

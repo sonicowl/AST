@@ -505,6 +505,15 @@ Monocle.Reader = function (node, bookData, options, onLoadCallback) {
     dispatchEvent('monocle:controlhide', { control: ctrl }, false);
   }
 
+  function setAttributeForClass(theClass, attribute) {
+		//Create Array of All HTML Tags
+		var allHTMLTags=document.getElementsByTagName("*");
+		for (i=0; i<allHTMLTags.length; i++) {
+			if (allHTMLTags[i].className==theClass) {
+				allHTMLTags[i].setAttribute("style",attribute);;
+			}
+		}
+  }
 
   function showControl(ctrl) {
     var controlData = dataForControl(ctrl);
@@ -532,6 +541,10 @@ Monocle.Reader = function (node, bookData, options, onLoadCallback) {
     }
 
     if (controlData.controlType == "popover") {
+	
+		document.getElementById("topMenu").setAttribute("style","opacity:0;-webkit-transform: translateY(-47px)");
+		setAttributeForClass("monelem_bottomMenu", "opacity:0; -webkit-transform: translateY(47px)")
+		
       var onControl = function (evt) {
         var obj = evt.target;
         do {
