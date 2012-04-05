@@ -11,6 +11,7 @@ var isPlaying;
 var currentTitle;
 var timeline;
 var toc;
+var currentDivPositionNumber = '01';
 var pathInfo = "<?php echo $full_url_path;?>";
 	
 	function setAttributeForClass(theClass, attribute) {
@@ -62,7 +63,7 @@ var pathInfo = "<?php echo $full_url_path;?>";
 <link rel="stylesheet" type="text/css" href="monocle/styles/monoctrl.css" />
 
 <style>
-  #reader { width: 320px; height: 416px; }
+#reader { width: 320px; height: 416px; }
 
   #part_01, #part_02, #part_03,  #part_04,  #part_05,  #part_06,  #part_07,  #part_08,  #part_09,  #part_10,  #part_11,  #part_12,  #part_13,  #part_14,  #part_15,  #part_16 ,  
 #part_17,  #part_18, #part_19,  #part_20,  #part_21, #part_22, #part_23,  #part_24, #part_25, #part_26,  #part_27, #part_28,#part_29,#part_30,#part_31,#part_32,#part_33, #part_34, #part_35, #part_36, #part_37{display:none}
@@ -106,10 +107,11 @@ var mySelPar=new Array();
 function populatearrays(){
 		pageDiv = reader.visiblePages()[0];
 		doc = pageDiv.m.activeFrame.contentDocument;
-
-		part1 = document.getElementById('part_01');
+		var divName = 'part_'+currentDivPositionNumber;
+		part1 = document.getElementById(divName);
+		
+		// console.log('populatearrays' +divName)
 		pArr = part1.getElementsByTagName("p");
-
 		myPages=new Array();
 		
 		for (var xx=0; xx<pArr.length-1;xx++){
@@ -146,13 +148,11 @@ function populatearrays(){
 		//console.log("myPages[3] " + myPages[3]);
 		//console.log("myPages[4] " + myPages[4]);
 		
-		
 		for (var xx=0; xx<nupages-1;xx++){
 			if (xx == 0) {
 				myTimes[0] = 0;
 				mySelPar[0] = 1;
 			}
-
 		   	if ((xx !== 0) && (typeof timeline[(myPages[xx-1]+1)]  != 'undefined')) {
 			    node1 = doc.evaluate('//p['+(myPages[xx-1])+']', doc, null, 9, null).singleNodeValue;
 				percent1 = pageDiv.m.dimensions.percentageThroughOfNode(node1);
@@ -287,10 +287,10 @@ function init(){
 			
 			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_pause.png)");
 			
-		    //console.log("mySelPar2[0] " + mySelPar[0]);
-			//console.log("mySelPar2[1] " + mySelPar[1]);
-			//console.log("mySelPar2[2] " + mySelPar[2]);
-			//console.log("mySelPar2[3] " + mySelPar[3]);
+			// 		    console.log("mySelPar2[0] " + mySelPar[0]);
+			// console.log("mySelPar2[1] " + mySelPar[1]);
+			// console.log("mySelPar2[2] " + mySelPar[2]);
+			// console.log("mySelPar2[3] " + mySelPar[3]);
 			//console.log("checked turned " + parag.length);
 		    if (turned == true) {
 		    	currentpar= mySelPar[pagenumber-1];
@@ -298,8 +298,7 @@ function init(){
 			}
 		    //reader.moveTo({ xpath: '//p['+currentpar+']' });
 		    console.log("moveTo Paragraph: " + (mySelPar[pagenumber-1]));
-		
-		console.log('call to seekto' +currentpar - 1);
+			console.log('call to seekto' +currentpar);
 			var seekToP;
 			if (isNaN(currentpar - 1) == true ){
 				seekToP = 0
@@ -348,15 +347,22 @@ function init(){
 function update(){
 	var status = document.getElementById("status");
 	//status.innerHTML = audio.currentTime + "<br />";
-	for (var i=0; i<timeline.length; i++){
-		
-	}
+	// for (var i=0; i<timeline.length; i++){
+	// 	
+	// }
 }
 
 function time2secs(t){
 	console.log('time2secs '+t);
 	var secs = (Number(t.toString().substr(0,2))*3600) + (Number(t.toString().substr(3,2))*60) + (Number(t.toString().substr(6,2)));
-	return Number(secs) + Number(timeline.offset);
+	var number = Number(secs) + Number(timeline.offset);
+	
+	console.log('time2secs secs '+Number(secs));
+	console.log('time2secs timeline.offset '+Number(timeline.offset));
+	
+	// console.log('time2secs final number '+number);
+	return Number(secs);
+	// return Number(secs) + Number(timeline.offset);
 }
 
 
@@ -375,9 +381,14 @@ function seekTo(t,btime){
 	var timeaux;
 	console.log("SeekTo " + t);
 	console.log("SeekTo timeline " + timeline);
+	console.log("SeekTo timeline 2 " + timeline[t]);
 	
 	if (t == 0) timeaux = 0; else timeaux = timeline[t].start.toString()
+	
+	console.log("SeekTo timeaux " + timeaux);
+	
 	time = time2secs(timeaux);
+	console.log("SeekTo time " + time);
 	
 	try {
 	  audio.pause();
@@ -763,8 +774,8 @@ Monocle.Events.listen(
 		{
 		    if (oReq.readyState == 4 /* complete */) {
 		        if (oReq.status == 200) {
-		            // console.log(oReq.responseText);
-		  			timeline = oReq.responseText;
+		             console.log('got new timeline');
+		  			timeline = eval(oReq.responseText);
 					var audio = document.getElementsByTagName('audio')[0];
 					var src = audio.getElementsByTagName('source')[0];
 					// console.log('audio src 1' +src.getAttribute('src'));
@@ -780,10 +791,16 @@ Monocle.Events.listen(
 		}
 		document.getElementById('top_title').innerHTML = place.chapterTitle();
 		console.log('place chapter metadata '+place.chapterSrc().split('_')[1]);
-		if (currentTitle != place.chapterTitle()){
+		currentDivPositionNumber = place.chapterSrc().split('_')[1];
+		 
+		console.log('currentTitle '+currentTitle);
+		console.log('place.chapterTitle() '+place.chapterTitle());
+		
+		if (currentTitle !== place.chapterTitle()){
+			currentTitle = place.chapterTitle();
 		  document.getElementById('top_title').innerHTML = place.chapterTitle();
 		  // console.log('timeline = ' +timeline);
-		  timeline = null;
+		  timeline = {};
 		  var oReq = new XMLHttpRequest();
 			if (oReq != null) {
 			    oReq.open("GET", pathInfo+"timeline_generator.php?c="+place.chapterSrc().split('_')[1], true);
@@ -1189,6 +1206,7 @@ function runProcess(i){
 i=Number(i) + 1;
 currentpar = i;
 populatearrays();
+console.log('runProcess timeline'+timeline);
 t2 = timeline[i].start;
 t1 = timeline[i-1].start;
 
@@ -1254,7 +1272,7 @@ if (i!=1) {
     clearTimeout(tt1);
 	//alert('par2-'+i.toString());
 	//Processo do paragrapho.
-    tt1 = setTimeout("runProcess("+i.toString()+")",time2);
+ tt1 = setTimeout("runProcess("+i.toString()+")",time2);
 
     parag = doc.getElementsByTagName('p');
 	for (var y=0; y<parag.length;y++){
@@ -1265,9 +1283,11 @@ if (i!=1) {
 	}			
 	//document.getElementById('currentpar').innerHTML = "HMP "+parag.length+", Paragraph "+i.toString()+", Next "+t2;
 
+
 }
 
-part1 = document.getElementById('part_01');
+var divName = 'part_'+currentDivPositionNumber;
+part1 = document.getElementById(divName);
 pArr = part1.getElementsByTagName("p");
 for (var i=0; i<pArr.length;i++){
 pArr[i].innerHTML = "<span style='background-color: #FFFFFF' onclick='javascript:top.seekTo(&quot;"+i.toString()+"&quot;,0);'>"+pArr[i].innerHTML+ "</span>";
