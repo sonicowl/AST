@@ -1,14 +1,16 @@
+<?php
+$full_url_path = "http://" . $_SERVER['HTTP_HOST'] . preg_replace("#/[^/]*\.php$#simU", "/", $_SERVER["PHP_SELF"]);
+?>
 <!DOCTYPE html>
 <html lang=en>
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<?php
-	$full_url_path = "http://" . $_SERVER['HTTP_HOST'] . preg_replace("#/[^/]*\.php$#simU", "/", $_SERVER["PHP_SELF"]);
-	?>
+
 <!-- TODO MINIFY JAVASCRIPT -->
 <script>
 var isPlaying;
 var currentTitle;
+var currentPage;
 var timeline;
 var toc;
 var currentDivPositionNumber = '01';
@@ -23,6 +25,61 @@ var pathInfo = "<?php echo $full_url_path;?>";
 			}
 		}
   	}
+
+	function Set_Cookie( name, value, expires, path, domain, secure )
+	{
+		// set time, it's in milliseconds
+		var today = new Date();
+		today.setTime( today.getTime() );
+
+		/*
+		if the expires variable is set, make the correct
+		expires time, the current script below will set
+		it for x number of days, to make it for hours,
+		delete * 24, for minutes, delete * 60 * 24
+		*/
+		if ( expires )
+		{
+			expires = expires * 1000 * 60 * 60 * 24;
+		}
+		var expires_date = new Date( today.getTime() + (expires) );
+
+		document.cookie = name + "=" +escape( value ) +
+		( ( expires ) ? ";expires=" + expires_date.toGMTString() : "" ) +
+		( ( path ) ? ";path=" + path : "" ) +
+		( ( domain ) ? ";domain=" + domain : "" ) +
+		( ( secure ) ? ";secure" : "" );
+	}
+	
+	
+	// this function gets the cookie, if it exists
+	// don't use this, it's weak and does not handle some cases
+	// correctly, this is just to maintain legacy information
+	function Get_Cookie( name ) {
+		var start = document.cookie.indexOf( name + "=" );
+		var len = start + name.length + 1;
+		if ( ( !start ) &&
+		( name != document.cookie.substring( 0, name.length ) ) )
+		{
+		return null;
+		}
+		if ( start == -1 ) return null;
+		var end = document.cookie.indexOf( ";", len );
+		if ( end == -1 ) end = document.cookie.length;
+		return unescape( document.cookie.substring( len, end ) );
+	}
+	
+	
+	// this deletes the cookie when called
+	function Delete_Cookie( name, path, domain ) {
+		if ( Get_Cookie( name ) ) document.cookie = name + "=" +
+		( ( path ) ? ";path=" + path : "") +
+		( ( domain ) ? ";domain=" + domain : "" ) +
+		";expires=Thu, 01-Jan-1970 00:00:01 GMT";
+	}
+
+
+
 </script>
  <!-- MONOCLE CORE -->
  <script type="text/javascript" src="src/core/monocle.js"></script>
@@ -63,7 +120,20 @@ var pathInfo = "<?php echo $full_url_path;?>";
 <link rel="stylesheet" type="text/css" href="monocle/styles/monoctrl.css" />
 
 <style>
-#reader { width: 320px; height: 416px; }
+
+
+#reader { /*width: 320px; height: 416px;*/ position: absolute;
+width: 100%;
+height: 100%;}
+
+
+@media screen and (max-width: 800px) {
+	#reader {
+		width: 320px; height: 416px; position: absolute;
+
+	}
+}
+
 
   #part_01, #part_02, #part_03,  #part_04,  #part_05,  #part_06,  #part_07,  #part_08,  #part_09,  #part_10,  #part_11,  #part_12,  #part_13,  #part_14,  #part_15,  #part_16 ,  
 #part_17,  #part_18, #part_19,  #part_20,  #part_21, #part_22, #part_23,  #part_24, #part_25, #part_26,  #part_27, #part_28,#part_29,#part_30,#part_31,#part_32,#part_33, #part_34, #part_35, #part_36, #part_37{display:none}
@@ -78,6 +148,8 @@ var pathInfo = "<?php echo $full_url_path;?>";
 	color:#cc0000;
   }
   #main_audio{display:none}
+
+
 </style>
 
 <meta charset="UTF-8">
@@ -223,9 +295,6 @@ function populatearrays(){
 		//console.log("mySelPar1[2] " + mySelPar[2]);
 		//console.log("mySelPar1[3] " + mySelPar[3]);
 		//console.log("mySelPar1[4] " + mySelPar[4]);
-	
-	
-	
 }
 
 function init(){
@@ -234,7 +303,6 @@ function init(){
 	
 	//Hide the address bar
 	audio = document.getElementById("audio");
-
 
 	function fullscreen(){
 		var a=document.getElementsByTagName("a");
@@ -281,7 +349,6 @@ function init(){
 			document.getElementById("topMenu").setAttribute("style","opacity:0;-webkit-transform: translateY(-47px)");
 			
 			setAttributeForClass("monelem_bottomMenu", "opacity:0; -webkit-transform: translateY(47px)")
-			
 			
 			populatearrays();
 			
@@ -737,6 +804,12 @@ Monocle.Events.listen(
 			nupages = place.countPage();
 			currentpar = mySelPar[pagenumber-1];
 			//alert(currentpar);
+			currentPage = pagenumber;
+			console.log('monocle:pagechange  place' +place.pageNumber() );
+			
+			console.log('getCookie for Current page ' +Get_Cookie('currentPage'));
+			Set_Cookie('currentPage', currentPage, '', '/', '', '' );
+
 	});
 
 
@@ -751,6 +824,19 @@ Monocle.Events.listen(
       reader = rdr;
       toc = Monocle.Controls.Contents(rdr);
       rdr.addControl(toc, 'popover', { hidden: true });
+
+	if (Get_Cookie('currentChapterSource') ){
+		reader.skipToChapter(Get_Cookie('currentChapterSource'));
+      	if (Get_Cookie('currentPage') ){
+			console.log('move to page '+Get_Cookie('currentPage'));
+			var t=setTimeout(function(){
+				
+						var pageN = Number(Get_Cookie('currentPage'));
+						reader.moveTo({ page: pageN })
+			},100);
+	
+		}
+	}
 
 	
       /* CHAPTER TITLE RUNNING HEAD */
@@ -793,6 +879,8 @@ Monocle.Events.listen(
 		console.log('place chapter metadata '+place.chapterSrc().split('_')[1]);
 		currentDivPositionNumber = place.chapterSrc().split('_')[1];
 		 
+		Set_Cookie('currentChapterSource', 'part_'+currentDivPositionNumber);
+		
 		console.log('currentTitle '+currentTitle);
 		console.log('place.chapterTitle() '+place.chapterTitle());
 		
@@ -850,9 +938,13 @@ Monocle.Events.listen(
   }
 );
 
+
 </script>
 
-<body style="padding:0; margin:0" onload="init()">
+<body style="padding:0; margin:0;" onload="init()">
+	<div id="reader">
+
+	</div>
 	<div id="currentpar" style="display:none"></div>
 	<div id="pagenum" style="display:none"></div>
 
@@ -872,14 +964,10 @@ Monocle.Events.listen(
 	<div style="clear:both"></div>
 </div>
 
-<div style="position:relative">
 <div id="reader_wrapper">
 	<div id="sound_image"></div>
-</div>
 
-	<div id="reader">
 
-	</div>
 </div>
 
 <!-- <div onclick="reader.moveTo({ direction: -1 }); ">Previous page</div>

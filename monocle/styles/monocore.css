@@ -162,12 +162,25 @@ div#topMenu {
 	margin-top:10px;
 	color:#fff;
 	font-weight:bold;
-	margin-left:10%;
+	margin-left:40%;
 	font: bold 15pt "Helvetica";
 	text-shadow: 0 2px black;
 	float:left;
-	
+
 }
+@media screen and (max-width: 800px) {
+	#top_title {
+		margin-top:10px;
+		color:#fff;
+		font-weight:bold;
+		margin-left:5%;
+		font: bold 15pt "Helvetica";
+		text-shadow: 0 2px black;
+		float:left;
+
+	}
+}
+
 
 
 #top_audio {

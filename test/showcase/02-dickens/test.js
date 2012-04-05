@@ -72,7 +72,7 @@ Monocle.DEBUG = true;
         bookData,
         readerOptions,
         function(reader) {
-          reader.addControl(placeSaver, 'invisible');
+          reader.addControl(placeSaver, 'visible');
 
           /* SPINNER */
           var spinner = Monocle.Controls.Spinner(reader);

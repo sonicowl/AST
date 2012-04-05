@@ -24,7 +24,7 @@ div.monelem_controls_contents_container {
   -webkit-box-shadow: 1px 2px 6px rgba(0,0,0,0.5);
 }
 
-.monelem_tableOfContentsTitle{margin-left:75px; font-size:1.3em; margin-bottom:15px; margin-top:18px; font-weight:bold}
+.monelem_tableOfContentsTitle{margin-left:25px; font-size:1.3em; margin-bottom:15px; margin-top:18px; font-weight:bold}
 	
 .monelem_closeBtn {position:absolute; width:35px; height:35px; background:url(close_btn.png) no-repeat; cursor:pointer; right:10px; top:10px}	
 	
@@ -170,24 +170,48 @@ div.monelem_bottomMenu {
 
 #reader_wrapper{
 	display:none;
-	background:url(sound_on.png) 60px 100px no-repeat;
+	background:url(sound_on.png) 50% 50% no-repeat;
 	position:absolute;
 	bottom:0;
 	top:0;
 	left:0;
-	width: 320px; 
-	height: 416px; 
-	z-index:99;
+	width: 100%; 
+/*	height: 100%; 
+*/	z-index:99;height:auto!important;
 }
-
-
 
 #sound_image {
 	opacity:0.5;
 	background:#000;
-	width: 320px; 
-	height: 416px;
+	width: 100%; 
+	height: 100%;
 }
+
+@media screen and (max-width: 800px) {
+	#reader_wrapper{
+		display:none;
+		background:url(sound_on.png) 40% 40% no-repeat;
+		position:absolute;
+		bottom:0;
+		top:0;
+		left:0;
+		width: 320px; 
+		height: 416px; 
+		z-index:99;
+	}
+
+
+
+	#sound_image {
+		opacity:0.5;
+		background:#000;
+		width: 320px; 
+		height: 416px;
+	}
+}
+
+
+
 
 
 div.monelem_bottomMenu_Inside {

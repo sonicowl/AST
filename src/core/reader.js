@@ -781,6 +781,9 @@ Monocle.Reader.DEFAULT_STYLE_RULES = [
     "position: absolute !important;" +
     "-webkit-text-size-adjust: none;" +
   "}",
+  "html#RS\\:monocle body .chapterOpenerText{" +
+    "font-size:1.5em" +
+  "}",
   "html#RS\\:monocle body * {" +
     "max-width: 100% !important;" +
   "}",
