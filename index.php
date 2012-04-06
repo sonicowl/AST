@@ -13,18 +13,12 @@ var currentTitle;
 var currentPage;
 var timeline;
 var toc;
+var interactive = true;
 var currentDivPositionNumber = '01';
 var pathInfo = "<?php echo $full_url_path;?>";
+
 	
-	function setAttributeForClass(theClass, attribute) {
-		//Create Array of All HTML Tags
-		var allHTMLTags=document.getElementsByTagName("*");
-		for (i=0; i<allHTMLTags.length; i++) {
-			if (allHTMLTags[i].className==theClass) {
-				allHTMLTags[i].setAttribute("style",attribute);;
-			}
-		}
-  	}
+
 
 	function Set_Cookie( name, value, expires, path, domain, secure )
 	{
@@ -81,6 +75,10 @@ var pathInfo = "<?php echo $full_url_path;?>";
 
 
 </script>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+
+
  <!-- MONOCLE CORE -->
  <script type="text/javascript" src="src/core/monocle.js"></script>
  <script type="text/javascript" src="src/compat/env.js"></script>
@@ -128,6 +126,8 @@ position: absolute;
 width: 100%;
 height: 100%;
 }
+
+.hiddenInfo {display:none}
 
 /*Ipad*/
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
@@ -187,6 +187,42 @@ var pagenumber = 1;
 var myPages=new Array();
 var myTimes=new Array();
 var mySelPar=new Array();
+var insertedSeekEvent = new Array();
+
+function insertSeekEventToParagraphsOfChapter(){
+	
+				var divName = Get_Cookie('currentChapterSource');
+				var i = 0;
+
+				$('.monelem_component').slice(0).contents().find('#'+divName).find('p').each(function(index){
+						// console.log("this content "+$(this).html());
+						$('span.selectParagraph', $(this)).remove();
+						var content = $(this).find('.hiddenInfo').text();
+						if (content == ""){content = $(this).html();}
+						$('span.hiddenInfo', $(this)).remove();
+						
+						$(this).html("<span class='selectParagraph' style='background-color: #FFFFFF' onclick='javascript:top.seekTo(&quot;"+index.toString()+"&quot;,0);'>"+content+ "</span><span class='hiddenInfo' style='display:none'>"+content+"</span>");
+				})
+				
+				$('.monelem_component').slice(1).contents().find('#'+divName).find('p').each(function(index){
+					$('span.selectParagraph', $(this)).remove();
+					var content = $(this).find('.hiddenInfo').text();
+					if (content == ""){content = $(this).html();}
+					$('span.hiddenInfo', $(this)).remove();
+					
+					$(this).html("<span class='selectParagraph' style='background-color: #FFFFFF' onclick='javascript:top.seekTo(&quot;"+index.toString()+"&quot;,0);'>"+content+ "</span><span class='hiddenInfo' style='display:none'>"+content+"</span>");
+				})
+				
+				// part1 = document.getElementById(divName);
+				// pArr = part1.getElementsByTagName("p");
+				// 
+				// console.log('insertSeekEventToParagraphsOfChapter number of p '+ pArr.length);
+				// 
+				// for (var i=0; i<pArr.length;i++){
+				// 	pArr[i].innerHTML = "<span style='background-color: #FFFFFF' onclick='javascript:top.seekTo(&quot;"+i.toString()+"&quot;,0);'>"+i.toString()+pArr[i].innerHTML+ "</span>";
+				// }
+}
+
 
 function populatearrays(){
 		pageDiv = reader.visiblePages()[0];
@@ -309,38 +345,39 @@ function populatearrays(){
 		//console.log("mySelPar1[4] " + mySelPar[4]);
 }
 
-function init(){
-	// console.log("init");
-	// window.reader = Monocle.Reader('reader');
 	
-	//Hide the address bar
-	audio = document.getElementById("audio");
-
-	function fullscreen(){
-		var a=document.getElementsByTagName("a");
-		for(var i=0;i<a.length;i++){
-			if(a[i].className.match("noeffect")){
-			
+	
+	function setAttributeForClass(theClass, attribute) {
+		//Create Array of All HTML Tags
+		var allHTMLTags=document.getElementsByTagName("*");
+		for (i=0; i<allHTMLTags.length; i++) {
+			if (allHTMLTags[i].className==theClass) {
+				allHTMLTags[i].setAttribute("style",attribute);;
 			}
-			else{a[i].onclick=function(){
-				window.location=this.getAttribute("href");
-				return false;
-			}}
+		}
+  	}
+
+	function showHideMenu(){
+		console.log('showHideMenu interactive '+interactive)
+		if (interactive == true) {
+			console.log('hide menu')
+			interactive = false;
+			document.getElementById("topMenu").setAttribute("style","opacity:0;-webkit-transform: translateY(-47px)");
+			setAttributeForClass("monelem_bottomMenu", "opacity:0; -webkit-transform: translateY(47px)")
+	      // return;
+	    }else{
+		    interactive = true;
+			document.getElementById("topMenu").setAttribute("style","opacity:0.9; -webkit-transform: translateY(0px)");
+			// document.getElementById("monelem_bottomMenu").setAttribute("style","opacity:0.9;");
+			setAttributeForClass("monelem_bottomMenu", "opacity:0.9; -webkit-transform: translateY(0px)")
 		}
 	}
-		
-	function hideURLbar(){
-		window.scrollTo(0,0.9)
-	}
-	fullscreen();
-	hideURLbar();
-
 	
-	//Audio Control
-	document.getElementById('top_audio').onclick = function(e){
-		
+	
+	
+	function playUpdateUI(){
 		if (isPlaying == true){
-			document.getElementById('reader_wrapper').setAttribute("style","display: none");
+			// document.getElementById('reader_wrapper').setAttribute("style","display: none");
 			
 			isPlaying = false;
 			audio.pause();
@@ -357,7 +394,7 @@ function init(){
 			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_play.png)");
 		}else{
 			isPlaying = true;
-			document.getElementById('reader_wrapper').setAttribute("style","display: block");
+			// document.getElementById('reader_wrapper').setAttribute("style","display: block");
 			document.getElementById("topMenu").setAttribute("style","opacity:0;-webkit-transform: translateY(-47px)");
 			
 			setAttributeForClass("monelem_bottomMenu", "opacity:0; -webkit-transform: translateY(47px)")
@@ -388,11 +425,50 @@ function init(){
 		}
 	}
 	
+function init(){
+	
+	
+	// console.log("init");
+	// window.reader = Monocle.Reader('reader');
+	
+	//Hide the address bar
+	audio = document.getElementById("audio");
+
+	function fullscreen(){
+		var a=document.getElementsByTagName("a");
+		for(var i=0;i<a.length;i++){
+			if(a[i].className.match("noeffect")){
+			
+			}
+			else{a[i].onclick=function(){
+				window.location=this.getAttribute("href");
+				return false;
+			}}
+		}
+	}
+		
+	function hideURLbar(){
+		window.scrollTo(0,0.9)
+	}
+	fullscreen();
+	hideURLbar();
+
+	
+	//Audio Control
+	document.getElementById('top_audio').onclick = function(e){
+		playUpdateUI();
+
+	}
+	
 	//Audio Control
 	document.getElementById('top_home_btn').onclick = function(e){
 		window.location = "home.php"
 	}
 
+	// for(p in paragraphElems){
+	// 	p.addEventListener("click", modeOn, true);
+	// }
+	
 	
 	audio.addEventListener("abort", 		function () {	debug(arguments, "abort"); });
 	audio.addEventListener("canplay", 		function () {	debug(arguments, "canplay"); });
@@ -456,7 +532,12 @@ function debug(args,msg){
 
 timeline.offset = 0;
 
-function seekTo(t,btime){	
+function seekTo(t,btime){
+	isPlaying = true;
+	document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_pause.png)");
+
+		
+	
 	var timeaux;
 	console.log("SeekTo " + t);
 	console.log("SeekTo timeline " + timeline);
@@ -769,7 +850,6 @@ var bookData = {
   }
 }
 
-
 function createBookTitle(reader, contactListeners) {
   var bt = {}
   bt.createControlElements = function () {
@@ -801,6 +881,8 @@ Monocle.Events.listen(
       { panels: Monocle.Panels.IMode }
     );
 	
+
+	
 	var hackCounter = 0;
 	
 	reader.listen(
@@ -814,8 +896,17 @@ Monocle.Events.listen(
 			var pageBottomPos = place.percentAtBottomOfPage();
 			if (pagenumber !== (place.pageNumber() - 1)) turned = true;
 			pagenumber = place.pageNumber() - 1;
-			document.getElementById('pagenum').innerHTML = "Page "+ pagenumber;
 			nupages = place.countPage();
+			
+			// if (pagenumber == 0){pagenumber = nupages;}
+			
+			document.getElementById('pagenum').innerHTML = "Page "+ pagenumber;
+
+			if (pagenumber ==0)pagenumber = 1
+			
+			$('.monelem_pagePositionStatus').html("Page "+ pagenumber + ' of ' +nupages);
+			
+			
 			currentpar = mySelPar[pagenumber-1];
 			//alert(currentpar);
 			currentPage = pagenumber;
@@ -828,10 +919,27 @@ Monocle.Events.listen(
 					Set_Cookie('currentPage', currentPage, '', '/', '', '' );
 				}
 			}
+			insertSeekEventToParagraphsOfChapter();
+			// insertSeekEventToParagraphsOfChapter();
+			// if(insertedSeekEvent.indexOf(Get_Cookie('currentChapterSource')) == -1){
+			// 	insertedSeekEvent.push(Get_Cookie('currentChapterSource'))
+			 	// insertSeekEventToParagraphsOfChapter();
+			// }
 			hackCounter = hackCounter+1;
 
 	});
+	reader.listen(
+		'monocle:componentchange',
+		function (evt) {
+			if(insertedSeekEvent.indexOf(Get_Cookie('currentChapterSource')) == -1){
+				insertedSeekEvent.push(Get_Cookie('currentChapterSource'))
+			 	insertSeekEventToParagraphsOfChapter();
+			}
 
+	});
+	
+
+	
 
 
     var readerOptions = {
@@ -846,17 +954,24 @@ Monocle.Events.listen(
       rdr.addControl(toc, 'popover', { hidden: true });
 
 	if (Get_Cookie('currentChapterSource') ){
+		
 		reader.skipToChapter(Get_Cookie('currentChapterSource'));
-      	if (Get_Cookie('currentPage') ){
+		      	if (Get_Cookie('currentPage') ){
 			console.log('move to page '+Get_Cookie('currentPage'));
 			var t=setTimeout(function(){
 						var pageN = Number(Get_Cookie('currentPage'));
 						reader.moveTo({ page: pageN })
 			},300);
-	
+			
 		}
 	}
+	
+	
 
+	$('.monelem_component').contents().find('p').click(function(){
+			// console.log('call showmenu');
+			showHideMenu()
+	})
 	
       /* CHAPTER TITLE RUNNING HEAD */
       var chapterTitle = {
@@ -894,6 +1009,12 @@ Monocle.Events.listen(
 		        }
 		    }
 		}
+		
+		$('.monelem_component').contents().find('p').click(function(){
+				// console.log('call showmenu');
+				showHideMenu()
+		})
+		
 		var newChapterTitle = "";
 		if (place.chapterTitle().length > 14 ){
 			newChapterTitle = place.chapterTitle().substring(0,14) +'...';
@@ -911,6 +1032,11 @@ Monocle.Events.listen(
 		
 		if (currentTitle !== place.chapterTitle()){
 			currentTitle = place.chapterTitle();
+			// insertSeekEventToParagraphsOfChapter();
+			$('.monelem_component').contents().find('p').click(function(){
+					// console.log('call showmenu');
+					showHideMenu()
+			})
 		  document.getElementById('top_title').innerHTML = place.chapterTitle();
 		  // console.log('timeline = ' +timeline);
 		  timeline = {};
@@ -1399,13 +1525,11 @@ if (i!=1) {
 
 }
 
-var divName = 'part_'+currentDivPositionNumber;
-part1 = document.getElementById(divName);
-pArr = part1.getElementsByTagName("p");
-for (var i=0; i<pArr.length;i++){
-pArr[i].innerHTML = "<span style='background-color: #FFFFFF' onclick='javascript:top.seekTo(&quot;"+i.toString()+"&quot;,0);'>"+pArr[i].innerHTML+ "</span>";
-}
-
+// if(insertedSeekEvent.indexOf(Get_Cookie('currentChapterSource')) == -1){
+// 	insertedSeekEvent.push(Get_Cookie('currentChapterSource'))
+ 	// insertSeekEventToParagraphsOfChapter();
+// }
+// insertSeekEventToParagraphsOfChapter();
 </script>
 
 </body>

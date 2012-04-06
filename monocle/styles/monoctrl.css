@@ -95,6 +95,16 @@ li.monelem_controls_contents_chapter_active {
   height:34px;
 }
 
+.monelem_pagePositionStatus{
+	position:absolute;
+	width:80px;
+	height:40px;
+	left:47%;
+	color:#FFF;
+	top:8px;
+	font-weight:bold;
+}
+
 .monelem_tocButton {
   cursor: pointer;
   color: #fff;

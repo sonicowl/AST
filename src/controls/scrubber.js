@@ -145,6 +145,9 @@ Monocle.Controls.Scrubber = function (reader) {
     Monocle.Events.listenForTap(btn, toggleMagnification);
 	
 	
+	var tocDiv = cntrInside.dom.append('div', 'pagePositionStatus');
+	
+	
 	var tocDiv = cntrInside.dom.append('div', 'tocButton');
 	Monocle.Events.listenForTap(tocDiv, showTOC);
     
