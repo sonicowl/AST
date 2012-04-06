@@ -122,12 +122,24 @@ var pathInfo = "<?php echo $full_url_path;?>";
 <style>
 
 
-#reader { /*width: 320px; height: 416px;*/ position: absolute;
+#reader { 
+/*width: 320px; height: 416px;*/ 
+position: absolute;
 width: 100%;
-height: 100%;}
+height: 100%;
+}
 
+/*Ipad*/
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+	#reader {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+	}
+}
 
-@media screen and (max-width: 800px) {
+/*Iphone */
+@media only screen and (max-device-width: 480px) {
 	#reader {
 		width: 320px; height: 416px; position: absolute;
 
@@ -788,7 +800,9 @@ Monocle.Events.listen(
       bookData,
       { panels: Monocle.Panels.IMode }
     );
-
+	
+	var hackCounter = 0;
+	
 	reader.listen(
 		'monocle:pagechange',
 		function (evt) {
@@ -805,10 +819,16 @@ Monocle.Events.listen(
 			currentpar = mySelPar[pagenumber-1];
 			//alert(currentpar);
 			currentPage = pagenumber;
-			console.log('monocle:pagechange  place' +place.pageNumber() );
-			
-			console.log('getCookie for Current page ' +Get_Cookie('currentPage'));
-			Set_Cookie('currentPage', currentPage, '', '/', '', '' );
+			console.log('monocle:pagechange  currentPage' +currentPage );
+			if (currentPage != "0" && currentPage != "1"){
+				console.log('getCookie for Current page ' +Get_Cookie('currentPage'));
+				Set_Cookie('currentPage', currentPage, '', '/', '', '' );
+			}else{
+				if (hackCounter >3){
+					Set_Cookie('currentPage', currentPage, '', '/', '', '' );
+				}
+			}
+			hackCounter = hackCounter+1;
 
 	});
 
@@ -830,10 +850,9 @@ Monocle.Events.listen(
       	if (Get_Cookie('currentPage') ){
 			console.log('move to page '+Get_Cookie('currentPage'));
 			var t=setTimeout(function(){
-				
 						var pageN = Number(Get_Cookie('currentPage'));
 						reader.moveTo({ page: pageN })
-			},100);
+			},300);
 	
 		}
 	}
@@ -860,7 +879,7 @@ Monocle.Events.listen(
 		{
 		    if (oReq.readyState == 4 /* complete */) {
 		        if (oReq.status == 200) {
-		             console.log('got new timeline');
+		             // console.log('got new timeline');
 		  			timeline = eval(oReq.responseText);
 					var audio = document.getElementsByTagName('audio')[0];
 					var src = audio.getElementsByTagName('source')[0];
@@ -875,14 +894,20 @@ Monocle.Events.listen(
 		        }
 		    }
 		}
-		document.getElementById('top_title').innerHTML = place.chapterTitle();
-		console.log('place chapter metadata '+place.chapterSrc().split('_')[1]);
+		var newChapterTitle = "";
+		if (place.chapterTitle().length > 14 ){
+			newChapterTitle = place.chapterTitle().substring(0,14) +'...';
+		}else{
+			newChapterTitle = place.chapterTitle();
+		}
+		document.getElementById('top_title').innerHTML = newChapterTitle;
+		// console.log('place chapter metadata '+place.chapterSrc().split('_')[1]);
 		currentDivPositionNumber = place.chapterSrc().split('_')[1];
 		 
 		Set_Cookie('currentChapterSource', 'part_'+currentDivPositionNumber);
 		
-		console.log('currentTitle '+currentTitle);
-		console.log('place.chapterTitle() '+place.chapterTitle());
+		// console.log('currentTitle '+currentTitle);
+		// console.log('place.chapterTitle() '+place.chapterTitle());
 		
 		if (currentTitle !== place.chapterTitle()){
 			currentTitle = place.chapterTitle();
