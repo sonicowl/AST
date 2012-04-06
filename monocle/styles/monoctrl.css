@@ -96,6 +96,7 @@ li.monelem_controls_contents_chapter_active {
 }
 
 .monelem_pagePositionStatus{
+	display:none;
 	position:absolute;
 	width:80px;
 	height:40px;
