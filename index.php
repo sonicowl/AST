@@ -533,10 +533,12 @@ function debug(args,msg){
 timeline.offset = 0;
 
 function seekTo(t,btime){
-	isPlaying = true;
+	if (currentpar-1 == t){
+		return false
+	}
 	document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_pause.png)");
 
-		
+	
 	
 	var timeaux;
 	console.log("SeekTo " + t);
@@ -1512,7 +1514,6 @@ if (i!=1) {
 	//alert('par2-'+i.toString());
 	//Processo do paragrapho.
  tt1 = setTimeout("runProcess("+i.toString()+")",time2);
-
     parag = doc.getElementsByTagName('p');
 	for (var y=0; y<parag.length;y++){
 			if (y!=(i-1))
