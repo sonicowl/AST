@@ -534,6 +534,7 @@ timeline.offset = 0;
 
 function seekTo(t,btime){
 	if (currentpar-1 == t){
+		showHideMenu();
 		return false
 	}
 	document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_pause.png)");
