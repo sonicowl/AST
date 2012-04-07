@@ -13,10 +13,10 @@ var currentTitle;
 var currentPage;
 var timeline;
 var toc;
-var interactive = true;
+var isMenuShowing = false;
+
 var currentDivPositionNumber = '01';
 var pathInfo = "<?php echo $full_url_path;?>";
-
 	
 
 
@@ -358,21 +358,21 @@ function populatearrays(){
   	}
 
 	function showHideMenu(){
-		console.log('showHideMenu interactive '+interactive)
-		if (interactive == true) {
+		console.log('showHideMenu isMenuShowing '+isMenuShowing)
+		if (isMenuShowing == true) {
 			console.log('hide menu')
-			interactive = false;
 			document.getElementById("topMenu").setAttribute("style","opacity:0;-webkit-transform: translateY(-47px)");
 			setAttributeForClass("monelem_bottomMenu", "opacity:0; -webkit-transform: translateY(47px)")
+			isMenuShowing = false;
 	      // return;
 	    }else{
-		    interactive = true;
+		    isMenuShowing = true;
 			document.getElementById("topMenu").setAttribute("style","opacity:0.9; -webkit-transform: translateY(0px)");
 			// document.getElementById("monelem_bottomMenu").setAttribute("style","opacity:0.9;");
 			setAttributeForClass("monelem_bottomMenu", "opacity:0.9; -webkit-transform: translateY(0px)")
 		}
 	}
-	
+
 	
 	
 	function playUpdateUI(){
@@ -923,11 +923,7 @@ Monocle.Events.listen(
 				}
 			}
 			insertSeekEventToParagraphsOfChapter();
-			// insertSeekEventToParagraphsOfChapter();
-			// if(insertedSeekEvent.indexOf(Get_Cookie('currentChapterSource')) == -1){
-			// 	insertedSeekEvent.push(Get_Cookie('currentChapterSource'))
-			 	// insertSeekEventToParagraphsOfChapter();
-			// }
+
 			hackCounter = hackCounter+1;
 
 	});
@@ -968,13 +964,7 @@ Monocle.Events.listen(
 			
 		}
 	}
-	
-	
 
-	$('.monelem_component').contents().find('p').click(function(){
-			// console.log('call showmenu');
-			showHideMenu()
-	})
 	
       /* CHAPTER TITLE RUNNING HEAD */
       var chapterTitle = {
@@ -1013,11 +1003,7 @@ Monocle.Events.listen(
 		    }
 		}
 		
-		$('.monelem_component').contents().find('p').click(function(){
-				// console.log('call showmenu');
-				showHideMenu()
-		})
-		
+
 		var newChapterTitle = "";
 		if (place.chapterTitle().length > 14 ){
 			newChapterTitle = place.chapterTitle().substring(0,14) +'...';
@@ -1036,9 +1022,12 @@ Monocle.Events.listen(
 		if (currentTitle !== place.chapterTitle()){
 			currentTitle = place.chapterTitle();
 			// insertSeekEventToParagraphsOfChapter();
-			$('.monelem_component').contents().find('p').click(function(){
-					// console.log('call showmenu');
-					showHideMenu()
+			$('.monelem_component').contents().find('p').each(function(index){
+					$(this).click(function(e){
+						// Return if it's a child that's clicked:
+					    if (e.target !== this) {return;}
+						showHideMenu();
+					})
 			})
 		  document.getElementById('top_title').innerHTML = place.chapterTitle();
 		  // console.log('timeline = ' +timeline);
