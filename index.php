@@ -391,17 +391,17 @@ function populatearrays(){
 				parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFFDD","background-color: #FFFFFF");
 			}
 			turned = false;
-			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_play.png)");
+			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_pause2.png)");
 		}else{
 			// document.getElementById('reader_wrapper').setAttribute("style","display: block");
-			document.getElementById("topMenu").setAttribute("style","opacity:0;-webkit-transform: translateY(-47px)");
+			// document.getElementById("topMenu").setAttribute("style","opacity:0;-webkit-transform: translateY(-47px)");
 			buttonState = "playing";
 			
 			setAttributeForClass("monelem_bottomMenu", "opacity:0; -webkit-transform: translateY(47px)")
 			
 			populatearrays();
 			
-			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_pause.png)");
+			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_play2.png)");
 			
 			// 		    console.log("mySelPar2[0] " + mySelPar[0]);
 			// console.log("mySelPar2[1] " + mySelPar[1]);
@@ -543,7 +543,7 @@ function seekTo(t,btime){
 	
 	
 	isPlaying = true;
-	document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_pause.png)");
+	document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_play2.png)");
 
 	
 	
