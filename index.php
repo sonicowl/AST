@@ -14,7 +14,7 @@ var currentPage;
 var timeline;
 var toc;
 var isMenuShowing = false;
-
+var buttonState = 'paused';
 var currentDivPositionNumber = '01';
 var pathInfo = "<?php echo $full_url_path;?>";
 	
@@ -378,7 +378,7 @@ function populatearrays(){
 	function playUpdateUI(){
 		if (isPlaying == true){
 			// document.getElementById('reader_wrapper').setAttribute("style","display: none");
-			
+			buttonState = "paused";
 			isPlaying = false;
 			audio.pause();
 			clearTimeout(tt1);
@@ -393,9 +393,9 @@ function populatearrays(){
 			turned = false;
 			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_play.png)");
 		}else{
-			isPlaying = true;
 			// document.getElementById('reader_wrapper').setAttribute("style","display: block");
 			document.getElementById("topMenu").setAttribute("style","opacity:0;-webkit-transform: translateY(-47px)");
+			buttonState = "playing";
 			
 			setAttributeForClass("monelem_bottomMenu", "opacity:0; -webkit-transform: translateY(47px)")
 			
@@ -533,10 +533,16 @@ function debug(args,msg){
 timeline.offset = 0;
 
 function seekTo(t,btime){
-	if (currentpar-1 == t){
+	// console.log('isPlaying '+isPlaying)
+	if (buttonState == "paused"){showHideMenu();return false;s}
+	if (currentpar-1 == t && isPlaying == true){
+		console.log('paragrah is already playing')
 		showHideMenu();
 		return false
 	}
+	
+	
+	isPlaying = true;
 	document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_pause.png)");
 
 	
@@ -1003,7 +1009,14 @@ Monocle.Events.listen(
 		    }
 		}
 		
-
+		$('.monelem_component').contents().find('p').each(function(index){
+				$(this).click(function(e){
+					
+					// Return if it's a child that's clicked:
+				    if (e.target !== this) {return;}
+						showHideMenu();
+				})
+		})
 		var newChapterTitle = "";
 		if (place.chapterTitle().length > 14 ){
 			newChapterTitle = place.chapterTitle().substring(0,14) +'...';
@@ -1024,9 +1037,10 @@ Monocle.Events.listen(
 			// insertSeekEventToParagraphsOfChapter();
 			$('.monelem_component').contents().find('p').each(function(index){
 					$(this).click(function(e){
+						
 						// Return if it's a child that's clicked:
 					    if (e.target !== this) {return;}
-						showHideMenu();
+							showHideMenu();
 					})
 			})
 		  document.getElementById('top_title').innerHTML = place.chapterTitle();
