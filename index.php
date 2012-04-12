@@ -17,7 +17,7 @@ var isMenuShowing = false;
 var buttonState = 'paused';
 var currentDivPositionNumber = '01';
 var pathInfo = "<?php echo $full_url_path;?>";
-	
+var isPlayerFirstTime = true;
 
 
 	function Set_Cookie( name, value, expires, path, domain, secure )
@@ -394,7 +394,7 @@ function populatearrays(){
 			document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_pause2.png)");
 		}else{
 			// document.getElementById('reader_wrapper').setAttribute("style","display: block");
-			// document.getElementById("topMenu").setAttribute("style","opacity:0;-webkit-transform: translateY(-47px)");
+			document.getElementById("topMenu").setAttribute("style","opacity:0;-webkit-transform: translateY(-47px)");
 			buttonState = "playing";
 			
 			setAttributeForClass("monelem_bottomMenu", "opacity:0; -webkit-transform: translateY(47px)")
@@ -540,41 +540,78 @@ function seekTo(t,btime){
 		showHideMenu();
 		return false
 	}
+
+	if (isPlayerFirstTime == true){
+
+		var timeaux;
+		console.log("SeekTo " + t);
+		console.log("SeekTo timeline " + timeline);
+		console.log("SeekTo timeline 2 " + timeline[t]);
+
+		if (t == 0) timeaux = 0; else timeaux = timeline[t].start.toString()
+
+		console.log("SeekTo timeaux " + timeaux);
+
+		time = time2secs(timeaux);
+		console.log("SeekTo time " + time);
+
+		try {
+			
+		  audio.play();
+		
+		function checkAudio1(){
+			if (btime != 0) audio.currentTime = btime; else   audio.currentTime = time;audio.play();audio.volume=1; isPlayerFirstTime=false;
+		}
+		  var tzz=setTimeout(checkAudio1(),1000);
+
+		} catch (e) {
+			// alert('catch')
+			audio.play();
+		    audio.pause();
+		    setTimeout("audio.currentTime = time;",2000);
+		    setTimeout("audio.play();",1500);
+		isPlayerFirstTime=false;
+		}
+		console.log("runProcess " + t);
+	    runProcess(t);
+	}else{
+		
+
+
+		var timeaux;
+		console.log("SeekTo " + t);
+		console.log("SeekTo timeline " + timeline);
+		console.log("SeekTo timeline 2 " + timeline[t]);
+
+		if (t == 0) timeaux = 0; else timeaux = timeline[t].start.toString()
+
+		console.log("SeekTo timeaux " + timeaux);
+
+		time = time2secs(timeaux);
+		console.log("SeekTo time " + time);
+
+		try {
+		  audio.pause();
+		  btime = 0;
+		  console.log("turned " + turned);
+		  if (btime != 0) audio.currentTime = btime; else   audio.currentTime = time;
+	 	  //setTimeout("audio.play()", 1000); 
+	      audio.play();
+
+		} catch (e) {
+			audio.play();
+		    audio.pause();
+		    setTimeout("audio.currentTime = time;",500);
+		    setTimeout("audio.play();",1000);
+		}
+		console.log("runProcess " + t);
+	    runProcess(t);
+	}
 	
 	
 	isPlaying = true;
 	document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_play2.png)");
 
-	
-	
-	var timeaux;
-	console.log("SeekTo " + t);
-	console.log("SeekTo timeline " + timeline);
-	console.log("SeekTo timeline 2 " + timeline[t]);
-	
-	if (t == 0) timeaux = 0; else timeaux = timeline[t].start.toString()
-	
-	console.log("SeekTo timeaux " + timeaux);
-	
-	time = time2secs(timeaux);
-	console.log("SeekTo time " + time);
-	
-	try {
-	  audio.pause();
-	  btime = 0;
-	  console.log("turned " + turned);
-	  if (btime != 0) audio.currentTime = btime; else   audio.currentTime = time;
- 	  //setTimeout("audio.play()", 1000); 
-      audio.play();
-   
-	} catch (e) {
-		audio.play();
-	    audio.pause();
-	    setTimeout("audio.currentTime = time;",500);
-	    setTimeout("audio.play();",1000);
-	}
-	console.log("runProcess " + t);
-    runProcess(t);
  
 }
 
