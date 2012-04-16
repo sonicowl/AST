@@ -186,26 +186,24 @@ var mySelPar=new Array();
 var insertedSeekEvent = new Array();
 
 function insertSeekEventToParagraphsOfChapter(){
-
-var divName = Get_Cookie('currentChapterSource');
-var i = 0;
-
-if (divName == null) divName = "part_01";
-
-$('.monelem_component').slice(0).contents().find('#'+divName).find('p').each(function(index){
-// console.log("this content "+$(this).html());
-$('span.selectParagraph', $(this)).remove();
-var content = $(this).find('.hiddenInfo').text();
-if (content == ""){content = $(this).html();}
-$('span.hiddenInfo', $(this)).remove();
-$(this).html("<span class='selectParagraph' style='background-color: #FFFFFF' onclick='javascript:top.seekTo(&quot;"+index.toString()+"&quot;,0);'>"+content+ "</span><span class='hiddenInfo' style='display:none'>"+content+"</span>");
+	var divName = Get_Cookie('currentChapterSource');
+	var i = 0;
+	if (divName == null) divName = "part_01";
+	$('.monelem_component').slice(0).contents().find('#'+divName).find('p').each(function(index){
+	// console.log("this content "+$(this).html());
+	$('span.selectParagraph', $(this)).remove();
+	var content = $(this).find('.hiddenInfo').text();
+	if (content == ""){content = $(this).html();
+														}
+	$('span.hiddenInfo', $(this)).remove();
+	$(this).html("<span class='selectParagraph' style='background-color: #FFFFFF' onclick='javascript:top.seekTo(&quot;"+index.toString()+"&quot;,0);'>"+content+ "</span><span class='hiddenInfo' style='display:none'>"+content+"</span>");
 })
-$('.monelem_component').slice(1).contents().find('#'+divName).find('p').each(function(index){
-$('span.selectParagraph', $(this)).remove();
-var content = $(this).find('.hiddenInfo').text();
-if (content == ""){content = $(this).html();}
-$('span.hiddenInfo', $(this)).remove();
-$(this).html("<span class='selectParagraph' style='background-color: #FFFFFF' onclick='javascript:top.seekTo(&quot;"+index.toString()+"&quot;,0);'>"+content+ "</span><span class='hiddenInfo' style='display:none'>"+content+"</span>");
+	$('.monelem_component').slice(1).contents().find('#'+divName).find('p').each(function(index){
+		$('span.selectParagraph', $(this)).remove();
+		var content = $(this).find('.hiddenInfo').text();
+		if (content == ""){content = $(this).html();}
+		$('span.hiddenInfo', $(this)).remove();
+		$(this).html("<span class='selectParagraph' style='background-color: #FFFFFF' onclick='javascript:top.seekTo(&quot;"+index.toString()+"&quot;,0);'>"+content+ "</span><span class='hiddenInfo' style='display:none'>"+content+"</span>");
 })
 // part1 = document.getElementById(divName);
 // pArr = part1.getElementsByTagName("p");
@@ -261,8 +259,8 @@ myPages[pag2] = 0;
 //console.log("myPages[4] " + myPages[4]);
 for (var xx=0; xx<nupages-1;xx++){
 if (xx == 0) {
-myTimes[0] = 0;
-mySelPar[0] = 1;
+	myTimes[0] = 0;
+	mySelPar[0] = 1;
 }
   if ((xx !== 0) && (typeof timeline[(myPages[xx-1]+1)]  != 'undefined')) {
    node1 = doc.evaluate('//p['+(myPages[xx-1])+']', doc, null, 9, null).singleNodeValue;
@@ -309,10 +307,10 @@ mySelPar[xx] = myPages[xx-1];
 //If the next paragraph has the bottom less than 0, that means if ends on the next page, and has the most part of it on the next page.
 if (t2 < 0){
            SizeOnActualPage = (t2 * -1);
-SizeOnNextPage = b2;
-newtime2 =  Math.floor((time2 * SizeOnActualPage) / (SizeOnActualPage + SizeOnNextPage));
-myTimes[xx] = (time2secs(timeline[(mySelPar[xx-1]+1)].start) + newtime2);
-mySelPar[xx] = myPages[xx-1] + 1;
+		SizeOnNextPage = b2;
+		newtime2 =  Math.floor((time2 * SizeOnActualPage) / (SizeOnActualPage + SizeOnNextPage));
+		myTimes[xx] = (time2secs(timeline[(mySelPar[xx-1]+1)].start) + newtime2);
+		mySelPar[xx] = myPages[xx-1] + 1;
 }
 //console.log("foi " + b1 );
 }
@@ -361,7 +359,7 @@ setAttributeForClass("monelem_bottomMenu", "opacity:0.9; -webkit-transform: tran
 }
 
 function playUpdateUI(){
-console.log("bbb");
+//console.log("bbb");
 if (isPlaying == true){
 	//document.getElementById('reader_wrapper').setAttribute("style","display: none");
 	buttonState = "paused";
@@ -400,15 +398,10 @@ else
 	//console.log("moveTo Paragraph: " + (mySelPar[pagenumber-1]));
 	console.log('call to seekto' +currentpar);
 	var seekToP;
-	if (isNaN(currentpar - 1) == true ){
-		seekToP = 0
-	}
-	else
-	{
-		seekToP = currentpar - 1;
-	}
-	console.log("bbb111"+seekToP);
-     seekTo(seekToP,myTimes[pagenumber-1]);
+	if (isNaN(currentpar - 1) == true ) seekToP = 0; else seekToP = currentpar - 1;
+	console.log("seekTo "+seekToP);
+	console.log("seekT ",myTimes[pagenumber-1])
+    seekTo(seekToP,myTimes[pagenumber-1]);
 }
 }
 function init(){
@@ -533,37 +526,20 @@ return Number(secs);
 function debug(args,msg){
 var t = "";
 for (var o in args[0]){
-t += o + " " + args[0][o];
+	t += o + " " + args[0][o];
 }
 
 if(msg == 'ended')
 {
-playUpdateUI();
-reader.moveTo({ direction: 2 }); 
-seekToP = 0;
-currentpar = 1;
-turned = false;
+	//turn Chapeter.
+	reader.moveTo({ direction: 2 }); 
 
-buttonState = "playing";
-populatearrays();
-console.log("1");
-seekToP = 0;
-isPlayerFirstTime = true;
-
-seekTo(seekToP,myTimes[pagenumber-1]);
-
-console.log("2z");
-//setTimeout(console.log("rr"),2000);
-//populatearrays();
-
-//turned = false;
-
-
-
-
+	insertedSeekEvent.push(2);
+	insertSeekEventToParagraphsOfChapter();
 	
 }
 console.log(args.length + " - " + msg);
+
 }
 
 
@@ -601,7 +577,7 @@ if (isPlayerFirstTime == true){
 	setTimeout("audio.play();",1500);
 	isPlayerFirstTime=false;
 }
-console.log("runProcess " + t);
+//console.log("runProcess " + t);
 }
 else
 {
@@ -627,12 +603,12 @@ try {
 	setTimeout("audio.currentTime = time;",500);
 	setTimeout("audio.play();",1000);
 }
-console.log("runProcess " + t);
+//console.log("runProcess " + t);
 }
 currentTimeIndex = t;
 isPlaying = true;
 document.getElementById("top_audio").setAttribute("style","background: url(monocle/styles/btn_play2.png)");
-
+runProcess(t);
  
 }
 
@@ -1486,112 +1462,73 @@ echo transDoc($xml,$xsl);
 
 document.getElementById('currentpar').innerHTML = "Paragraph 1, Next 0";
 
-// function runProcess(i){
-// console.log ('runProcess' +i);
-// i=Number(i) + 1;
-// currentpar = i;
-// populatearrays();
-// console.log('runProcess timeline'+timeline);
-// t2 = timeline[i].start;
-// t1 = timeline[i-1].start;
-// 
-// console.log ('runProcess t2' +t2);
-// 
-// console.log ('runProcess t1' +t1);
-// 
-// time1 = time2secs(t1);
-// time2 = ((time2secs(t2)-time1) * 1000);
-// 
-// if (i!=1) {
-// node1 = doc.evaluate('//p['+(i-1)+']', doc, null, 9, null).singleNodeValue;
-// percent1 = pageDiv.m.dimensions.percentageThroughOfNode(node1);
-// pag1 =Math.floor(percent1 * nupages)+1;
-// 
-// node2 = doc.evaluate('//p['+i+']', doc, null, 9, null).singleNodeValue;
-// percent2 = pageDiv.m.dimensions.percentageThroughOfNode(node2);
-// pag2 =Math.floor(percent2 * nupages)+1;
-// 
-// node3 = doc.evaluate('//p['+(i+1)+']', doc, null, 9, null).singleNodeValue;
-// percent3 = pageDiv.m.dimensions.percentageThroughOfNode(node3);
-// pag3 =Math.floor(percent3 * nupages)+1;
-// 
-// b1 = node1.getBoundingClientRect().bottom;
-// b2 = node2.getBoundingClientRect().bottom;
-// b3 = node2.getBoundingClientRect().bottom;
-// 
-// t1 = node1.getBoundingClientRect().top;
-// t2 = node2.getBoundingClientRect().top;
-// t3 = node3.getBoundingClientRect().top;
-// 
-// h1 = node1.getBoundingClientRect().height;
-// h2 = node2.getBoundingClientRect().height;
-// h3 = node3.getBoundingClientRect().height;
-// 
-// //means it starts in the current page and ends on the next, the most part of the text is on the current page
-// if (((pag2+1) == pag3) && (t3 > 0)) {
-// SizeOnActualPage = (doc.body.scrollHeight - t2);
-// SizeOnNextPage = (b2 - doc.body.scrollHeight);
-// newtime2 =  Math.floor((time2 * SizeOnActualPage) / (SizeOnActualPage + SizeOnNextPage));
-//    clearTimeout(tt2);
-// //Processo da pagina
-// //alert('page1-'+(pag2+1).toString());
-// tt2 = setTimeout("reader.moveTo({ page: "+(pag2+1)+" })",newtime2);
-// }
-// 
-// //means it starts in the current page and ends on the next, the most part of the text is on the next page
-// //or means it starts in the current page and ends on the next, the most part of the text is on the next page, and the next page has a paragraph that ends after the next page and the most of text are on that page
-// if (((pag2 == pag3) && (t2 < 0)) || (((pag2+1) == pag3) && (t2 < 0) && (t3 < 0))) {
-// SizeOnActualPage = (t2 * -1);
-// SizeOnNextPage = b2;
-// newtime2 =  Math.floor((time2 * SizeOnActualPage) / (SizeOnActualPage + SizeOnNextPage));
-// clearTimeout(tt2);
-// //Processo da pagina
-// //alert('page2-'+pag2.toString());
-// tt2 = setTimeout("reader.moveTo({ page: "+pag2+" })",newtime2);
-//    //alert(newtime2);
-// }
-// if (t2 == 0){reader.moveTo({ page: pag2 })}
-// }
-// 
-// 
-//     clearTimeout(tt1);
-// //alert('par2-'+i.toString());
-// //Processo do paragrapho.
-//  tt1 = setTimeout("runProcess("+i.toString()+")",time2);
-//     parag = doc.getElementsByTagName('p');
-// for (var y=0; y<parag.length;y++){
-// if (y!=(i-1))
-// parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFFDD","background-color: #FFFFFF");
-// else
-//    parag[y].innerHTML = parag[y].innerHTML.replace("background-color: #FFFFFF","background-color: #FFFFDD");
-// }
-// //document.getElementById('currentpar').innerHTML = "HMP "+parag.length+", Paragraph "+i.toString()+", Next "+t2;
-// 
-// 
-// }
+function runProcess(i){
+ console.log ('Processing ' +i);
+ i=Number(i) + 1;
+ currentpar = i;
+ populatearrays();
+ //console.log('runProcess timeline'+timeline);
+ t2 = timeline[i].start;
+ t1 = timeline[i-1].start;
+ time1 = time2secs(t1);
+ time2 = ((time2secs(t2)-time1) * 1000);
+
+ if (i!=1) {
+ 	node1 = doc.evaluate('//p['+(i-1)+']', doc, null, 9, null).singleNodeValue;
+ 	percent1 = pageDiv.m.dimensions.percentageThroughOfNode(node1);
+ 	pag1 =Math.floor(percent1 * nupages)+1;
+
+ 	node2 = doc.evaluate('//p['+i+']', doc, null, 9, null).singleNodeValue;
+ 	percent2 = pageDiv.m.dimensions.percentageThroughOfNode(node2);
+ 	pag2 =Math.floor(percent2 * nupages)+1;
+
+ 	node3 = doc.evaluate('//p['+(i+1)+']', doc, null, 9, null).singleNodeValue;
+ 	percent3 = pageDiv.m.dimensions.percentageThroughOfNode(node3);
+ 	pag3 =Math.floor(percent3 * nupages)+1;
+
+ 	b1 = node1.getBoundingClientRect().bottom;
+ 	b2 = node2.getBoundingClientRect().bottom;
+ 	b3 = node2.getBoundingClientRect().bottom;
+
+ 	t1 = node1.getBoundingClientRect().top;
+ 	t2 = node2.getBoundingClientRect().top;
+ 	t3 = node3.getBoundingClientRect().top;
+
+ 	h1 = node1.getBoundingClientRect().height;
+ 	h2 = node2.getBoundingClientRect().height;
+ 	h3 = node3.getBoundingClientRect().height;
+ 
+ 	//means it starts in the current page and ends on the next, the most part of the text is on the current page
+ 	if (((pag2+1) == pag3) && (t3 > 0)) {
+		SizeOnActualPage = (doc.body.scrollHeight - t2);
+		SizeOnNextPage = (b2 - doc.body.scrollHeight);
+		newtime2 =  Math.floor((time2 * SizeOnActualPage) / (SizeOnActualPage + SizeOnNextPage));
+		clearTimeout(tt2);
+		//Processo da pagina
+		console.log ('runProcess c ' +newtime2);
+		tt2 = setTimeout("reader.moveTo({ page: "+(pag2+1)+" })",newtime2);
+ 	}
+ 
+	//means it starts in the current page and ends on the next, the most part of the text is on the next page
+	//or means it starts in the current page and ends on the next, the most part of the text is on the next page, and the next page has a paragraph that ends after the next page and the most of text are on that page
+ 	if (((pag2 == pag3) && (t2 < 0)) || (((pag2+1) == pag3) && (t2 < 0) && (t3 < 0))) {
+ 		SizeOnActualPage = (t2 * -1);
+ 		SizeOnNextPage = b2;
+ 		newtime2 =  Math.floor((time2 * SizeOnActualPage) / (SizeOnActualPage + SizeOnNextPage));
+ 		clearTimeout(tt2);
+ 		//Processo da pagina
+		console.log ('runProcess d ' +newtime2);
+ 		tt2 = setTimeout("reader.moveTo({ page: "+pag2+" })",newtime2);
+ 	}
+ 	if (t2 == 0){reader.moveTo({ page: pag2 })}
+ }
 
 
-function runProcess(){
-console.log ('runProcess' +i);
-i = currentTimeIndex;
-i=Number(i) + 1;
-currentpar = i;
-populatearrays();
-console.log('runProcess timeline'+timeline);
-t2 = timeline[i].start;
-t1 = timeline[i-1].start;
-
-// console.log ('runProcess t2' +t2);
-// console.log ('runProcess t1' +t1);
-
-time1 = time2secs(t1);
-time2 = ((time2secs(t2)-time1) * 1000);
-
-
-
-
-}
-
+	clearTimeout(tt1);
+	//Processo do paragrapho.
+	tt1 = setTimeout("runProcess("+i.toString()+")",time2);
+	parag = doc.getElementsByTagName('p');
+ }
 </script>
 
 </body>
